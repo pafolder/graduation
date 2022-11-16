@@ -28,7 +28,7 @@ public class AppConfiguration {
 
         jpaProperties.put("database.username", env.getProperty("database.username"));
         jpaProperties.put("database.password", env.getProperty("database.password"));
-        jpaProperties.put("database.url", env.getProperty("database.url"));
+//        jpaProperties.put("database.url", env.getProperty("database.url"));
         jpaProperties.put("database.init", env.getProperty("database.init"));
         jpaProperties.put("jdbc.initLocation", env.getProperty("jdbc.initLocation"));
         jpaProperties.put("jpa.showSql", env.getProperty("jpa.showSql"));

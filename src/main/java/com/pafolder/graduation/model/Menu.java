@@ -1,24 +1,49 @@
 package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import java.sql.Date;
+import jakarta.validation.*;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Range;
 
-@Entity
-@Table(name = "menus")
+import java.sql.Date;
+import java.util.List;
+
+@Entity(name = "Menu")
+@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant", "date"}, name = "menu_unique_restaurant_date_idx")})
 public class Menu {
     @Id
-    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = 100000)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
+    @SequenceGenerator(name = "menu_id_seq", sequenceName = "menu_id_seq", allocationSize = 1, initialValue = 0)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_id_seq")
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "restaurant", nullable = false)
     @NotBlank
-    private String name;
+    @NotNull
+    private String restaurant;
 
     @Column(name = "date", nullable = false)
+    @NotNull
     private Date date;
+
+    @Valid
+    @NotNull
+    @NotEmpty
+    @ElementCollection(targetClass = Item.class)
+    @CollectionTable(name = "menuitem", joinColumns = @JoinColumn(name = "menu_id"))
+    private List<Item> menuItems;
+
+    public void setMenuItems(List<Item> menuItems) {
+        this.menuItems = menuItems;
+    }
+
+    public Menu() {
+    }
+
+    public Menu(String restaurant, Date date) {
+        this.restaurant = restaurant;
+        this.date = date;
+    }
 
     public Date getDate() {
         return date;
@@ -28,12 +53,12 @@ public class Menu {
         this.date = date;
     }
 
-    public String getName() {
-        return name;
+    public String getRestaurant() {
+        return restaurant;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRestaurant(String restaurant) {
+        this.restaurant = restaurant;
     }
 
     public Integer getId() {
@@ -44,12 +69,41 @@ public class Menu {
         this.id = id;
     }
 
+    public List<Item> getMenuItems() {
+        return menuItems;
+    }
+
+    public void addItem(Item menuItem) {
+        menuItems.add(menuItem);
+    }
+
     @Override
     public String toString() {
-        return "\nMenu{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", date=" + date +
-                '}';
+        StringBuilder sb = new StringBuilder("\n" + id + " " + restaurant + " " + date);
+        if (menuItems != null) {
+            for (Item item : menuItems) {
+                sb.append("\n").append(item.dishName).append(" ").append(item.dishPrice);
+            }
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    @Embeddable
+    public static class Item {
+        @NotNull
+        @NotBlank
+        private String dishName;
+
+        @Range(min = 0, max = 10000)
+        private Double dishPrice;
+
+        public Item() {
+        }
+
+        public Item(String dishName, Double dishPrice) {
+            this.dishName = dishName;
+            this.dishPrice = dishPrice;
+        }
     }
 }
