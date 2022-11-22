@@ -1,5 +1,6 @@
 package com.pafolder.graduation.configuration;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -8,12 +9,13 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.sql.DataSource;
 import java.util.Objects;
 import java.util.Properties;
 
-@PropertySource({"classpath:application.properties","classpath:db/hsqldb.properties"} )
+@PropertySource({"classpath:db/hsqldb.properties"} )
 
 @Configuration
 public class AppConfiguration {
@@ -45,5 +47,27 @@ public class AppConfiguration {
         return databaseBuilder.setType(EmbeddedDatabaseType.HSQL)
                 .addScript(Objects.requireNonNull(env.getProperty("jdbc.initLocation")))
                 .addScript(Objects.requireNonNull(env.getProperty("jdbc.populateLocation"))).build();
+    }
+
+
+//    @Bean
+//    public ViewResolver internalResourceViewResolver() {
+//        InternalResourceViewResolver bean = new InternalResourceViewResolver();
+//        bean.setViewClass(JstlView.class);
+//        bean.setPrefix("/WEB-INF/jsp/");
+//        bean.setSuffix(".jsp");
+//        LoggerFactory.getLogger("root").error("viewResolver Bean has been created");
+//        return bean;
+//    }
+    @Bean
+    public InternalResourceViewResolver getViewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+//        viewResolver.setPrefix("/WEB-INF/jsp/");
+        viewResolver.setPrefix("/WEB-INF/");
+        viewResolver.setSuffix(".jsp");
+        viewResolver.setViewNames("jsp/*");
+        viewResolver.setOrder(1);
+        LoggerFactory.getLogger("root").error("viewResolver Bean has been created");
+        return viewResolver;
     }
 }

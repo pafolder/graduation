@@ -6,23 +6,31 @@ import com.pafolder.graduation.model.Vote;
 import com.pafolder.graduation.service.MenuService;
 import com.pafolder.graduation.service.UserService;
 import com.pafolder.graduation.service.VoteService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.sql.Date;
 import java.util.List;
 
 @Controller
 public class RestController {
-    private MenuService menuService;
-    private UserService userService;
-    private VoteService voteService;
+    private final MenuService menuService;
+    private final UserService userService;
+    private final VoteService voteService;
 
     @Autowired
     public RestController(MenuService menuService, UserService userService, VoteService voteService) {
         this.menuService = menuService;
         this.userService = userService;
         this.voteService = voteService;
+    }
+
+    @GetMapping("/root")
+    public String getRoot() {
+        LoggerFactory.getLogger("yellow").error("@GetMapping('/root')");
+        return "thymeleafPage";
     }
 
     public void testDataBase() {
