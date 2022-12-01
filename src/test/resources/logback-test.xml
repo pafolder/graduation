@@ -22,11 +22,11 @@
     <appender name="consolebriefyellow" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%blue(%M:%L) %yellow(===) %msg%n)</pattern>
+            <pattern>%yellow(===***){} %blue(%M:%L){} %yellow(***===) %msg%n)</pattern>
         </encoder>
     </appender>
 
-    <logger name="yellow" level="info">
+    <logger name="yellow" level="info" additivity="false">
         <appender-ref ref="consolebriefyellow"/>
     </logger>
 
@@ -35,11 +35,11 @@
     </logger>
 
     <logger name="org.springframework.web" level="debug">
-        <appender-ref ref="consolebriefyellow"/>
+<!--        <appender-ref ref="consolebriefyellow"/>-->
     </logger>
 
 
-    <root level="warn">
+    <root level="info">
         <appender-ref ref="console"/>
     </root>
 </configuration>

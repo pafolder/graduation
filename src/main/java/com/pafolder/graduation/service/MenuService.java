@@ -6,19 +6,17 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
 
+@ComponentScan
 @Service
 public class MenuService {
-    private final DataJpaMenuRepository menuRepository;
-
     @Autowired
-    public MenuService(DataJpaMenuRepository menuRepository) {
-        this.menuRepository = menuRepository;
-    }
+    private DataJpaMenuRepository menuRepository;
 
     @Cacheable("user")
     public List<Menu> getAll() {
@@ -30,8 +28,8 @@ public class MenuService {
         menuRepository.addItem(menuId, new Menu.@Valid Item(name, price));
     }
 
-    public void create(Menu menu) {
-        menuRepository.save(menu);
+    public Menu addMenu(Menu menu) {
+        return menuRepository.add(menu);
     }
 
     public List<Menu> getByDate(Date date) {

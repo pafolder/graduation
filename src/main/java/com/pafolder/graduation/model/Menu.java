@@ -6,7 +6,10 @@ import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Range;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Entity(name = "Menu")
 @Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant", "date"}, name = "menu_unique_restaurant_date_idx")})
@@ -40,9 +43,11 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(String restaurant, Date date) {
+    public Menu(String restaurant, Date date, Menu.Item ... items) {
         this.restaurant = restaurant;
         this.date = date;
+        menuItems = new ArrayList<>();
+        addItems(items);
     }
 
     public Date getDate() {
@@ -73,8 +78,9 @@ public class Menu {
         return menuItems;
     }
 
-    public void addItem(Item menuItem) {
-        menuItems.add(menuItem);
+    public void addItems(Item... items) {
+        List<Item> itemList= Arrays.asList(items);
+        menuItems.addAll(itemList);
     }
 
     @Override
@@ -105,5 +111,17 @@ public class Menu {
             this.dishName = dishName;
             this.dishPrice = dishPrice;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Menu menu)) return false;
+        return getId().equals(menu.getId()) && getRestaurant().equals(menu.getRestaurant()) && getDate().equals(menu.getDate()) && Objects.equals(getMenuItems(), menu.getMenuItems());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRestaurant(), getDate(), getMenuItems());
     }
 }
