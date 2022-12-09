@@ -10,19 +10,35 @@ import java.util.List;
 
 @Service
 public class UserService {
-    DataJpaUserRepository userRepository;
+    DataJpaUserRepository repository;
 
     @Autowired
     public UserService(DataJpaUserRepository userRepository) {
-        this.userRepository = userRepository;
+        this.repository = userRepository;
     }
 
     public List<User> getAll() {
-        return userRepository.getAll();
+        return repository.getAll();
     }
 
     public User save(@Valid User user) {
-        userRepository.save(user);
+        repository.save(user);
         return user;
+    }
+
+    public User create(User user) {
+        return repository.save(user);
+    }
+
+    public void delete(int id) {
+        repository.delete(id);
+    }
+
+    public User getByEmail(String email) {
+        return repository.get(email);
+    }
+
+    public User getById(int id) {
+        return repository.get(id);
     }
 }

@@ -13,4 +13,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u")
     @EntityGraph(attributePaths = "role")
     List<User> findAll();
+
+    int deleteUserById(int id);
+
+    User getByEmail(String email);
 }

@@ -3,6 +3,7 @@ package com.pafolder.graduation.repository.User;
 import com.pafolder.graduation.model.User;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
@@ -20,7 +21,21 @@ public class DataJpaUserRepository {
         return userRepository.findAll();
     }
 
-    public void save(@Valid User user) {
-        userRepository.save(user);
+    @Transactional
+    public User save(@Valid User user) {
+        return userRepository.save(user);
+    }
+
+    public User get(String email) {
+        return userRepository.getByEmail(email);
+    }
+
+    public User get(int id) {
+        return userRepository.getById(id);
+    }
+
+    @Transactional
+    public boolean delete(int id) {
+        return userRepository.deleteUserById(id) != 0;
     }
 }

@@ -62,7 +62,7 @@ public class SPController {
         System.out.println("getByDate(\"2020-01-30\"):");
         System.out.println(menuService.getByDate(Date.valueOf("2020-01-30")));
 
-        User user = new User("Auroutune Karapetovich", "karapetovich@trashedmail.not", User.Role.CLIENT);
+        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", User.Role.CLIENT);
         userService.save(user);
         List<User> users = userService.getAll();
         System.out.println(users);

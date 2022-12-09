@@ -74,7 +74,7 @@ public class WebAppConfiguration implements WebMvcConfigurer {
         viewResolver.setSuffix(".jsp");
         viewResolver.setViewNames("jsp/*");
         viewResolver.setOrder(1);
-        LoggerFactory.getLogger("root").error("viewResolver Bean has been created");
+        LoggerFactory.getLogger("root").info("viewResolver Bean has been created");
         return viewResolver;
     }
 }

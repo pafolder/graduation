@@ -14,13 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static com.pafolder.graduation.TestData.menu1;
 import static com.pafolder.graduation.TestData.menu2;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@Sql(scripts = {"classpath:db/initDB.sql", "classpath:db/populateDB.sql"}, config = @SqlConfig(encoding = "UTF-8"))
-class MenuServiceTest {
+class MenuServiceTest extends AbstractServiceTest{
     @Autowired
     private MenuService service;
-    Logger log = LoggerFactory.getLogger("yellow");
 
     @Test
     void getAll() {

@@ -21,13 +21,13 @@ VALUES (0, 'Фасоль', 99.99),
        (3, 'Капрезе', 326.00),
        (3, 'Вино красное сухое', 450.00);
 
-INSERT INTO user (name, email, role)
-VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', 'CLIENT'),
-       ('Серей Сергеев', 'Segey.Sergeev@dvorkim.ru', 'CLIENT'),
-       ('Александра Александрова', 'aa@nomail.su', 'CLIENT'),
-       ('Пётр Петров', 'petr_p@yandex.com', 'ADMIN'),
-       ('Кирилл Кириллов', 'k_kirillov@qq.org', 'CLIENT'),
-       ('Евгения Евгеньева', 'evgeniya_e@yahoo.kz', 'CLIENT');
+INSERT INTO user (name, email, password, role)
+VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', 'password', 'CLIENT'),
+       ('Серей Сергеев', 'Segey.Sergeev@dvorkim.ru', 'password', 'CLIENT'),
+       ('Александра Александрова', 'aa@nomail.su', 'password', 'CLIENT'),
+       ('Пётр Петров', 'petr_p@yandex.com', 'password', 'ADMIN'),
+       ('Кирилл Кириллов', 'k_kirillov@qq.org', 'password', 'CLIENT'),
+       ('Евгения Евгеньева', 'evgeniya_e@yahoo.kz', 'password', 'CLIENT');
 
 INSERT INTO vote (date, user_id, menu_id)
 VALUES ('2020-01-30', 1, 3),
