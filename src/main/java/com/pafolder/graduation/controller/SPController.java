@@ -6,7 +6,10 @@ import com.pafolder.graduation.model.Vote;
 import com.pafolder.graduation.service.SPMenuService;
 import com.pafolder.graduation.service.SPUserService;
 import com.pafolder.graduation.service.SPVoteService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,22 +24,35 @@ public class SPController {
     private final SPMenuService menuService;
     private final SPUserService userService;
     private final SPVoteService voteService;
+    private final Logger log;
 
     @Autowired
     public SPController(SPMenuService menuService, SPUserService userService, SPVoteService voteService) {
         this.menuService = menuService;
         this.userService = userService;
         this.voteService = voteService;
+        log = LoggerFactory.getLogger("yellow");
     }
 
     @GetMapping("/")
-    public String getIndes() {
-        LoggerFactory.getLogger("yellow").error("@GetMapping('/')");
+    public String getIndexes(HttpServletRequest request, HttpServletResponse response) {
+        log.info("@GetMapping('/')");
+        Cookie [] cookies = request.getCookies();
+        if( cookies.length == 0 ) {
+            Cookie cookie = new Cookie("username", "petr_p@yandex.com");
+            Cookie cookie2 = new Cookie("password", "password");
+            response.addCookie(cookie);
+            response.addCookie(cookie2);
+        } else {
+            for (Cookie cookie: cookies) {
+                log.info(cookie.getName() + "=" + cookie.getValue());
+            }
+        }
         return "thymeleafPage";
     }
 
     @GetMapping("/root")
-    public String getRoot() {
+    public String getRoot(HttpServletRequest request) {
         LoggerFactory.getLogger("yellow").error("@GetMapping('/root')");
         return "thymeleafPage";
     }

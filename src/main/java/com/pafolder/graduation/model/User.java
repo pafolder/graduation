@@ -35,6 +35,11 @@ public class User {
     @NotEmpty
     private String password;
 
+    @Column(name = "enabled", nullable = false)
+    @NotEmpty
+    private boolean enabled = true;
+
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
