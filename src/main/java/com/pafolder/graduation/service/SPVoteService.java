@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VoteService {
+public class SPVoteService {
     DataJpaVoteRepository voteRepository;
 
-    public VoteService(DataJpaVoteRepository voteRepository) {
+    public SPVoteService(DataJpaVoteRepository voteRepository) {
         this.voteRepository = voteRepository;
     }
 

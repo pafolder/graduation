@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService {
+public class SPUserService {
     DataJpaUserRepository repository;
 
     @Autowired
-    public UserService(DataJpaUserRepository userRepository) {
+    public SPUserService(DataJpaUserRepository userRepository) {
         this.repository = userRepository;
     }
 

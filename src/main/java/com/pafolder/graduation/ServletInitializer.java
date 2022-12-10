@@ -2,7 +2,7 @@ package com.pafolder.graduation;
 
 import com.pafolder.graduation.controller.SPController;
 import com.pafolder.graduation.model.Menu;
-import com.pafolder.graduation.service.MenuService;
+import com.pafolder.graduation.service.SPMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -10,9 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 //@Configuration
@@ -33,7 +30,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
         ApplicationContext context = SpringApplication.run(ServletInitializer.class, args);
         Logger logger = LoggerFactory.getLogger("yellow");
-        MenuService service = context.getBean(MenuService.class);
+        SPMenuService service = context.getBean(SPMenuService.class);
 
         Logger log = LoggerFactory.getLogger("yellow");
 

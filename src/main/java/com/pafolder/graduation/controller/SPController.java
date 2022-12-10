@@ -3,9 +3,9 @@ package com.pafolder.graduation.controller;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
-import com.pafolder.graduation.service.MenuService;
-import com.pafolder.graduation.service.UserService;
-import com.pafolder.graduation.service.VoteService;
+import com.pafolder.graduation.service.SPMenuService;
+import com.pafolder.graduation.service.SPUserService;
+import com.pafolder.graduation.service.SPVoteService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.net.http.HttpRequest;
 import java.sql.Date;
 import java.util.List;
 
 @Controller
 public class SPController {
-    private final MenuService menuService;
-    private final UserService userService;
-    private final VoteService voteService;
+    private final SPMenuService menuService;
+    private final SPUserService userService;
+    private final SPVoteService voteService;
 
     @Autowired
-    public SPController(MenuService menuService, UserService userService, VoteService voteService) {
+    public SPController(SPMenuService menuService, SPUserService userService, SPVoteService voteService) {
         this.menuService = menuService;
         this.userService = userService;
         this.voteService = voteService;

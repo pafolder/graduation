@@ -14,7 +14,7 @@ import java.util.List;
 
 @ComponentScan
 @Service
-public class MenuService {
+public class SPMenuService {
     @Autowired
     private DataJpaMenuRepository menuRepository;
 

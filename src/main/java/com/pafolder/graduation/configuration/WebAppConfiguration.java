@@ -1,18 +1,14 @@
 package com.pafolder.graduation.configuration;
 
-import com.pafolder.graduation.repository.Menu.DataJpaMenuRepository;
-import com.pafolder.graduation.service.MenuService;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -23,8 +19,8 @@ import java.util.Properties;
 @PropertySource({"classpath:db/hsqldb.properties"})
 //@EnableWebMvc
 //@Configuration
-@SpringBootConfiguration
-
+@SpringBootApplication
+//@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class WebAppConfiguration implements WebMvcConfigurer {
     @Bean
     LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env) {
