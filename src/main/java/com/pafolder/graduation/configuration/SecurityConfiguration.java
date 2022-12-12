@@ -28,12 +28,29 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.csrf().disable();
+
+        http.authorizeHttpRequests()
+                .requestMatchers( "/login*", "/resources/**", "/error")
+                .permitAll()
+//                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
+//                        "/resources/**", "/add", "/create", "/uploadImage", "/edit/**", "/delete/**")
+//                .hasRole("ADMIN")
+//                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
+//                        "/resources/**")
+//                .hasRole("USER")
+//                .and()
+//                .authorizeHttpRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin()
-                .and()
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll())
+//                .defaultSuccessUrl("/index.html", true)
+//                .failureUrl("/login?error=true")
+//                .and().logout().permitAll()
+//                .and()
                 .httpBasic();
         return http.build();
     }

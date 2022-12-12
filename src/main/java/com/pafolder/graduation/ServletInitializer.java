@@ -34,6 +34,8 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
         Logger log = LoggerFactory.getLogger("yellow");
 
+
+
         for (Menu menu : service.getAll()) {
             log.error(menu.toString());
         }

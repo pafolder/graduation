@@ -9,8 +9,10 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 import java.util.Objects;
@@ -53,24 +55,26 @@ public class WebAppConfiguration implements WebMvcConfigurer {
     }
 
 
-    //    @Bean
+//    @Bean
 //    public ViewResolver internalResourceViewResolver() {
 //        InternalResourceViewResolver bean = new InternalResourceViewResolver();
 //        bean.setViewClass(JstlView.class);
-//        bean.setPrefix("/WEB-INF/jsp/");
+//        bean.setPrefix("/WEB-INF/");
 //        bean.setSuffix(".jsp");
 //        LoggerFactory.getLogger("root").error("viewResolver Bean has been created");
 //        return bean;
 //    }
-    @Bean
-    public InternalResourceViewResolver getViewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+
+
+//    @Bean
+//    public InternalResourceViewResolver getViewResolver() {
+//        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 //        viewResolver.setPrefix("/WEB-INF/jsp/");
-        viewResolver.setPrefix("/WEB-INF/");
-        viewResolver.setSuffix(".jsp");
-        viewResolver.setViewNames("jsp/*");
-        viewResolver.setOrder(1);
-        LoggerFactory.getLogger("root").info("viewResolver Bean has been created");
-        return viewResolver;
-    }
+//        viewResolver.setPrefix("/WEB-INF/");
+//        viewResolver.setSuffix(".jsp");
+//        viewResolver.setViewNames("jsp/*");
+//        viewResolver.setOrder(1);
+//        LoggerFactory.getLogger("root").info("JSP viewResolver Bean has been created");
+//        return viewResolver;
+//    }
 }

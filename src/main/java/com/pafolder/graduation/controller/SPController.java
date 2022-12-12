@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.sql.Date;
 import java.util.List;
@@ -32,36 +33,51 @@ public class SPController {
         this.userService = userService;
         this.voteService = voteService;
         log = LoggerFactory.getLogger("yellow");
+        log.error("Hello! Logging has started!");
     }
 
-    @GetMapping("/")
+
+    @GetMapping("/login")
+    public String login() {
+        log.error("login");
+        return "login.html";
+    }
+
+   @GetMapping("/error")
+    public String error() {
+        log.error("error");
+        return "";
+    }
+
+        @GetMapping("/")
     public String getIndexes(HttpServletRequest request, HttpServletResponse response) {
-        log.info("@GetMapping('/')");
-        Cookie [] cookies = request.getCookies();
-        if( cookies.length == 0 ) {
-            Cookie cookie = new Cookie("username", "petr_p@yandex.com");
-            Cookie cookie2 = new Cookie("password", "password");
-            response.addCookie(cookie);
-            response.addCookie(cookie2);
-        } else {
-            for (Cookie cookie: cookies) {
-                log.info(cookie.getName() + "=" + cookie.getValue());
-            }
-        }
-        return "thymeleafPage";
+        log.error("@GetMapping('/')");
+//        Cookie [] cookies = request.getCookies();
+//        if( cookies.length == 0 ) {
+//            Cookie cookie = new Cookie("username", "petr_p@yandex.com");
+//            Cookie cookie2 = new Cookie("password", "password");
+//            response.addCookie(cookie);
+//            response.addCookie(cookie2);
+//        } else {
+//            for (Cookie cookie: cookies) {
+//                log.info(cookie.getName() + "=" + cookie.getValue());
+//            }
+//        }
+        return "index";
     }
 
     @GetMapping("/root")
     public String getRoot(HttpServletRequest request) {
-        LoggerFactory.getLogger("yellow").error("@GetMapping('/root')");
+        log.error("@GetMapping('/root')");
         return "thymeleafPage";
     }
 
     @GetMapping("/menus")
     public String getAll(HttpServletRequest request, Model model) {
+        log.error("@GetMapping('/menus')");
         List<Menu> menus = menuService.getAll();
         model.addAttribute("menus", menus);
-        return "jsp/menus";
+        return "menus";
     }
 
     public void testDataBase() {
