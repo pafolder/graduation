@@ -1,10 +1,7 @@
 package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.util.Objects;
 
@@ -22,9 +19,10 @@ public class User {
 
     @Column(name = "name", nullable = false)
     @NotBlank
+    @Size(min = 2)
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     @NotNull
     @NotEmpty
     @Email
@@ -36,7 +34,6 @@ public class User {
     private String password;
 
     @Column(name = "enabled", nullable = false)
-    @NotEmpty
     private boolean enabled = true;
 
 

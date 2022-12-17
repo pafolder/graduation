@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 @Repository
-@Validated
 public class DataJpaVoteRepository {
     private final VoteRepository voteRepository;
 
@@ -20,7 +19,7 @@ public class DataJpaVoteRepository {
         return voteRepository.findAll();
     }
 
-    public void save(@Valid Vote vote) {
+    public void save(Vote vote) {
         voteRepository.save(vote);
     }
 }

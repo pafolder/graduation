@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 
 @Repository
-@Validated
 public class DataJpaUserRepository {
     private final UserRepository userRepository;
 
@@ -22,7 +21,7 @@ public class DataJpaUserRepository {
     }
 
     @Transactional
-    public User save(@Valid User user) {
+    public User save(User user) {
         return userRepository.save(user);
     }
 

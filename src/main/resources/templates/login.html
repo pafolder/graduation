@@ -1,22 +1,43 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-  <title>Please Log In</title>
+    <title>Please Log In</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/css/style.css?v=2">
 </head>
 <body>
-<h1>Please Log In</h1>
-<div th:if="${param.error}">
-  Invalid username and password.</div>
-<div th:if="${param.logout}">
-  You have been logged out.</div>
-<form th:action="@{/login}" method="post">
-  <div>
-    <input type="text" name="username" placeholder="Username"/>
-  </div>
-  <div>
-    <input type="password" name="password" placeholder="Password"/>
-  </div>
-  <input type="submit" value="Log in" />
-</form>
+<div class="container align-items-center">
+    <h2 class="text-center mb-3">Please Log In</h2>
+    <br>
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <form class="text-center mb-3" id="loginForm" th:action="@{/login}" method="post">
+        <!--  <form th:id="loginForm" action="spring_security_check" method="post">-->
+        <div>
+            <input type="text" name="username" placeholder="Username"/>
+        </div>
+        <br>
+        <div>
+            <input type="password" name="password" placeholder="Password"/>
+        </div>
+        <br>
+        <!--        <input type="submit" value="Log in"/>-->
+        <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+    </form>
+    <div class=" text-center mb-3">
+    <button class="btn btn-success" onclick="loginAsPetr_P()"> Login as petr_p@yandex.com</button>
+    </div>
+</div>
+<script>
+    function loginAsPetr_P() {
+        document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
+        document.getElementsByName("password")[0].value = 'password';
+        document.getElementById("loginForm").submit();
+    }
+</script>
 </body>
 </html>

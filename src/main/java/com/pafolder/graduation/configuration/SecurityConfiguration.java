@@ -28,10 +28,11 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+//        http.csrf().disable();
+        http.csrf().ignoringRequestMatchers("/login");
 
         http.authorizeHttpRequests()
-                .requestMatchers( "/login*", "/resources/**", "/error")
+                .requestMatchers( "/login*", "/resources/**", "/webjars/**", "/error")
                 .permitAll()
 //                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
 //                        "/resources/**", "/add", "/create", "/uploadImage", "/edit/**", "/delete/**")
@@ -46,7 +47,9 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin(form -> form
                         .loginPage("/login")
+//                        .loginProcessingUrl("/spring_security_check")
                         .permitAll())
+                .csrf().disable()
 //                .defaultSuccessUrl("/index.html", true)
 //                .failureUrl("/login?error=true")
 //                .and().logout().permitAll()

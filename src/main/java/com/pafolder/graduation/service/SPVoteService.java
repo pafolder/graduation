@@ -19,7 +19,7 @@ public class SPVoteService {
         return voteRepository.getAll();
     }
 
-    public Vote save(@Valid Vote vote) {
+    public Vote save(Vote vote) {
         voteRepository.save(vote);
         return vote;
     }

@@ -25,7 +25,7 @@ public class SPMenuService {
 
     @CacheEvict("user")
     public void addItem(int menuId, String name, Double price) {
-        menuRepository.addItem(menuId, new Menu.@Valid Item(name, price));
+        menuRepository.addItem(menuId, new Menu.Item(name, price));
     }
 
     public Menu addMenu(Menu menu) {

@@ -9,10 +9,8 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 import java.util.Objects;
@@ -54,7 +52,6 @@ public class WebAppConfiguration implements WebMvcConfigurer {
                 .addScript(Objects.requireNonNull(env.getProperty("jdbc.populateLocation"))).build();
     }
 
-
 //    @Bean
 //    public ViewResolver internalResourceViewResolver() {
 //        InternalResourceViewResolver bean = new InternalResourceViewResolver();
@@ -65,16 +62,14 @@ public class WebAppConfiguration implements WebMvcConfigurer {
 //        return bean;
 //    }
 
-
-//    @Bean
-//    public InternalResourceViewResolver getViewResolver() {
-//        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//        viewResolver.setPrefix("/WEB-INF/jsp/");
-//        viewResolver.setPrefix("/WEB-INF/");
-//        viewResolver.setSuffix(".jsp");
-//        viewResolver.setViewNames("jsp/*");
-//        viewResolver.setOrder(1);
-//        LoggerFactory.getLogger("root").info("JSP viewResolver Bean has been created");
-//        return viewResolver;
-//    }
+    @Bean
+    public InternalResourceViewResolver getViewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/");
+        viewResolver.setSuffix(".jsp");
+        viewResolver.setViewNames("jsp/*");
+        viewResolver.setOrder(1);
+        LoggerFactory.getLogger("root").info("JSP viewResolver Bean has been created");
+        return viewResolver;
+    }
 }

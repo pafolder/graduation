@@ -3,21 +3,25 @@ package com.pafolder.graduation.controller;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
+import com.pafolder.graduation.security.SPUserDetails;
 import com.pafolder.graduation.service.SPMenuService;
 import com.pafolder.graduation.service.SPUserService;
 import com.pafolder.graduation.service.SPVoteService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -34,23 +38,25 @@ public class SPController {
         this.voteService = voteService;
         log = LoggerFactory.getLogger("yellow");
         log.error("Hello! Logging has started!");
+        testDataBase();
     }
-
 
     @GetMapping("/login")
     public String login() {
         log.error("login");
-        return "login.html";
+        return "login";
     }
 
-   @GetMapping("/error")
-    public String error() {
-        log.error("error");
-        return "";
-    }
+//   @GetMapping("/error")
+//    public String error(@RequestParam String message, Model model) {
+//        log.error("=== /error: " + message);
+//       List<Menu> menus = menuService.getAll();
+//       model.addAttribute("menus", menus);
+//        return "jsp/menus";
+//    }
 
         @GetMapping("/")
-    public String getIndexes(HttpServletRequest request, HttpServletResponse response) {
+    public String getIndexes(HttpServletRequest request, HttpServletResponse response, Model model) {
         log.error("@GetMapping('/')");
 //        Cookie [] cookies = request.getCookies();
 //        if( cookies.length == 0 ) {
@@ -63,7 +69,19 @@ public class SPController {
 //                log.info(cookie.getName() + "=" + cookie.getValue());
 //            }
 //        }
-        return "index";
+            SPUserDetails currentUser = null;
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (!(authentication instanceof AnonymousAuthenticationToken)) {
+                 currentUser = (SPUserDetails) (authentication.getPrincipal());
+            }
+
+            User user = currentUser.getUser();
+
+            List<Menu> menus = menuService.getAll();
+            model.addAttribute("menus", menus);
+            model.addAttribute("currentUser", currentUser.getUser().getEmail());
+        return "jsp/menus";
     }
 
     @GetMapping("/root")
@@ -77,15 +95,16 @@ public class SPController {
         log.error("@GetMapping('/menus')");
         List<Menu> menus = menuService.getAll();
         model.addAttribute("menus", menus);
-        return "menus";
+        return "jsp/menus";
     }
 
     public void testDataBase() {
 //        menuService.addItem(100000, "Hello", 1300.);
 //        Menu menu = new Menu("Меню Пятого Ресторана", Date.valueOf(LocalDate.now()));
 //        Menu menu2 = new Menu("Меню Пятого Ресторана", Date.valueOf(LocalDate.now()));
-//        Menu menu1 = new Menu("Меню Четвёртого Ресторана", Date.valueOf(LocalDate.now()));
-//        menuService.create(menu1);
+        Menu menu1 = new Menu("Меню Четвёртого Ресторана", Date.valueOf(LocalDate.now()));
+        menu1.addItems(new Menu.Item( "Hello", 1300.));
+        menuService.addMenu(menu1);
 //        menuService.create(menu);
 
         List<Menu> menuList = menuService.getAll();
@@ -97,6 +116,7 @@ public class SPController {
         userService.save(user);
         List<User> users = userService.getAll();
         System.out.println(users);
+
 
 //        Vote vote = new Vote(Date.valueOf(LocalDate.now()), users.get(2), menuList.get(3));
 //        voteService.save(vote);

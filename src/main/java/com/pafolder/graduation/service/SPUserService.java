@@ -21,7 +21,7 @@ public class SPUserService {
         return repository.getAll();
     }
 
-    public User save(@Valid User user) {
+    public User save(User user) {
         repository.save(user);
         return user;
     }
