@@ -5,6 +5,7 @@ import jakarta.validation.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Range;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -97,6 +98,7 @@ public class Menu {
 
     @Embeddable
     public static class Item {
+
         @NotNull
         @NotBlank
         private String dishName;
@@ -109,6 +111,22 @@ public class Menu {
 
         public Item(String dishName, Double dishPrice) {
             this.dishName = dishName;
+            this.dishPrice = dishPrice;
+        }
+
+        public String getDishName() {
+            return dishName;
+        }
+
+        public void setDishName(String dishName) {
+            this.dishName = dishName;
+        }
+
+        public Double getDishPrice() {
+            return dishPrice;
+        }
+
+        public void setDishPrice(Double dishPrice) {
             this.dishPrice = dishPrice;
         }
     }
