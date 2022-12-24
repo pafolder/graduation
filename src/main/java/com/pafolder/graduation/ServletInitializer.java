@@ -43,12 +43,12 @@ public class ServletInitializer extends SpringBootServletInitializer {
         SPController controller = context.getBean(SPController.class);
         controller.testDataBase();
     }
-//	@Controller
-//	public static class WarInitializerController {
-//		@GetMapping("/")
-//		public String handler() {
+	@Controller
+	public static class WarInitializerController {
+		@GetMapping("/")
+		public String handler() {
 // 			return "jsp/index";
-// 			return "thymeleafPage";
-//		}
-//	}
+ 			return "thymeleafPage";
+		}
+	}
 }

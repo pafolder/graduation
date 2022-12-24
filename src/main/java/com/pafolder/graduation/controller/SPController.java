@@ -30,26 +30,15 @@ public class SPController {
         this.voteService = voteService;
     }
 
-    @GetMapping("/")
-    public String getIndes() {
-        LoggerFactory.getLogger("yellow").error("@GetMapping('/')");
-        return "thymeleafPage";
-    }
-
     @GetMapping("/root")
     public String getRoot() {
         LoggerFactory.getLogger("yellow").error("@GetMapping('/root')");
         return "thymeleafPage";
     }
 
-    @GetMapping("/menus")
-    public String getAll(HttpServletRequest request, Model model) {
-        List<Menu> menus = menuService.getAll();
-        model.addAttribute("menus", menus);
-        return "jsp/menus";
-    }
-
     public void testDataBase() {
+    }
+    /*
 //        menuService.addItem(100000, "Hello", 1300.);
 //        Menu menu = new Menu("Меню Пятого Ресторана", Date.valueOf(LocalDate.now()));
 //        Menu menu2 = new Menu("Меню Пятого Ресторана", Date.valueOf(LocalDate.now()));
@@ -72,4 +61,6 @@ public class SPController {
         List<Vote> votes = voteService.getAll();
         System.out.println(votes);
     }
+
+     */
 }

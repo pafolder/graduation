@@ -47,7 +47,7 @@ public class Menu {
         this.restaurant = restaurant;
         this.date = date;
         menuItems = new ArrayList<>();
-        addItems(items);
+//        addItems(items);
     }
 
     public Date getDate() {
@@ -78,10 +78,10 @@ public class Menu {
         return menuItems;
     }
 
-    public void addItems(Item... items) {
-        List<Item> itemList= Arrays.asList(items);
-        menuItems.addAll(itemList);
-    }
+//    public void addItems(Item... items) {
+//        List<Item> itemList= Arrays.asList(items);
+//        menuItems.addAll(itemList);
+//    }
 
     @Override
     public String toString() {

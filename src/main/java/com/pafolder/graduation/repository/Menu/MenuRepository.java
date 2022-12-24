@@ -25,6 +25,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     Menu save(Menu menu);
 
-    Menu findByDateAndRestaurant(Date date, String restaurant);
+  //  Menu findByDateAndRestaurant(Date date, String restaurant);
 }
 

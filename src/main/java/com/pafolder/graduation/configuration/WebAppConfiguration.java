@@ -22,10 +22,10 @@ import java.util.Properties;
 
 @PropertySource({"classpath:db/hsqldb.properties"})
 //@EnableWebMvc
-//@Configuration
-@SpringBootConfiguration
+@Configuration
+//@SpringBootConfiguration
 
-public class WebAppConfiguration implements WebMvcConfigurer {
+public class WebAppConfiguration {
     @Bean
     LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env) {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();

@@ -45,7 +45,7 @@ public class DataJpaMenuRepository {
 
     @Transactional
     public Menu add(Menu menu) {
-        Menu existing = menuRepository.findByDateAndRestaurant(menu.getDate(), menu.getRestaurant());
+        Menu existing = null; // menuRepository.findByDateAndRestaurant(menu.getDate(), menu.getRestaurant());
         if (existing != null) {
             existing = menu;
             return existing;
