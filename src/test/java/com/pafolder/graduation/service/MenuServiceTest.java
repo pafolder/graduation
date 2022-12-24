@@ -9,7 +9,7 @@ import static com.pafolder.graduation.TestData.menu2;
 
 class MenuServiceTest extends AbstractServiceTest{
     @Autowired
-    private SPMenuService service;
+    private MenuService service;
 
     @Test
     void getAll() {

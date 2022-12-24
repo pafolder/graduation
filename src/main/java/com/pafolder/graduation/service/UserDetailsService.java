@@ -1,15 +1,14 @@
 package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.User;
-import com.pafolder.graduation.security.SPUserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.pafolder.graduation.security.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SPUserDetailsService implements UserDetailsService {
-    private SPUserService userService;
+public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+    private UserService userService;
     private PasswordEncoder encoder;
 
     public PasswordEncoder getEncoder() {
@@ -21,7 +20,7 @@ public class SPUserDetailsService implements UserDetailsService {
     }
 
 
-    public SPUserDetailsService(SPUserService userService) {
+    public UserDetailsService(UserService userService) {
         this.userService = userService;
     }
 
@@ -31,6 +30,6 @@ public class SPUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("No such user " + email);
         }
-        return new SPUserDetails(user, encoder);
+        return new UserDetails(user, encoder);
     }
 }

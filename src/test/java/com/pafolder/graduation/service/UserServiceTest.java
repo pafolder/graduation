@@ -15,7 +15,7 @@ class UserServiceTest extends AbstractServiceTest {
 
 
     @Autowired
-    private SPUserService service;
+    private UserService service;
 
     @Test
     void getAll() {

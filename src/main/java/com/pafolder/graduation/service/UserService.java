@@ -2,18 +2,17 @@ package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.repository.User.DataJpaUserRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class SPUserService {
+public class UserService {
     DataJpaUserRepository repository;
 
     @Autowired
-    public SPUserService(DataJpaUserRepository userRepository) {
+    public UserService(DataJpaUserRepository userRepository) {
         this.repository = userRepository;
     }
 

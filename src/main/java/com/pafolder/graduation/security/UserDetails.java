@@ -2,16 +2,15 @@ package com.pafolder.graduation.security;
 
 import com.pafolder.graduation.model.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
-public class SPUserDetails implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private User user;
     private PasswordEncoder encoder;
 
-    public SPUserDetails(User user, PasswordEncoder encoder) {
+    public UserDetails(User user, PasswordEncoder encoder) {
         this.user = user;
         this.encoder = encoder;
     }

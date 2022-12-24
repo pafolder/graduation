@@ -1,14 +1,14 @@
 package com.pafolder.graduation.controller;
 
-import com.pafolder.graduation.service.SPMenuService;
+import com.pafolder.graduation.service.MenuService;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -21,7 +21,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @Sql(scripts = {"classpath:db/initDB.sql", "classpath:db/populateDB.sql"}, config = @SqlConfig(encoding = "UTF-8"))
-
-class SPRestControllerTest {
+@EnableWebSecurity
+class MenuRestControllerTest {
     private static final Locale RU_LOCALE = new Locale("ru");
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 
@@ -60,7 +59,7 @@ class SPRestControllerTest {
     }
 
     @Autowired
-    SPMenuService menuService;
+    MenuService menuService;
 
     @Test
     void getAll() throws Exception {

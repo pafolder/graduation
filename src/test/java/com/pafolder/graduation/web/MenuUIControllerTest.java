@@ -1,13 +1,11 @@
 package com.pafolder.graduation.web;
 
 import com.pafolder.graduation.ServletInitializer;
-import com.pafolder.graduation.controller.SPController;
+import com.pafolder.graduation.controller.UIController;
 import jakarta.annotation.PostConstruct;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,7 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 //@ContextConfiguration(classes = WebConfig.class)
 @PropertySource({"classpath:db/hsqldb.properties"} )
 @SpringJUnitWebConfig(classes = ServletInitializer.class)
-class MenuRestControllerTest {
+@EnableWebSecurity
+class MenuUIControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
@@ -40,23 +39,11 @@ class MenuRestControllerTest {
 
     @PostConstruct
     private void postConstruct() {
-        SPController controller = webApplicationContext.getBean(SPController.class);
+        UIController controller = webApplicationContext.getBean(UIController.class);
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
                 .build();
     }
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
-    void getAll() throws Exception {
-        mockMvc.perform(get("/rest/menus")).andDo(print());
-    }
 }

@@ -3,16 +3,15 @@ package com.pafolder.graduation.controller;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
-import com.pafolder.graduation.security.SPUserDetails;
-import com.pafolder.graduation.service.SPMenuService;
-import com.pafolder.graduation.service.SPUserService;
-import com.pafolder.graduation.service.SPVoteService;
+import com.pafolder.graduation.security.UserDetails;
+import com.pafolder.graduation.service.MenuService;
+import com.pafolder.graduation.service.UserService;
+import com.pafolder.graduation.service.VoteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +24,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-public class SPController {
-    private final SPMenuService menuService;
-    private final SPUserService userService;
-    private final SPVoteService voteService;
+public class UIController {
+    private final MenuService menuService;
+    private final UserService userService;
+    private final VoteService voteService;
     private final Logger log;
 
     @Autowired
-    public SPController(SPMenuService menuService, SPUserService userService, SPVoteService voteService) {
+    public UIController(MenuService menuService, UserService userService, VoteService voteService) {
         this.menuService = menuService;
         this.userService = userService;
         this.voteService = voteService;
@@ -69,11 +68,11 @@ public class SPController {
 //                log.info(cookie.getName() + "=" + cookie.getValue());
 //            }
 //        }
-            SPUserDetails currentUser = null;
+            UserDetails currentUser = null;
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (!(authentication instanceof AnonymousAuthenticationToken)) {
-                 currentUser = (SPUserDetails) (authentication.getPrincipal());
+                 currentUser = (UserDetails) (authentication.getPrincipal());
             }
 
             User user = currentUser.getUser();

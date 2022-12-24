@@ -2,7 +2,6 @@ package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.repository.Menu.DataJpaMenuRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,7 +13,7 @@ import java.util.List;
 
 @ComponentScan
 @Service
-public class SPMenuService {
+public class MenuService {
     @Autowired
     private DataJpaMenuRepository menuRepository;
 
