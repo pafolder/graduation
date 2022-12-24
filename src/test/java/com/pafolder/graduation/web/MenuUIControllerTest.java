@@ -5,7 +5,7 @@ import com.pafolder.graduation.controller.UIController;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 //@ContextConfiguration(classes = WebConfig.class)
 @PropertySource({"classpath:db/hsqldb.properties"} )
 @SpringJUnitWebConfig(classes = ServletInitializer.class)
-@EnableWebSecurity
+//@EnableWebSecurity
 class MenuUIControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;

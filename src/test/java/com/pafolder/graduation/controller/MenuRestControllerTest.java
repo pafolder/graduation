@@ -1,6 +1,5 @@
 package com.pafolder.graduation.controller;
 
-import com.pafolder.graduation.service.MenuService;
 import jakarta.annotation.PostConstruct;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -21,14 +20,14 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.Locale;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+//import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @Sql(scripts = {"classpath:db/initDB.sql", "classpath:db/populateDB.sql"}, config = @SqlConfig(encoding = "UTF-8"))
-@EnableWebSecurity
+//@EnableWebSecurity
 class MenuRestControllerTest {
     private static final Locale RU_LOCALE = new Locale("ru");
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
@@ -54,17 +53,14 @@ class MenuRestControllerTest {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
 //                .addFilter(CHARACTER_ENCODING_FILTER)
-                .apply(springSecurity())
+//                .apply(springSecurity())
                 .build();
     }
-
-    @Autowired
-    MenuService menuService;
 
     @Test
     void getAll() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/rest").contentType(MediaType.APPLICATION_JSON)
-                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("petr_p@yandex.com", "password"))
+//                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("petr_p@yandex.com", "password"))
 )
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -74,7 +70,7 @@ class MenuRestControllerTest {
     @Test
     void addMenu() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/rest").contentType(MediaType.APPLICATION_JSON)
-                .with(SecurityMockMvcRequestPostProcessors.httpBasic("petr_p@yandex.com", "password"))
+//                .with(SecurityMockMvcRequestPostProcessors.httpBasic("petr_p@yandex.com", "password"))
 //                .content(JsonUtil.writeValue(updatedTo)))
                 .content("{\"id\":0,\"restaurant\":\"Старый Ресторан\"," +
                         "\"date\":\"2020-01-30\"," +
