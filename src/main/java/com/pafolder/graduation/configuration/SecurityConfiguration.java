@@ -32,7 +32,8 @@ public class SecurityConfiguration {
         http.csrf().ignoringRequestMatchers("/login");
 
         http.authorizeHttpRequests()
-                .requestMatchers( "/login*", "/resources/**", "/webjars/**", "/error")
+                .requestMatchers( "/login*", "/resources/**", "/webjars/**",
+                        "/v3/**","/swagger-ui/**","/error")
                 .permitAll()
 //                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
 //                        "/resources/**", "/add", "/create", "/uploadImage", "/edit/**", "/delete/**")
