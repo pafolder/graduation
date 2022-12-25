@@ -11,20 +11,17 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.List;
 
-@ComponentScan
 @Service
 public class MenuService {
-    @Autowired
-    private DataJpaMenuRepository menuRepository;
+    private final DataJpaMenuRepository menuRepository;
+
+    public MenuService(DataJpaMenuRepository menuRepository) {
+        this.menuRepository = menuRepository;
+    }
 
     @Cacheable("user")
     public List<Menu> getAll() {
         return menuRepository.getAll();
-    }
-
-    @CacheEvict("user")
-    public void addItem(int menuId, String name, Double price) {
-        menuRepository.addItem(menuId, new Menu.Item(name, price));
     }
 
     public Menu addMenu(Menu menu) {
