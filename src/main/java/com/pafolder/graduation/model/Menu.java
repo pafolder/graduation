@@ -1,11 +1,9 @@
 package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Range;
 
-import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +28,6 @@ public class Menu {
     @NotNull
     private Date date;
 
-    @Valid
     @NotNull
     @NotEmpty
     @ElementCollection(targetClass = Item.class)
@@ -98,7 +95,6 @@ public class Menu {
 
     @Embeddable
     public static class Item {
-
         @NotNull
         @NotBlank
         private String dishName;

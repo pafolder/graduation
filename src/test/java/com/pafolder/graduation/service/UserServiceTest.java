@@ -13,7 +13,6 @@ import static com.pafolder.graduation.TestData.*;
 class UserServiceTest extends AbstractServiceTest {
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "id");
 
-
     @Autowired
     private UserService service;
 
