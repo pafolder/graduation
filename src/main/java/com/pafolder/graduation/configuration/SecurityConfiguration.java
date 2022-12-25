@@ -33,7 +33,7 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests()
                 .requestMatchers( "/login*", "/resources/**", "/webjars/**",
-                        "/swagger-ui/**", "/v3/**", "/error")
+                        "/v3/**","/swagger-ui/**","/error")
                 .permitAll()
 //                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
 //                        "/resources/**", "/add", "/create", "/uploadImage", "/edit/**", "/delete/**")

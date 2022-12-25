@@ -5,12 +5,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
 
-@ComponentScan
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m")
@@ -25,6 +25,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     Menu save(Menu menu);
 
-    Menu findByDateAndRestaurant(Date date, String restaurant);
+    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
+    Menu findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") String restaurant);
 }
 
