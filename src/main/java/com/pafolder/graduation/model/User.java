@@ -1,12 +1,15 @@
 package com.pafolder.graduation.model;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Objects;
 
 
 @Entity(name = "User")
+@RepositoryRestResource(exported = false)
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
 public class User {
     private static final String DEFAULT_PASSWORD = "password";

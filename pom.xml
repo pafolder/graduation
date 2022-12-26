@@ -5,17 +5,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.2-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pafolder</groupId>
     <artifactId>graduation</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>graduation</name>
     <description>Graduation project on Spring Boot</description>
     <properties>
         <java.version>19</java.version>
+        <springdoc.version>2.0.2</springdoc.version>
     </properties>
     <dependencies>
         <dependency>
@@ -107,20 +108,17 @@
             <artifactId>jquery</artifactId>
             <version>3.6.1</version>
         </dependency>
+
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.0.2</version>
+            <version>${springdoc.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-            <version>2.0.2</version>
-        </dependency>
+
     </dependencies>
 
     <build>
-        <finalName>${artifactId}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

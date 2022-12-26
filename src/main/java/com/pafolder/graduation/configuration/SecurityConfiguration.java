@@ -1,6 +1,6 @@
 package com.pafolder.graduation.configuration;
 
-import com.pafolder.graduation.service.UserDetailsService;
+import com.pafolder.graduation.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder,
-                                                       UserDetailsService userDetailsService) throws Exception {
-        userDetailsService.setEncoder(passwordEncoder);
+                                                       UserService userService) throws Exception {
+        userService.setEncoder(passwordEncoder);
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(userDetailsService)
+                .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder)
                 .and()
                 .build();

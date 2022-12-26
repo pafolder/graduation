@@ -2,7 +2,9 @@ package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -11,12 +13,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "Menu")
+@RepositoryRestResource(exported = false)
 @Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant", "date"}, name = "menu_unique_restaurant_date_idx")})
 public class Menu {
     @Id
     @SequenceGenerator(name = "menu_id_seq", sequenceName = "menu_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_id_seq")
     @Column(name = "id", nullable = false)
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "restaurant", nullable = false)

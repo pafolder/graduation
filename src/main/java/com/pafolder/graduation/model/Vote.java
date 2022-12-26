@@ -2,10 +2,12 @@ package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.sql.Date;
 
 @Entity(name = "Vote")
+@RepositoryRestResource(exported = false)
 @Table(name = "vote",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "vote_unique_date_user_idx")})
 public class Vote {

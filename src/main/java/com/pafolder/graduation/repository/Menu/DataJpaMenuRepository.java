@@ -1,12 +1,15 @@
 package com.pafolder.graduation.repository.Menu;
 
 import com.pafolder.graduation.model.Menu;
+import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
 
+@RepositoryRestResource(exported = false)
 @Repository
 public class DataJpaMenuRepository {
     private final MenuRepository menuRepository;
