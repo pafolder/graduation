@@ -1,16 +1,13 @@
 package com.pafolder.graduation.model;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
-
 @Entity(name = "User")
-@RepositoryRestResource(exported = false)
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
 public class User {
     private static final String DEFAULT_PASSWORD = "password";
     @Id
@@ -38,7 +35,6 @@ public class User {
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
-
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -90,6 +86,14 @@ public class User {
         this.password = password;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
@@ -116,8 +120,13 @@ public class User {
         return Objects.hash(getId(), getName(), getEmail(), password, role);
     }
 
-    public enum Role {
-        CLIENT,
-        ADMIN
+    public enum Role implements GrantedAuthority {
+        USER,
+        ADMIN;
+
+        @Override
+        public String getAuthority() {
+            return "ROLE_" + name();
+        }
     }
 }

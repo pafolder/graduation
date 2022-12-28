@@ -1,7 +1,7 @@
-package com.pafolder.graduation.repository.Menu;
+package com.pafolder.graduation.repository.menu;
 
 import com.pafolder.graduation.model.Menu;
-import org.springframework.context.annotation.ComponentScan;
+import com.pafolder.graduation.model.Restaurant;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +14,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m")
-    @EntityGraph(attributePaths = "menuItems")
+    @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     List<Menu> findAll();
 
     @Query("SELECT m FROM Menu m WHERE m.date = ?1")
@@ -26,6 +26,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     Menu save(Menu menu);
 
     @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
-    Menu findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") String restaurant);
+    Menu findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") Restaurant restaurant);
 }
 

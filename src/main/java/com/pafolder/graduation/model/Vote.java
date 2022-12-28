@@ -2,12 +2,10 @@ package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.sql.Date;
 
-@Entity(name = "Vote")
-@RepositoryRestResource(exported = false)
+@Entity
 @Table(name = "vote",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "vote_unique_date_user_idx")})
 public class Vote {
@@ -17,6 +15,16 @@ public class Vote {
     private Integer id;
     @Column(name = "date", nullable = false)
     private Date date;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id", nullable = false)
+    @NotNull
+    private Menu menu;
 
     public Vote() {
     }
@@ -33,16 +41,38 @@ public class Vote {
                 "id=" + id +
                 " " + date +
                 " '" + user.getName() + '\'' +
-                " '" + menu.getRestaurant() + '\'';
+                " '" + menu.getRestaurant().getName() + '\'';
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @NotNull
-    private User user;
+    public Integer getId() {
+        return id;
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "menu_id", nullable = false)
-    @NotNull
-    private Menu menu;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
 }

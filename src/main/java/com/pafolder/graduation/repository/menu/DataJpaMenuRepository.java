@@ -1,15 +1,14 @@
-package com.pafolder.graduation.repository.Menu;
+package com.pafolder.graduation.repository.menu;
 
 import com.pafolder.graduation.model.Menu;
-import io.swagger.v3.oas.annotations.Hidden;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import com.pafolder.graduation.model.Restaurant;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
-@RepositoryRestResource(exported = false)
 @Repository
 public class DataJpaMenuRepository {
     private final MenuRepository menuRepository;
@@ -36,6 +35,10 @@ public class DataJpaMenuRepository {
         return menuRepository.findByDate(date);
     }
 
+    public Menu getByDateAndRestaurant(Date date, Restaurant restaurant) {
+        return menuRepository.findByDateAndRestaurant(date, restaurant);
+    }
+
     @Transactional
     public boolean delete(int id) {
         return menuRepository.deleteById(id);
@@ -49,5 +52,9 @@ public class DataJpaMenuRepository {
         } else {
             return menuRepository.save(menu);
         }
+    }
+
+    public Optional<Menu> getById(Integer id) {
+        return menuRepository.findById(id);
     }
 }

@@ -29,13 +29,21 @@
         <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
     </form>
     <div class=" text-center mb-3">
-    <button class="btn btn-success" onclick="loginAsPetr_P()"> Login as petr_p@yandex.com</button>
+    <button class="btn btn-success" onclick="loginAsAdmin()"> Login as ADMIN</button>
+    <button class="btn btn-success" onclick="loginAsUser()"> Login as USER</button>
     <button class="btn btn-success" onclick="location.href='http://localhost:8080/swagger-ui/index.html'">Swagger</button>
     </div>
 </div>
 <script>
-    function loginAsPetr_P() {
+    function loginAsAdmin() {
         document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
+        document.getElementsByName("password")[0].value = 'password';
+        document.getElementById("loginForm").submit();
+    }
+
+
+    function loginAsUser() {
+        document.getElementsByName("username")[0].value = 'Segey.Sergeev@dvorkin.ru';
         document.getElementsByName("password")[0].value = 'password';
         document.getElementById("loginForm").submit();
     }

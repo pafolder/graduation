@@ -1,13 +1,14 @@
 package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.User;
-import com.pafolder.graduation.repository.User.DataJpaUserRepository;
+import com.pafolder.graduation.repository.user.DataJpaUserRepository;
 import com.pafolder.graduation.security.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.List;
 
 @Service
@@ -55,7 +56,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = getByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("No such user " + email);

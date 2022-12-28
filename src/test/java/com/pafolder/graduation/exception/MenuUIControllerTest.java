@@ -1,4 +1,4 @@
-package com.pafolder.graduation.web;
+package com.pafolder.graduation.exception;
 
 import com.pafolder.graduation.ServletInitializer;
 import com.pafolder.graduation.controller.UIController;

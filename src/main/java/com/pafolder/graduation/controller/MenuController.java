@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Menus", description = "The Graduation Menus API")
 @RequestMapping("/rest")
-public class MenuRestController extends AbstractRestController {
+public class MenuController extends AbstractController {
 
     @GetMapping("/menus")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
@@ -32,13 +32,13 @@ public class MenuRestController extends AbstractRestController {
         return list;
     }
 
-    @PutMapping("/menus")
+    @PostMapping("/menus")
     @ResponseStatus(HttpStatus.CREATED)
 //    public void addMenu(@Valid @RequestBody Menu menu, Authentication authentication) {
     public void addMenu(@Valid @RequestBody Menu menu, @AuthenticationPrincipal UserDetails userDetails) {
 //        Object user = authentication.getPrincipal();
         User user = userDetails.getUser();
         log.info("public void addMenu(@Valid @RequestBody Menu menu), Authenticated user: {}", user.getEmail());
-        menuService.addMenu(menu);
+        menuService.add(menu);
     }
 }

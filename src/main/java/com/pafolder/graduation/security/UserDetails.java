@@ -2,9 +2,12 @@ package com.pafolder.graduation.security;
 
 import com.pafolder.graduation.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private User user;
@@ -17,7 +20,9 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getAuthority()));
+        return authorities;
     }
 
     @Override
@@ -47,7 +52,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isEnabled();
     }
 
     public User getUser() {

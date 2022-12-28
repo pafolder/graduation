@@ -1,6 +1,7 @@
 package com.pafolder.graduation;
 
 import com.pafolder.graduation.model.Menu;
+import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.model.User;
 
 import java.sql.Date;
@@ -13,11 +14,11 @@ public class TestData {
     public static Date DATE5 = Date.valueOf("2022-12-15");
     public static Date DATE6 = Date.valueOf("2022-12-16");
     public static Date DATE7 = Date.valueOf("2022-12-17");
-    public static String RESTAURANT1 = "Первый ресторан";
-    public static String RESTAURANT2 = "Второй ресторан";
-    public static String RESTAURANT3 = "Третий ресторан";
-    public static String RESTAURANT4 = "Четвёртый ресторан";
-    public static String RESTAURANT5 = "Пятый ресторан";
+    public static Restaurant RESTAURANT1 = new Restaurant("Первый ресторан","No address");
+    public static Restaurant RESTAURANT2 = new Restaurant("Второй ресторан", "No address");
+    public static Restaurant RESTAURANT3 = new Restaurant("Третий ресторан", "No address");
+    public static Restaurant RESTAURANT4 = new Restaurant("Четвёртый ресторан", "No address");
+    public static Restaurant RESTAURANT5 = new Restaurant("Пятый ресторан", "No address");
     public static final Menu.Item menuItem1 = new Menu.Item("Сосиски", 129.80);
     public static final Menu.Item menuItem2 = new Menu.Item("Макароны", 67.50);
     public static final Menu.Item menuItem3 = new Menu.Item("Вино сухое", 380.00);
@@ -28,9 +29,10 @@ public class TestData {
     public static final Menu.Item menuItem8 = new Menu.Item("Баклажаны", 220.00);
     public static final Menu menu1 = new Menu(RESTAURANT1, DATE1, menuItem1, menuItem2, menuItem3);
     public static final Menu menu2 = new Menu(RESTAURANT2, DATE1, menuItem4, menuItem5);
-    public static final User user = new User(1,"Иван Иванов", "ivan_ivanov@mail.net", User.Role.CLIENT);
+    public static final User user = new User(1,"Иван Иванов", "ivan_ivanov@mail.net", User.Role.USER);
     public static final User updatedUser =  new User(1,"Novoivanov", "newmail@nm.com", User.Role.ADMIN);
     public static final int NEW_USER_ID = 7;
-    public static final User newUser =  new User(0,"Новый Пользователь", "new_user@new_mail.new", User.Role.CLIENT);;
+    public static final User newUser =  new User(0,"Новый Пользователь", "new_user@new_mail.new", User.Role.USER);;
     public static final User admin = new User(4, "Пётр Петров", "petr_p@yandex.com", User.Role.ADMIN);
+    public static final String UNEXISTING_ID_STRING = "-1";
 }

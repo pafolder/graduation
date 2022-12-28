@@ -1,10 +1,13 @@
 package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import net.minidev.json.annotate.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -12,21 +15,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(name = "Menu")
-@RepositoryRestResource(exported = false)
-@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant", "date"}, name = "menu_unique_restaurant_date_idx")})
+@Entity
+@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"},
+        name = "menu_unique_restaurant_date_idx")})
 public class Menu {
     @Id
     @SequenceGenerator(name = "menu_id_seq", sequenceName = "menu_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_id_seq")
     @Column(name = "id", nullable = false)
-    @JsonIgnore
     private Integer id;
 
-    @Column(name = "restaurant", nullable = false)
-    @NotBlank
-    @NotNull
-    private String restaurant;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
     @NotNull
@@ -45,7 +47,7 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(String restaurant, Date date, Menu.Item ... items) {
+    public Menu(Restaurant restaurant, Date date, Menu.Item... items) {
         this.restaurant = restaurant;
         this.date = date;
         menuItems = new ArrayList<>();
@@ -60,11 +62,11 @@ public class Menu {
         this.date = date;
     }
 
-    public String getRestaurant() {
+    public Restaurant getRestaurant() {
         return restaurant;
     }
 
-    public void setRestaurant(String restaurant) {
+    public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
 
@@ -81,13 +83,13 @@ public class Menu {
     }
 
     public void addItems(Item... items) {
-        List<Item> itemList= Arrays.asList(items);
+        List<Item> itemList = Arrays.asList(items);
         menuItems.addAll(itemList);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("\n" + id + " " + restaurant + " " + date);
+        StringBuilder sb = new StringBuilder("\n" + id + " " + restaurant.getName() + " " + date);
         if (menuItems != null) {
             for (Item item : menuItems) {
                 sb.append("\n").append(item.dishName).append(" ").append(item.dishPrice);

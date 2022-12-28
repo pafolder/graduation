@@ -1,10 +1,8 @@
-package com.pafolder.graduation.repository.User;
+package com.pafolder.graduation.repository.user;
 
 import com.pafolder.graduation.model.User;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 

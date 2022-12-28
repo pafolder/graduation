@@ -1,15 +1,13 @@
 package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.Menu;
-import com.pafolder.graduation.repository.Menu.DataJpaMenuRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.annotation.ComponentScan;
+import com.pafolder.graduation.model.Restaurant;
+import com.pafolder.graduation.repository.menu.DataJpaMenuRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MenuService {
@@ -19,16 +17,23 @@ public class MenuService {
         this.menuRepository = menuRepository;
     }
 
-    @Cacheable("user")
     public List<Menu> getAll() {
         return menuRepository.getAll();
     }
 
-    public Menu addMenu(Menu menu) {
+    public Menu add(Menu menu) {
         return menuRepository.add(menu);
     }
 
     public List<Menu> getByDate(Date date) {
         return menuRepository.getByDate(date);
+    }
+
+    public Optional<Menu> getById(int id) {
+        return menuRepository.getById(id);
+    }
+
+    public Menu getByDateAndRestaurant(Date date, Restaurant restaurant) {
+        return menuRepository.getByDateAndRestaurant(date, restaurant);
     }
 }

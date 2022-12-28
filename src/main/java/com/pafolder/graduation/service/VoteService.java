@@ -1,9 +1,10 @@
 package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.Vote;
-import com.pafolder.graduation.repository.Vote.DataJpaVoteRepository;
+import com.pafolder.graduation.repository.vote.DataJpaVoteRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -18,7 +19,11 @@ public class VoteService {
         return voteRepository.getAll();
     }
 
-    public Vote save(Vote vote) {
+    public List<Vote> getAllByDate(Date date) {
+        return voteRepository.getAllByDate(date);
+    }
+
+    public Vote add(Vote vote) {
         voteRepository.save(vote);
         return vote;
     }

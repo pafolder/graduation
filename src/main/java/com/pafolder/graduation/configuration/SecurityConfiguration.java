@@ -32,15 +32,14 @@ public class SecurityConfiguration {
         http.csrf().ignoringRequestMatchers("/login");
 
         http.authorizeHttpRequests()
-                .requestMatchers( "/login*", "/resources/**", "/webjars/**",
-                        "/v3/**","/swagger-ui/**","/error")
+                .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**",
+                        "/v3/**", "/error")
+//                        "/v3/**","/swagger-ui/**","/error")
                 .permitAll()
-//                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
-//                        "/resources/**", "/add", "/create", "/uploadImage", "/edit/**", "/delete/**")
-//                .hasRole("ADMIN")
-//                .antMatchers("/", "/login*", "/error", "/search", "/browse", "/recipes/**", "/tags/**",
-//                        "/resources/**")
-//                .hasRole("USER")
+                .requestMatchers("/rest/votes/**", "/rest/admin/**")
+                .hasRole("ADMIN")
+                .requestMatchers("/vote", "/rest/profile/*")
+                .hasRole("USER")
 //                .and()
 //                .authorizeHttpRequests()
                 .anyRequest()
@@ -49,9 +48,9 @@ public class SecurityConfiguration {
                 .formLogin(form -> form
                         .loginPage("/login")
 //                        .loginProcessingUrl("/spring_security_check")
+                        .defaultSuccessUrl("http://localhost:8080/swagger-ui/index.html", true)
                         .permitAll())
                 .csrf().disable()
-//                .defaultSuccessUrl("/index.html", true)
 //                .failureUrl("/login?error=true")
 //                .and().logout().permitAll()
 //                .and()

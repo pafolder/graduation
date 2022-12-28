@@ -1,10 +1,9 @@
-package com.pafolder.graduation.repository.Vote;
+package com.pafolder.graduation.repository.vote;
 
 import com.pafolder.graduation.model.Vote;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Repository;
-import org.springframework.validation.annotation.Validated;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
@@ -17,6 +16,10 @@ public class DataJpaVoteRepository {
 
   public List<Vote> getAll() {
         return voteRepository.findAll();
+    }
+
+  public List<Vote> getAllByDate(Date date) {
+        return voteRepository.findAllByDate(date);
     }
 
     public void save(Vote vote) {

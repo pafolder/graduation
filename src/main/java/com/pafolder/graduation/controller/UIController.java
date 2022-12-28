@@ -1,10 +1,11 @@
 package com.pafolder.graduation.controller;
 
 import com.pafolder.graduation.model.Menu;
+import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
-import com.pafolder.graduation.security.UserDetails;
 import com.pafolder.graduation.service.MenuService;
+import com.pafolder.graduation.service.RestaurantService;
 import com.pafolder.graduation.service.UserService;
 import com.pafolder.graduation.service.VoteService;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -14,13 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -28,16 +27,19 @@ import java.util.List;
 
 @Controller
 public class UIController {
+    private final RestaurantService restaurantService;
     private final MenuService menuService;
     private final UserService userService;
     private final VoteService voteService;
     private final Logger log;
 
     @Autowired
-    public UIController(MenuService menuService, UserService userService, VoteService voteService) {
+    public UIController(RestaurantService restaurantService, MenuService menuService, UserService userService,
+                        VoteService voteService) {
         this.menuService = menuService;
         this.userService = userService;
         this.voteService = voteService;
+        this.restaurantService = restaurantService;
         log = LoggerFactory.getLogger("yellow");
         log.error("Hello! Logging has started!");
         testDataBase();
@@ -58,7 +60,9 @@ public class UIController {
 //    }
 
 //    @GetMapping("/")
-//    public String getIndexes(HttpServletRequest request, HttpServletResponse response, Model model) {
+//    public ModelAndView getIndexes(HttpServletRequest request, HttpServletResponse response, Model model) {
+//        return new ModelAndView("redirect:" + "http://localhost:8080/swagger-ui/index.html");
+//    }
 //        log.error("@GetMapping('/')");
 //        Cookie [] cookies = request.getCookies();
 //        if( cookies.length == 0 ) {
@@ -103,28 +107,22 @@ public class UIController {
     }
 
     public void testDataBase() {
-//        menuService.addItem(100000, "Hello", 1300.);
-//        Menu menu = new Menu("Меню Пятого Ресторана", Date.valueOf(LocalDate.now()));
-//        Menu menu2 = new Menu("Меню Пятого Ресторана", Date.valueOf(LocalDate.now()));
-        Menu menu1 = new Menu("Меню Четвёртого Ресторана", Date.valueOf(LocalDate.now()));
+        Menu menu1 = new Menu(restaurantService.getById(0).orElse(null), Date.valueOf(LocalDate.now()));
         menu1.addItems(new Menu.Item("Hello", 1300.));
-        menuService.addMenu(menu1);
-//        menuService.create(menu);
+
+        restaurantService.add(new Restaurant("Added", "yyy"));
+        List<User> users = userService.getAll();
+        List<Restaurant> restaurants = restaurantService.getAll();
+        List<Menu> menus = menuService.getAll();
+        List<Vote> votes = voteService.getAll();
+        menuService.add(menu1);
 
         List<Menu> menuList = menuService.getAll();
-        System.out.println(menuList);
-        System.out.println("getByDate(\"2020-01-30\"):");
-        System.out.println(menuService.getByDate(Date.valueOf("2020-01-30")));
+//        System.out.println(menuList);
+//        System.out.println("getByDate(\"2020-01-30\"):");
+//        System.out.println(menuService.getByDate(Date.valueOf("2020-01-30")));
 
-        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", User.Role.CLIENT);
+        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", User.Role.USER);
         userService.save(user);
-        List<User> users = userService.getAll();
-        System.out.println(users);
-
-
-//        Vote vote = new Vote(Date.valueOf(LocalDate.now()), users.get(2), menuList.get(3));
-//        voteService.save(vote);
-        List<Vote> votes = voteService.getAll();
-        System.out.println(votes);
     }
 }

@@ -1,4 +1,4 @@
-package com.pafolder.graduation.repository.User;
+package com.pafolder.graduation.repository.user;
 
 import com.pafolder.graduation.model.User;
 import org.springframework.data.jpa.repository.EntityGraph;
