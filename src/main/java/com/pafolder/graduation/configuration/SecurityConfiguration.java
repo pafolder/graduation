@@ -3,6 +3,8 @@ package com.pafolder.graduation.configuration;
 import com.pafolder.graduation.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,14 +34,17 @@ public class SecurityConfiguration {
         http.csrf().ignoringRequestMatchers("/login");
 
         http.authorizeHttpRequests()
-                .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**",
-                        "/v3/**", "/error")
-//                        "/v3/**","/swagger-ui/**","/error")
-                .permitAll()
-                .requestMatchers("/rest/votes/**", "/rest/admin/**")
+                .requestMatchers( "/rest/admin/**")
                 .hasRole("ADMIN")
-                .requestMatchers("/vote", "/rest/profile/*")
+                .requestMatchers(  "/rest/profile/*")
                 .hasRole("USER")
+                .requestMatchers(  "/rest/menus", "/rest/votes")
+                .access(AuthorizationManagers.anyOf(
+                        AuthorityAuthorizationManager.hasRole("ADMIN"),
+                        AuthorityAuthorizationManager.hasRole("USER")))
+                .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**",
+                        "/v3/**","/swagger-ui/**","/error")
+                .permitAll()
 //                .and()
 //                .authorizeHttpRequests()
                 .anyRequest()

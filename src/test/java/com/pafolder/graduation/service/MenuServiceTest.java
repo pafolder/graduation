@@ -1,6 +1,7 @@
 package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.Menu;
+import com.pafolder.graduation.repository.MenuRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import static com.pafolder.graduation.TestData.menu2;
 
 class MenuServiceTest extends AbstractServiceTest{
     @Autowired
-    private MenuService service;
+    private MenuRepository menuRepository;
 
     @Test
     void addItem() {

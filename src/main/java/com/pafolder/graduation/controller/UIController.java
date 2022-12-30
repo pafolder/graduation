@@ -4,13 +4,12 @@ import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
-import com.pafolder.graduation.service.MenuService;
-import com.pafolder.graduation.service.RestaurantService;
+import com.pafolder.graduation.repository.MenuRepository;
+import com.pafolder.graduation.repository.RestaurantRepository;
+import com.pafolder.graduation.repository.VoteRepository;
 import com.pafolder.graduation.service.UserService;
-import com.pafolder.graduation.service.VoteService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -27,19 +25,19 @@ import java.util.List;
 
 @Controller
 public class UIController {
-    private final RestaurantService restaurantService;
-    private final MenuService menuService;
+    private final RestaurantRepository restaurantRepository;
+    private final MenuRepository menuRepository;
     private final UserService userService;
-    private final VoteService voteService;
+    private final VoteRepository voteRepository;
     private final Logger log;
 
     @Autowired
-    public UIController(RestaurantService restaurantService, MenuService menuService, UserService userService,
-                        VoteService voteService) {
-        this.menuService = menuService;
+    public UIController(RestaurantRepository restaurantRepository, MenuRepository menuRepository, UserService userService,
+                        VoteRepository voteRepository) {
+        this.menuRepository = menuRepository;
         this.userService = userService;
-        this.voteService = voteService;
-        this.restaurantService = restaurantService;
+        this.voteRepository = voteRepository;
+        this.restaurantRepository = restaurantRepository;
         log = LoggerFactory.getLogger("yellow");
         log.error("Hello! Logging has started!");
         testDataBase();
@@ -101,28 +99,28 @@ public class UIController {
     @GetMapping("/menus")
     public String getAll(HttpServletRequest request, Model model) {
         log.error("@GetMapping('/menus')");
-        List<Menu> menus = menuService.getAll();
+        List<Menu> menus = menuRepository.findAll();
         model.addAttribute("menus", menus);
         return "jsp/menus";
     }
 
     public void testDataBase() {
-        Menu menu1 = new Menu(restaurantService.getById(0).orElse(null), Date.valueOf(LocalDate.now()));
+        Menu menu1 = new Menu(restaurantRepository.findById(0).orElse(null), Date.valueOf(LocalDate.now()));
         menu1.addItems(new Menu.Item("Hello", 1300.));
 
-        restaurantService.add(new Restaurant("Added", "yyy"));
+        restaurantRepository.save(new Restaurant("Added", "yyy"));
         List<User> users = userService.getAll();
-        List<Restaurant> restaurants = restaurantService.getAll();
-        List<Menu> menus = menuService.getAll();
-        List<Vote> votes = voteService.getAll();
-        menuService.add(menu1);
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        List<Menu> menus = menuRepository.findAll();
+        List<Vote> votes = voteRepository.findAll();
+        menuRepository.save(menu1);
 
-        List<Menu> menuList = menuService.getAll();
+        List<Menu> menuList = menuRepository.findAll();
 //        System.out.println(menuList);
 //        System.out.println("getByDate(\"2020-01-30\"):");
 //        System.out.println(menuService.getByDate(Date.valueOf("2020-01-30")));
 
-        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", User.Role.USER);
+        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", "password", User.Role.USER);
         userService.save(user);
     }
 }

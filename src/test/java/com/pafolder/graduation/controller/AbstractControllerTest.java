@@ -1,6 +1,6 @@
 package com.pafolder.graduation.controller;
 
-import com.pafolder.graduation.service.MenuService;
+import com.pafolder.graduation.repository.MenuRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -53,5 +53,5 @@ public abstract class AbstractControllerTest {
     }
 
     @Autowired
-    MenuService menuService;
+    MenuRepository menuRepository;
 }

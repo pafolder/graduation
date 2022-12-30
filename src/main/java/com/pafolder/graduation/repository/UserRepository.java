@@ -1,12 +1,14 @@
-package com.pafolder.graduation.repository.user;
+package com.pafolder.graduation.repository;
 
 import com.pafolder.graduation.model.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -14,7 +16,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @EntityGraph(attributePaths = "role")
     List<User> findAll();
 
-    int deleteUserById(int id);
-
-    User getByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

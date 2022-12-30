@@ -2,6 +2,7 @@ package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.MatcherFactory;
 import com.pafolder.graduation.model.User;
+import com.pafolder.graduation.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,12 @@ class UserServiceTest extends AbstractServiceTest {
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "id");
 
     @Autowired
-    private UserService service;
+    private UserRepository userRepository;
 
     @Test
     void getAll() {
         log.info("Testing User Service ===/s");
-        List<User> userList = service.getAll();
+        List<User> userList = userRepository.findAll();
         for (User user : userList) {
             log.info(user.toString());
             Assertions.assertEquals(userList, userList);
@@ -28,15 +29,15 @@ class UserServiceTest extends AbstractServiceTest {
 
     @Test
     void save() {
-        service.save(updatedUser);
-        User userRead = service.getByEmail(updatedUser.getEmail());
-        Assertions.assertEquals( userRead, updatedUser);
+        userRepository.save(updatedUser);
+        User userRead = userRepository.findByEmail(updatedUser.getEmail()).orElseThrow();
+        Assertions.assertEquals(userRead, updatedUser);
     }
 
     @Test
     void create() {
-        service.save(newUser);
-        User userRead = service.getByEmail(newUser.getEmail());
+        userRepository.save(newUser);
+        User userRead = userRepository.findByEmail(newUser.getEmail()).orElseThrow();
 //        newUser.setId(NEW_USER_ID);
 //        Assertions.assertEquals( userRead, newUser);
         USER_MATCHER.assertMatch(userRead, newUser);
@@ -45,9 +46,9 @@ class UserServiceTest extends AbstractServiceTest {
     @Test
     void delete() {
         int id = user.getId();
-        service.delete(id);
-        User us = service.getById(id);
-        Assertions.assertThrows(Exception.class, () -> service.getById(id).equals(user));
+        userRepository.deleteById(id);
+        User us = userRepository.findById(id).orElse(null);
+        Assertions.assertThrows(Exception.class, () -> userRepository.findById(id).orElse(null).equals(user));
     }
 
     @Test

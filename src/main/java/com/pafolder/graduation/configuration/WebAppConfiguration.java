@@ -67,6 +67,6 @@ public class WebAppConfiguration implements WebMvcConfigurer {
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
-                .info(new Info().title("Restaurant Voting API").version(appVersion));
+                .info(new Info().title("Rest API Documentation for Restaurant Voting Application").version(appVersion));
     }
 }

@@ -1,5 +1,6 @@
-package com.pafolder.graduation.repository.vote;
+package com.pafolder.graduation.repository;
 
+import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,10 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
     List<Vote> findAllByDate(Date date);
+
+    @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
+    Vote findByDateAndUser(Date date, User user);
+
+//    @Transactional
+//    Vote save(Vote vote);
 }

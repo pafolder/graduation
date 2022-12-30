@@ -1,7 +1,7 @@
 package com.pafolder.graduation.service;
 
 import com.pafolder.graduation.model.User;
-import com.pafolder.graduation.repository.user.DataJpaUserRepository;
+import com.pafolder.graduation.repository.UserRepository;
 import com.pafolder.graduation.security.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,18 +10,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
-    DataJpaUserRepository repository;
+    UserRepository repository;
 
     @Autowired
-    public UserService(DataJpaUserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.repository = userRepository;
     }
 
     public List<User> getAll() {
-        return repository.getAll();
+        return repository.findAll();
     }
 
     public User save(User user) {
@@ -34,15 +35,15 @@ public class UserService implements UserDetailsService {
     }
 
     public void delete(int id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     public User getByEmail(String email) {
-        return repository.get(email);
+        return repository.findByEmail(email).orElse(null);
     }
 
-    public User getById(int id) {
-        return repository.get(id);
+    public Optional<User> getById(int id) {
+        return repository.findById(id);
     }
 
     private PasswordEncoder encoder;

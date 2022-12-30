@@ -9,7 +9,6 @@ import java.util.Objects;
 @Entity(name = "User")
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
 public class User {
-    private static final String DEFAULT_PASSWORD = "password";
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
@@ -42,11 +41,11 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String email, Role role) {
+    public User(Integer id, String name, String email, String password, Role role) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = DEFAULT_PASSWORD;
+        this.password = password;
         this.role = role;
     }
 
