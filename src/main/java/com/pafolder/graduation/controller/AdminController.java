@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,27 +44,21 @@ public class AdminController extends AbstractController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @InitBinder("menuTo")
+    @InitBinder
     private void initBinderMenuTo(WebDataBinder binder) {
-        binder.setValidator(menuToValidator);
-//        binder.addValidators(menuToValidator, userToValidator);
+//        binder.setValidator(menuToValidator);
+        binder.addValidators(menuToValidator, userToValidator);
     }
 
-    @InitBinder("userTo")
-    private void initBinderUserTo(WebDataBinder binder) {
-        binder.setValidator(userToValidator);
-    }
+//    @InitBinder("userTo")
+//    private void initBinderUserTo(WebDataBinder binder) {
+//        binder.setValidator(userToValidator);
+//    }
 
     @GetMapping("/users")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    @DeleteMapping("/users/{id}")
-    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    public void deleteUser(@PathVariable Integer id) {
-        userRepository.deleteById(id);
     }
 
     @GetMapping("/menus")
@@ -81,11 +74,8 @@ public class AdminController extends AbstractController {
     public ResponseEntity<Menu> addMenu(@Valid @RequestBody MenuTo menuTo) {
         menuTo.setDate(menuTo.getDate() == null ? getCurrentDate() : menuTo.getDate());
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
-                restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) :
+                restaurantRepository.getReferenceById(menuTo.getRestaurantId()) :
                 restaurantRepository.save(new Restaurant(menuTo.getRestaurantName(), menuTo.getRestaurantAddress()));
-        if (restaurant == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong restaurant information");
-        }
         Menu menu = new Menu(restaurant, menuTo.getDate(), menuTo.getMenuItems());
         menu = menuRepository.save(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -95,7 +85,6 @@ public class AdminController extends AbstractController {
 
     @DeleteMapping("/menus/{id}")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteMenu(@PathVariable Integer id) {
         menuRepository.deleteById(id);
     }
@@ -121,7 +110,6 @@ public class AdminController extends AbstractController {
 
     @PutMapping("/restaurants")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void updateRestaurant(@Valid @RequestBody Restaurant restaurant) {
         restaurant = restaurantRepository.save(restaurant);
         if (restaurant.getId() == null) {
@@ -131,7 +119,6 @@ public class AdminController extends AbstractController {
 
     @DeleteMapping("/restaurants/{id}")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteRestaurant(@PathVariable Integer id) {
         restaurantRepository.deleteById(id);
     }
@@ -149,15 +136,14 @@ public class AdminController extends AbstractController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No restaurant found");
             }
         }
-        if (restaurant.isEmpty()) {
-            List<Vote> list = voteRepository.findAllByDate(date);
-            return list;
+        if( restaurant.isEmpty()) {
+            return voteRepository.findAllByDate(date);
         } else {
             Optional<Menu> menu = menuRepository.findByDateAndRestaurant(date, restaurant.get());
             if (menu.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No menu found");
             }
-            return voteRepository.findAllByMenu(menu.get());
+        return voteRepository.findByMenu(menu.get());
         }
     }
 

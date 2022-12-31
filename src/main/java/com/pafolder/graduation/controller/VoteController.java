@@ -11,12 +11,10 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
@@ -31,18 +29,19 @@ public class VoteController extends AbstractController {
 
     @GetMapping("/votes")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    public List<Vote> getVotes(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
+    public Vote getVote(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userDetails.getUser();
         log.error("Get vote for user {}", user);
-        List<Vote> votes = date != null ? voteRepository.findAllByDateAndUser(date, user) :
-                voteRepository.findAllByUser(user);
-        return votes;
+        Optional<Vote> vote = voteRepository.findByDateAndUser(date == null ? getCurrentDate() : date, user);
+        if (vote.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
+        }
+        return vote.get();
     }
 
     @PostMapping("/votes")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    @Transactional
     public void acceptVote(@RequestParam int menuId, @RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
         log.info("User {} voting for the {} menu", userDetails.getUsername(), menuId);
         Date votingDate = date == null ? getCurrentDate() : date;
@@ -66,9 +65,9 @@ public class VoteController extends AbstractController {
         date = date == null ? getCurrentDate() : date;
         User user = userDetails.getUser();
         log.info("User {} deletes vote on {}", userDetails.getUsername(), date.toString());
-        List<Vote> votes = voteRepository.findAllByDateAndUser(date, user);
-        if (!votes.isEmpty()) {
-            voteRepository.delete(votes.get(0));
+        Optional<Vote> vote = voteRepository.findByDateAndUser(date, user);
+        if (vote.isPresent()) {
+            voteRepository.delete(vote.get());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
         }
