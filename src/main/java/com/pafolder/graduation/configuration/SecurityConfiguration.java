@@ -34,11 +34,11 @@ public class SecurityConfiguration {
         http.csrf().ignoringRequestMatchers("/login");
 
         http.authorizeHttpRequests()
-                .requestMatchers( "/rest/admin/**")
+                .requestMatchers( "/api/admin/**")
                 .hasRole("ADMIN")
-                .requestMatchers(  "/rest/profile/*")
+                .requestMatchers(  "/api/profile/*")
                 .hasRole("USER")
-                .requestMatchers(  "/rest/menus", "/rest/votes")
+                .requestMatchers(  "/api/menus", "/api/votes")
                 .access(AuthorizationManagers.anyOf(
                         AuthorityAuthorizationManager.hasRole("ADMIN"),
                         AuthorityAuthorizationManager.hasRole("USER")))
@@ -56,9 +56,11 @@ public class SecurityConfiguration {
                         .defaultSuccessUrl("http://localhost:8080/swagger-ui/index.html", true)
                         .permitAll())
                 .csrf().disable()
-//                .failureUrl("/login?error=true")
-//                .and().logout().permitAll()
+//                .logout()
 //                .and()
+//                .failureUrl("/login?error=true")
+                .logout().permitAll()
+                .and()
                 .httpBasic();
         return http.build();
     }

@@ -3,10 +3,13 @@ package com.pafolder.graduation.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Objects;
 
 @Entity
+//@OnDelete(action = OnDeleteAction.CASCADE)
 @Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"}, name = "restaurant_unique_name_address_idx")})
 public class Restaurant {
     @Id
@@ -21,6 +24,7 @@ public class Restaurant {
     private String name;
 
     @Column(name = "address", nullable = false)
+    @NotBlank
     @NotNull
     private String address;
 

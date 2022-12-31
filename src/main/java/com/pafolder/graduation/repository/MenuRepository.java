@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
@@ -38,6 +39,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
-    Menu findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") Restaurant restaurant);
+    Optional<Menu> findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") Restaurant restaurant);
 }
 

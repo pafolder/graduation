@@ -16,6 +16,6 @@ public class MenuToValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         MenuTo menuTo = (MenuTo) object;
-        errors.rejectValue("", "Error code", "Error message");
+//        errors.rejectValue("", "Error code", "Error message");
     }
 }

@@ -6,15 +6,16 @@ import jakarta.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
-@Table(name = "vote",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "vote_unique_date_user_idx")})
+@Table(name = "vote")
+//, uniqueConstraints = {@UniqueConstraint(columnNames = {"menu.getDate()", "user_id"}, name = "vote_unique_date_user_idx")})
 public class Vote {
     @Id
     @SequenceGenerator(name = "vote_id_generator", sequenceName = "vote_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vote_id_generator")
     private Integer id;
-    @Column(name = "date", nullable = false)
-    private Date date;
+
+//    @Column(name = "date", nullable = false)
+//    private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -30,7 +31,7 @@ public class Vote {
     }
 
     public Vote(Date date, User user, Menu menu) {
-        this.date = date;
+//        this.date = date;
         this.user = user;
         this.menu = menu;
     }
@@ -39,7 +40,7 @@ public class Vote {
     public String toString() {
         return "\nVote " +
                 "id=" + id +
-                " " + date +
+//                " " + date +
                 " '" + user.getName() + '\'' +
                 " '" + menu.getRestaurant().getName() + '\'';
     }
@@ -53,12 +54,12 @@ public class Vote {
     }
 
     public Date getDate() {
-        return date;
+        return menu.getDate();
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
 
     public User getUser() {
         return user;

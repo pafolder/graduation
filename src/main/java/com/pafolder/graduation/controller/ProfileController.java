@@ -8,6 +8,8 @@ import com.pafolder.graduation.util.UserUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,5 +42,14 @@ public class ProfileController {
         User userUpdated = UserUtil.createNewFromTo(userTo);
         userUpdated.setId(authUser.getUser().getId());
         userRepository.save(userUpdated);
+    }
+
+    @DeleteMapping("")
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    public void haraKiri(@AuthenticationPrincipal UserDetails authUser, HttpServletRequest request) throws ServletException {
+        log.error("Self delete user {}", authUser.getUsername());
+        userRepository.delete(authUser.getUser());
+        request.logout();
     }
 }

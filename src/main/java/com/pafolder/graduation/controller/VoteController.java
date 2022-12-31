@@ -15,28 +15,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Optional;
 
 import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
 
 @RestController
 @Tag(name = "1 Votes", description = "Votes API")
-@RequestMapping(value = "/api/profile", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController extends AbstractController {
-
-//    @GetMapping("/votes")
-//    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<Vote> getAll(@AuthenticationPrincipal UserDetails userDet) {
-//        List<Vote> votes = voteService.getAll();
-//        return votes;
-//    }
+    private static String NO_VOTE_FOUND = "No vote found";
+    private static String NO_MENU_FOUND = "No menu found";
+    private static String ILLEGAL_VOTING_DATE = "Illegal voting date (in the past)";
 
     @GetMapping("/votes")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    public List<Vote> getAllByDate(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDet) {
-        return date == null ? voteRepository.findAll() : voteRepository.findAllByDate(date);
+    public Vote getVote(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
+        User user = userDetails.getUser();
+        log.error("Get vote for user {}", user);
+        Optional<Vote> vote = voteRepository.findByDateAndUser(date == null ? getCurrentDate() : date, user);
+        if (vote.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
+        }
+        return vote.get();
     }
 
     @PostMapping("/votes")
@@ -48,10 +48,10 @@ public class VoteController extends AbstractController {
 
         Menu menu = menuRepository.findById(menuId).orElse(null);
         if (menu == null || !menu.getDate().equals(votingDate)) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "No such Menu found on voting date");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_MENU_FOUND);
         }
         if (votingDate.before(getCurrentDate())) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Illegal voting date (in the past)");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, ILLEGAL_VOTING_DATE);
         }
 
         Vote vote = new Vote(date, userDetails.getUser(), menu);
@@ -65,11 +65,11 @@ public class VoteController extends AbstractController {
         date = date == null ? getCurrentDate() : date;
         User user = userDetails.getUser();
         log.info("User {} deletes vote on {}", userDetails.getUsername(), date.toString());
-        Vote vote = voteRepository.findByDateAndUser(date, user);
-        if (vote != null) {
-            voteRepository.delete(vote);
+        Optional<Vote> vote = voteRepository.findByDateAndUser(date, user);
+        if (vote.isPresent()) {
+            voteRepository.delete(vote.get());
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No such Vote found on voting date");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
         }
     }
 }

@@ -49,10 +49,10 @@ VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', 'password', 'USER'),
        ('Кирилл Кириллов', 'k_kirillov@qq.org', 'password', 'USER'),
        ('Евгения Евгеньевна', 'evgeniya_e@yahoo.kz', 'password', 'USER');
 
-INSERT INTO vote (date, user_id, menu_id)
-VALUES ('2022-12-16', 0, 1),
-       ('2022-12-16', 1, 0),
-       ('2022-12-17', 2, 2),
-       ('2022-12-17', 3, 3),
-       ('2022-12-17', 4, 0),
-       ('2022-12-17', 5, 0);
+INSERT INTO vote (user_id, menu_id)
+VALUES (0, 1),
+       (1, 0),
+       (2, 2),
+       (3, 3),
+       (4, 0),
+       (5, 0);

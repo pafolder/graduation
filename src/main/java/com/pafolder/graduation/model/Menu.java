@@ -27,7 +27,6 @@ public class Menu {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
@@ -52,6 +51,12 @@ public class Menu {
         this.date = date;
         menuItems = new ArrayList<>();
         addItems(items);
+    }
+
+    public Menu(Restaurant restaurant, Date date, List<Menu.Item> items) {
+        this.restaurant = restaurant;
+        this.date = date;
+        this.menuItems = items;
     }
 
     public Date getDate() {

@@ -29,12 +29,12 @@ public class MenuController extends AbstractController {
         return menuRepository.findAllByDate(date == null ? getCurrentDate() : date);
     }
 
-    @PostMapping("/menus")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    public void addMenu(@Valid @RequestBody Menu menu, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userDetails.getUser();
-        log.info("public void addMenu(@Valid @RequestBody Menu menu), Authenticated user: {}", user.getEmail());
-        menuRepository.save(menu);
-    }
+//    @PostMapping("/menus")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+//    public void addMenu(@Valid @RequestBody Menu menu, @AuthenticationPrincipal UserDetails userDetails) {
+//        User user = userDetails.getUser();
+//        log.info("public void addMenu(@Valid @RequestBody Menu menu), Authenticated user: {}", user.getEmail());
+//        menuRepository.save(menu);
+//    }
 }
