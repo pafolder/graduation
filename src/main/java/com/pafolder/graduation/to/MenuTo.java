@@ -1,26 +1,69 @@
 package com.pafolder.graduation.to;
 
 import com.pafolder.graduation.model.Menu;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
+import java.sql.Date;
 import java.util.List;
 
 public class MenuTo {
-    private String name;
-    private List<Menu.Item> list;
+    @Nullable
+    private Integer restaurantId;
 
-    public String getName() {
-        return name;
+    @Nullable
+    private String restaurantName;
+
+    @Nullable
+    private String restaurantAddress;
+
+    @Nullable
+    @DateTimeFormat
+    private Date date;
+
+    private List<Menu.Item> menuItems;
+
+    @Nullable
+    public Integer getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRestaurantId(@Nullable Integer restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
-    public List<Menu.Item> getList() {
-        return list;
+    @Nullable
+    public String getRestaurantName() {
+        return restaurantName;
     }
 
-    public void setList(List<Menu.Item> list) {
-        this.list = list;
+    public void setRestaurantName(@Nullable String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
+    @Nullable
+    public String getRestaurantAddress() {
+        return restaurantAddress;
+    }
+
+    public void setRestaurantAddress(@Nullable String restaurantAddress) {
+        this.restaurantAddress = restaurantAddress;
+    }
+
+    @Nullable
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(@Nullable Date date) {
+        this.date = date;
+    }
+
+    public List<Menu.Item> getMenuItems() {
+        return menuItems;
+    }
+
+    public void setMenuItems(List<Menu.Item> menuItems) {
+        this.menuItems = menuItems;
     }
 }

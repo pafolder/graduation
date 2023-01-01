@@ -30,9 +30,13 @@
         <appender-ref ref="consolebriefyellow"/>
     </logger>
 
-    <logger name="log4j.logger.org.springframework.transaction" level="debug"/>
+    <logger name="org.springframework.transaction" level="debug"/>
 
     <logger name="org.springframework.web" level="warn"/>
+
+    <logger name="org.springframework.cache" level="trace">
+        <appender-ref ref="consolebriefyellow"/>
+    </logger>
 
     <root level="warn">
         <appender-ref ref="console"/>

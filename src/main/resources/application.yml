@@ -1,2 +1,6 @@
 springdoc:
   version: '@springdoc.version@'
+spring:
+  cache:
+    cache-names: menus
+#    caffeine.spec: maximumSize=5000,expireAfterAccess=600s

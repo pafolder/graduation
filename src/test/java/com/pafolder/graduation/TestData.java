@@ -16,11 +16,11 @@ public class TestData {
     public static Date DATE5 = Date.valueOf("2022-12-15");
     public static Date DATE6 = Date.valueOf("2022-12-16");
     public static Date DATE7 = Date.valueOf("2022-12-17");
-    public static Restaurant RESTAURANT1 = new Restaurant("Первый ресторан", "No address");
-    public static Restaurant RESTAURANT2 = new Restaurant("Второй ресторан", "No address");
-    public static Restaurant RESTAURANT3 = new Restaurant("Третий ресторан", "No address");
-    public static Restaurant RESTAURANT4 = new Restaurant("Четвёртый ресторан", "No address");
-    public static Restaurant RESTAURANT5 = new Restaurant("Пятый ресторан", "No address");
+    public static Restaurant RESTAURANT1 = new Restaurant("Старый ресторан", "Старая ул., дом 999");
+    public static Restaurant RESTAURANT2 = new Restaurant("Первый ресторан", "Первый просп., дом 1");
+    public static Restaurant RESTAURANT3 = new Restaurant("Второй ресторан", "Второй пер., дом 2");
+    public static Restaurant RESTAURANT4 = new Restaurant("Третий ресторан", "Третий бульвар, дом 3");
+    public static Restaurant RESTAURANT5 = new Restaurant("Четвёртый ресторан", "Четвёртая линия, дом 4");
     public static final Menu.Item menuItem1 = new Menu.Item("Сосиски", 129.80);
     public static final Menu.Item menuItem2 = new Menu.Item("Макароны", 67.50);
     public static final Menu.Item menuItem3 = new Menu.Item("Вино сухое", 380.00);
