@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -94,7 +91,8 @@ public class Menu {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("\n" + id + " " + restaurant.getName() + " " + date);
+        String restaurantName = restaurant != null ? restaurant.getName() : "";
+        StringBuilder sb = new StringBuilder("\n" + id + " " + restaurantName + " " + date);
         if (menuItems != null) {
             for (Item item : menuItems) {
                 sb.append("\n").append(item.dishName).append(" ").append(item.dishPrice);

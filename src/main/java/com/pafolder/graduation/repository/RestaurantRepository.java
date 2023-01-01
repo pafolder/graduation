@@ -1,6 +1,7 @@
 package com.pafolder.graduation.repository;
 
 import com.pafolder.graduation.model.Restaurant;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,4 +16,8 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     Optional<Restaurant> findById(int id);
 
     List<Restaurant> findAll();
+
+    @CacheEvict(value = "menus", allEntries = true)
+    @Override
+    void deleteById(Integer integer);
 }

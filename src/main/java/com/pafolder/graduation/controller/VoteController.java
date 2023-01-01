@@ -11,6 +11,7 @@ import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -42,6 +43,7 @@ public class VoteController extends AbstractController {
     @PostMapping("/votes")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    @Transactional
     public void acceptVote(@RequestParam int menuId, @RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
         log.info("User {} voting for the {} menu", userDetails.getUsername(), menuId);
         Date votingDate = date == null ? getCurrentDate() : date;

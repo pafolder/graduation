@@ -44,21 +44,27 @@ public class AdminController extends AbstractController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @InitBinder
+    @InitBinder("menuTo")
     private void initBinderMenuTo(WebDataBinder binder) {
-//        binder.setValidator(menuToValidator);
-        binder.addValidators(menuToValidator, userToValidator);
+        binder.setValidator(menuToValidator);
+//        binder.addValidators(menuToValidator, userToValidator);
     }
 
-//    @InitBinder("userTo")
-//    private void initBinderUserTo(WebDataBinder binder) {
-//        binder.setValidator(userToValidator);
-//    }
+    @InitBinder("userTo")
+    private void initBinderUserTo(WebDataBinder binder) {
+        binder.setValidator(userToValidator);
+    }
 
     @GetMapping("/users")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @DeleteMapping("/users/{id}")
+    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    public void deleteUser(@PathVariable Integer id) {
+        userRepository.deleteById(id);
     }
 
     @GetMapping("/menus")
@@ -137,7 +143,8 @@ public class AdminController extends AbstractController {
             }
         }
         if( restaurant.isEmpty()) {
-            return voteRepository.findAllByDate(date);
+            List<Vote> list = voteRepository.findAllByDate(date);
+            return list;
         } else {
             Optional<Menu> menu = menuRepository.findByDateAndRestaurant(date, restaurant.get());
             if (menu.isEmpty()) {
