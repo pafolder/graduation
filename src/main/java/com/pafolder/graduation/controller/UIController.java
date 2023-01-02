@@ -105,22 +105,13 @@ public class UIController {
     }
 
     public void testDataBase() {
-        Menu menu1 = new Menu(restaurantRepository.findById(0).orElse(null), Date.valueOf(LocalDate.now()));
-        menu1.addItems(new Menu.Item("Hello", 1300.));
 
-        restaurantRepository.save(new Restaurant("Added", "yyy"));
-        List<User> users = userService.getAll();
-        List<Restaurant> restaurants = restaurantRepository.findAll();
-        List<Menu> menus = menuRepository.findAll();
-        List<Vote> votes = voteRepository.findAll();
-        menuRepository.save(menu1);
-
-        List<Menu> menuList = menuRepository.findAll();
+//        List<Menu> menuList = menuRepository.findAll();
 //        System.out.println(menuList);
 //        System.out.println("getByDate(\"2020-01-30\"):");
 //        System.out.println(menuService.getByDate(Date.valueOf("2020-01-30")));
 
-        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", "password", User.Role.USER);
-        userService.save(user);
+//        User user = new User(0, "Auroutune Karapetovich", "karapetovich@trashedmail.not", "password", User.Role.USER);
+//        userService.save(user);
     }
 }

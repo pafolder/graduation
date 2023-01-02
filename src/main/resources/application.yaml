@@ -1,0 +1,33 @@
+server:
+  port: 8080
+  servlet:
+    application-display-name: Graduation
+spring:
+  security:
+    user:
+      name: user
+      password: password
+  cache:
+    cache-names: menus
+    caffeine.spec: maximumSize=5000,expireAfterAccess=600s
+springdoc:
+  packagesToScan: com.pafolder.graduation.controller
+  swagger-ui:
+    path: /swagger-ui.html
+    tagsSorter: alpha
+  version: '@springdoc.version@'
+#application:
+#  version: 0.8
+level: warn
+logging:
+  level:
+    ROOT: ${level}
+    org:
+      hibernate: ${level}
+      hibernate.SQL: ${level}
+      springframework:
+        cache: TRACE
+        orm:
+          jpa: debug
+        transaction: ${level}
+        transaction.interceptor: trace
