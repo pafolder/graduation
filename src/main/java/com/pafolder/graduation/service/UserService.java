@@ -14,7 +14,8 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
-    UserRepository repository;
+    private UserRepository repository;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -26,11 +27,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User save(User user) {
-        repository.save(user);
-        return user;
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
     }
 
     public User create(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 
@@ -46,14 +48,12 @@ public class UserService implements UserDetailsService {
         return repository.findById(id);
     }
 
-    private PasswordEncoder encoder;
-
-    public PasswordEncoder getEncoder() {
-        return encoder;
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
     }
 
-    public void setEncoder(PasswordEncoder encoder) {
-        this.encoder = encoder;
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -62,6 +62,8 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("No such user " + email);
         }
-        return new UserDetails(user, encoder);
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return new UserDetails(user);
     }
 }

@@ -5,7 +5,6 @@ import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
 import com.pafolder.graduation.repository.RestaurantRepository;
-import com.pafolder.graduation.security.UserDetails;
 import com.pafolder.graduation.to.MenuTo;
 import com.pafolder.graduation.validator.MenuToValidator;
 import com.pafolder.graduation.validator.UserToValidator;
@@ -17,7 +16,6 @@ import jakarta.validation.Valid;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -60,13 +58,13 @@ public class AdminController extends AbstractController {
     @GetMapping("/users")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.getAll();
     }
 
     @DeleteMapping("/users/{id}")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
     public void deleteUser(@PathVariable Integer id) {
-        userRepository.deleteById(id);
+        userService.delete(id);
     }
 
     @GetMapping("/menus")
