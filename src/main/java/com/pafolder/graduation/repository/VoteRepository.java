@@ -14,9 +14,9 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
-    //    @Query("SELECT v FROM Vote v")
+    @Query("SELECT v FROM Vote v WHERE :user=v.user")
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
-    List<Vote> findAll();
+    List<Vote> findAllByUser(User user);
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
     @Query("SELECT v FROM Vote v WHERE :date=v.menu.date")
@@ -24,10 +24,10 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
     @Query("SELECT v FROM Vote v WHERE :user=v.user AND :date=v.menu.date")
-    Optional<Vote> findByDateAndUser(Date date, User user);
+    List<Vote> findAllByDateAndUser(Date date, User user);
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
-    List<Vote> findByMenu(Menu menu);
+    List<Vote> findAllByMenu(Menu menu);
 
 //    @Transactional
 //    Vote save(Vote vote);
