@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
@@ -30,14 +31,12 @@ public class VoteController extends AbstractController {
 
     @GetMapping("/votes")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
-    public Vote getVote(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
+    public List<Vote> getVotes(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userDetails.getUser();
         log.error("Get vote for user {}", user);
-        Optional<Vote> vote = voteRepository.findByDateAndUser(date == null ? getCurrentDate() : date, user);
-        if (vote.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
-        }
-        return vote.get();
+        List<Vote> votes = date != null ? voteRepository.findAllByDateAndUser(date, user) :
+                voteRepository.findAllByUser(user);
+        return votes;
     }
 
     @PostMapping("/votes")
@@ -67,9 +66,9 @@ public class VoteController extends AbstractController {
         date = date == null ? getCurrentDate() : date;
         User user = userDetails.getUser();
         log.info("User {} deletes vote on {}", userDetails.getUsername(), date.toString());
-        Optional<Vote> vote = voteRepository.findByDateAndUser(date, user);
-        if (vote.isPresent()) {
-            voteRepository.delete(vote.get());
+        List<Vote> votes = voteRepository.findAllByDateAndUser(date, user);
+        if (!votes.isEmpty()) {
+            voteRepository.delete(votes.get(0));
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
         }

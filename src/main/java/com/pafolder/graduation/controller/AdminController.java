@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -78,6 +79,7 @@ public class AdminController extends AbstractController {
     @PostMapping("/menus")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
     @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
     public ResponseEntity<Menu> addMenu(@Valid @RequestBody MenuTo menuTo) {
         menuTo.setDate(menuTo.getDate() == null ? getCurrentDate() : menuTo.getDate());
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
@@ -157,7 +159,7 @@ public class AdminController extends AbstractController {
             if (menu.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No menu found");
             }
-            return voteRepository.findByMenu(menu.get());
+            return voteRepository.findAllByMenu(menu.get());
         }
     }
 
