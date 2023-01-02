@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pafolder</groupId>
     <artifactId>graduation</artifactId>
-    <version>0.5.0-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>graduation</name>
     <description>Graduation project on Spring Boot</description>
@@ -86,10 +86,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.github.ben-manes.caffeine</groupId>-->
-<!--            <artifactId>caffeine</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.webjars.npm</groupId>

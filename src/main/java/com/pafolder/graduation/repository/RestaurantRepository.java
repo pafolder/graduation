@@ -17,7 +17,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 
     List<Restaurant> findAll();
 
-    @CacheEvict(value = "menus", allEntries = true)
     @Override
     void deleteById(Integer integer);
 }

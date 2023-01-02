@@ -28,10 +28,8 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     List<Menu> findAllByDate(Date date);
 
-
     @Modifying
     @Transactional
-    @CachePut("menus")
     Menu save(Menu menu);
 
 //    @Modifying
@@ -40,7 +38,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     @Modifying
     @Transactional
-    @CacheEvict(value = "menus", allEntries = true)
     boolean deleteById(int id);
 
     @Cacheable("menus")
@@ -48,4 +45,3 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     Optional<Menu> findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") Restaurant restaurant);
 }
-
