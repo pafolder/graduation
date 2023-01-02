@@ -11,11 +11,11 @@ import java.util.List;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private User user;
-    private PasswordEncoder encoder;
+//    private PasswordEncoder encoder;
 
-    public UserDetails(User user, PasswordEncoder encoder) {
+    public UserDetails(User user) {
         this.user = user;
-        this.encoder = encoder;
+//        this.encoder = encoder;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public String getPassword() {
-        return encoder.encode(user.getPassword());
+        return user.getPassword();
     }
 
     @Override

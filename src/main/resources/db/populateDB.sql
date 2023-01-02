@@ -48,9 +48,9 @@ VALUES (0, 'Фасоль', 99.99),
 
 INSERT INTO users (name, email, password, role)
 VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', 'password', 'USER'),
-       ('Серей Сергеев', 'Segey.Sergeev@dvorkin.ru', 'password', 'USER'),
+       ('Серей Сергеев', 'Segey.Sergeev@dvorkin.ru', '$2a$10$ioVa7A//YxDBvUqt7O8WnObHilyX2h7X2ERzezqdyeWufgWW6niTC', 'USER'),
        ('Александра Александрова', 'aa@nomail.su', 'password', 'USER'),
-       ('Пётр Петров', 'petr_p@yandex.com', 'password', 'ADMIN'),
+       ('Пётр Петров', 'petr_p@yandex.com', '$2a$10$ioVa7A//YxDBvUqt7O8WnObHilyX2h7X2ERzezqdyeWufgWW6niTC', 'ADMIN'),
        ('Кирилл Кириллов', 'k_kirillov@qq.org', 'password', 'USER'),
        ('Евгения Евгеньевна', 'evgeniya_e@yahoo.kz', 'password', 'USER');
 
