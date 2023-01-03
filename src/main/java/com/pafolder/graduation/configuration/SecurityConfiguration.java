@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.parameters.P;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
     private final UserRepository userRepository;
 
@@ -41,8 +42,8 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        return new BCryptPasswordEncoder();
     }
 
 //    @Bean
@@ -53,11 +54,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
         http.csrf().ignoringRequestMatchers("/login");
 
         http.authorizeHttpRequests()
-                .requestMatchers("/api/admin/**")
+               .requestMatchers("/api/admin/**")
                 .hasRole("ADMIN")
                 .requestMatchers("/api/profile/*")
                 .hasRole("USER")
@@ -66,7 +66,7 @@ public class SecurityConfiguration {
                         AuthorityAuthorizationManager.hasRole("ADMIN"),
                         AuthorityAuthorizationManager.hasRole("USER")))
                 .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**",
-                        "/v3/**", "/swagger-ui/**", "/error")
+                        "/v3/**", "/swagger-ui/**", "/error", "/api/register", "/api/menus")
                 .permitAll()
 //                .and()
 //                .authorizeHttpRequests()

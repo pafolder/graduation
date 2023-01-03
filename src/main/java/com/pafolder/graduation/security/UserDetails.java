@@ -11,11 +11,9 @@ import java.util.List;
 
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private User user;
-//    private PasswordEncoder encoder;
 
     public UserDetails(User user) {
         this.user = user;
-//        this.encoder = encoder;
     }
 
     @Override

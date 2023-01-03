@@ -23,12 +23,9 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> findAllByDate(Date date);
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
-    @Query("SELECT v FROM Vote v WHERE :user=v.user AND :date=v.menu.date")
-    List<Vote> findAllByDateAndUser(Date date, User user);
+    @Query("SELECT DISTINCT v FROM Vote v WHERE :user=v.user AND :date=v.menu.date")
+    Optional<Vote> findByDateAndUser(Date date, User user);
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant"})
     List<Vote> findAllByMenu(Menu menu);
-
-//    @Transactional
-//    Vote save(Vote vote);
 }

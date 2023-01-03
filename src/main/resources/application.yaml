@@ -2,6 +2,7 @@ server:
   port: 8080
   servlet:
     application-display-name: Graduation
+  max-http-request-header-size: 32KB
 spring:
   security:
     user:

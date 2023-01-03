@@ -15,7 +15,9 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,7 @@ import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
 
 @RestController
 @Tag(name = "5 Admin", description = "Administration API")
-@RequestMapping("/api/admin")
+@RequestMapping(value = "/api/admin", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController extends AbstractController {
     private final MenuToValidator menuToValidator;
     private final UserToValidator userToValidator;
@@ -63,6 +65,7 @@ public class AdminController extends AbstractController {
 
     @DeleteMapping("/users/{id}")
     @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    @Secured("ROLE_ADMIN")
     public void deleteUser(@PathVariable Integer id) {
         userService.delete(id);
     }

@@ -1,9 +1,6 @@
 package com.pafolder.graduation.controller;
 
 import com.pafolder.graduation.model.Menu;
-import com.pafolder.graduation.model.Restaurant;
-import com.pafolder.graduation.model.User;
-import com.pafolder.graduation.model.Vote;
 import com.pafolder.graduation.repository.MenuRepository;
 import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.repository.VoteRepository;
@@ -19,8 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
