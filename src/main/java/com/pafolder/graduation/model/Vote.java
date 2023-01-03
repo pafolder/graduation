@@ -30,8 +30,7 @@ public class Vote {
     public Vote() {
     }
 
-    public Vote(Date date, User user, Menu menu) {
-//        this.date = date;
+    public Vote(User user, Menu menu) {
         this.user = user;
         this.menu = menu;
     }
@@ -61,10 +60,6 @@ public class Vote {
     public Date getDate() {
         return menu.getDate();
     }
-
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
 
     public User getUser() {
         return user;

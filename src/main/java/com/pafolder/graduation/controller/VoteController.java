@@ -5,6 +5,7 @@ import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
 import com.pafolder.graduation.security.UserDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
@@ -19,56 +20,72 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
+import static com.pafolder.graduation.util.DateTimeUtil.*;
 
 @RestController
-@Tag(name = "1 Votes", description = "Votes API")
+@Tag(name = "1 Votes", description = "API")
 @RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController extends AbstractController {
     private static String NO_VOTE_FOUND = "No vote found";
     private static String NO_MENU_FOUND = "No menu found";
     private static String ILLEGAL_VOTING_DATE = "Illegal voting date (in the past)";
+    private static String TOO_LATE_TO_VOTE = "It's too late to vote (available until 11:00 am)";
+    private static String TOO_LATE_TO_DELETE_VOTE = "It's too late to delete the vote (available until 11:00 am)";
 
     @GetMapping("/votes")
-    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    @Operation(summary = "Get user's vote(s)", security = {@SecurityRequirement(name = "basicScheme")})
+    @Parameter(name = "date", description = "Optional: Get user's vote on the specified date. Defaults to all votes for any dates")
     public List<Vote> getVotes(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userDetails.getUser();
         log.error("Get vote for user {}", user);
-        List<Vote> votes = date != null ? voteRepository.findAllByDateAndUser(date, user) :
-                voteRepository.findAllByUser(user);
+        List<Vote> votes;
+        if (date == null) {
+            votes = voteRepository.findAllByUser(user);
+        } else {
+            votes = List.of(voteRepository.findByDateAndUser(date, user).orElse(null));
+        }
         return votes;
     }
 
     @PostMapping("/votes")
     @ResponseStatus(value = HttpStatus.ACCEPTED)
-    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    @Operation(summary = "Send user's vote", security = {@SecurityRequirement(name = "basicScheme")})
+    @Parameter(name = "menuId", description = "Id of the Menu user votes for")
     @Transactional
-    public void acceptVote(@RequestParam int menuId, @RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
-        log.info("User {} voting for the {} menu", userDetails.getUsername(), menuId);
-        Date votingDate = date == null ? getCurrentDate() : date;
-
+    public void acceptVote(@RequestParam int menuId, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
+        User user = userDetails.getUser();
+        log.info("User {} voting for the {} menu", user.getName(), menuId);
         Menu menu = menuRepository.findById(menuId).orElse(null);
-        if (menu == null || !menu.getDate().equals(votingDate)) {
+        if (menu == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_MENU_FOUND);
         }
-        if (votingDate.before(getCurrentDate())) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, ILLEGAL_VOTING_DATE);
+        if (menu.getDate().equals(getCurrentDate())
+                && getCurrentTime().getTime() > VOTING_TIME_LIMIT.getTime()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, TOO_LATE_TO_VOTE);
         }
-
-        Vote vote = new Vote(date, userDetails.getUser(), menu);
+        Vote vote = new Vote(userDetails.getUser(), menu);
+        Optional<Vote> existingVote = voteRepository.findByDateAndUser(menu.getDate(), user);
+        if (existingVote.isPresent()) {
+            vote.setId(existingVote.get().getId());
+        }
         voteRepository.save(vote);
     }
 
     @DeleteMapping("/votes")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    @Operation(security = {@SecurityRequirement(name = "basicScheme")})
+    @Operation(summary = "Delete user's vote", security = {@SecurityRequirement(name = "basicScheme")})
+    @Parameter(name = "date", description = "Optional: Date to delete vote on. Defaults to the next launch date.")
     public void deleteVote(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) throws Exception {
         date = date == null ? getCurrentDate() : date;
         User user = userDetails.getUser();
         log.info("User {} deletes vote on {}", userDetails.getUsername(), date.toString());
-        List<Vote> votes = voteRepository.findAllByDateAndUser(date, user);
-        if (!votes.isEmpty()) {
-            voteRepository.delete(votes.get(0));
+        Optional<Vote> vote = voteRepository.findByDateAndUser(date, user);
+        if (vote.isPresent()) {
+            if (vote.get().getMenu().getDate().equals(getCurrentDate())
+                    && getCurrentTime().getTime() > VOTING_TIME_LIMIT.getTime()) {
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, TOO_LATE_TO_VOTE);
+            }
+            voteRepository.delete(vote.get());
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
         }

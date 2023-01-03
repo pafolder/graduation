@@ -108,6 +108,7 @@ public class Menu {
         @NotBlank
         private String dishName;
 
+        @NotNull
         @Range(min = 0, max = 10000)
         private Double dishPrice;
 

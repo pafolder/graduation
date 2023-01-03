@@ -37,6 +37,6 @@ public class TestData {
     public static final User newUser = new User(0, "Новый Пользователь", "new_user@new_mail.new", DEFAULT_PASSWORD, User.Role.USER);
     public static final User admin = new User(4, "Пётр Петров", "petr_p@yandex.com", DEFAULT_PASSWORD, User.Role.ADMIN);
     public static final String NONEXISTING_ID_STRING = "-1";
-    public static final Vote vote1 = new Vote(DATE6, admin, menu1);
+    public static final Vote vote1 = new Vote(admin, menu1);
 }
 

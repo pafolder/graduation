@@ -58,12 +58,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = getByEmail(email);
+        User user = getByEmail(email.toLowerCase());
         if (user == null) {
-            throw new UsernameNotFoundException("No such user " + email);
+            throw new UsernameNotFoundException("No such user " + email.toLowerCase());
         }
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         return new UserDetails(user);
     }
 }

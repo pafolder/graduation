@@ -48,9 +48,10 @@ VALUES (0, 'Фасоль', 99.99),
 
 INSERT INTO users (name, email, password, role)
 VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', 'password', 'USER'),
-       ('Серей Сергеев', 'Segey.Sergeev@dvorkin.ru', '$2a$10$ioVa7A//YxDBvUqt7O8WnObHilyX2h7X2ERzezqdyeWufgWW6niTC', 'USER'),
-       ('Александра Александрова', 'aa@nomail.su', 'password', 'USER'),
-       ('Пётр Петров', 'petr_p@yandex.com', '$2a$10$ioVa7A//YxDBvUqt7O8WnObHilyX2h7X2ERzezqdyeWufgWW6niTC', 'ADMIN'),
+       ('Серей Сергеев', 'sergey.sergeev@smail.su', '{noop}password', 'USER'),
+       ('Александра Александрова', 'aa@nomail.ru', 'password', 'USER'),
+       ('Пётр Петров', 'petr_p@yandex.com', '{bcrypt}$2a$10$oHGXOKCZvICllyMwtvdNjeKHvx1EQXJgd5Ayh01S8vBGMAY3bvTOm',
+        'ADMIN'),
        ('Кирилл Кириллов', 'k_kirillov@qq.org', 'password', 'USER'),
        ('Евгения Евгеньевна', 'evgeniya_e@yahoo.kz', 'password', 'USER');
 
@@ -60,4 +61,4 @@ VALUES (0, 1, '2022-12-17'),
        (2, 2, '2022-12-17'),
        (3, 3, '2022-12-17'),
        (4, 0, '2022-12-16'),
-       (5, 0, '2022-12-16');
+       (1, 2, '2022-12-17');
