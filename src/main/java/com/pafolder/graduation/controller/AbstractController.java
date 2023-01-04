@@ -1,21 +1,41 @@
 package com.pafolder.graduation.controller;
 
 import com.pafolder.graduation.repository.MenuRepository;
-import com.pafolder.graduation.repository.UserRepository;
+import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.repository.VoteRepository;
-import com.pafolder.graduation.service.UserService;
+import com.pafolder.graduation.service.UserServiceImpl;
+import com.pafolder.graduation.validator.MenuToValidator___;
+import com.pafolder.graduation.validator.UserToValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 public abstract class AbstractController {
+    public static final String REST_URL = "/api";
     protected Logger log = LoggerFactory.getLogger("yellow");
     @Autowired
     protected MenuRepository menuRepository;
-
     @Autowired
-    protected UserService userService;
-
+    protected UserServiceImpl userService;
     @Autowired
     protected VoteRepository voteRepository;
+    @Autowired
+    protected RestaurantRepository restaurantRepository;
+    @Autowired
+    protected MenuToValidator___ menuToValidator;
+    @Autowired
+    protected UserToValidator userToValidator;
+
+    @InitBinder("menuTo")
+    private void initBinderMenuTo(WebDataBinder binder) {
+        binder.setValidator(menuToValidator);
+    }
+
+    @InitBinder("userTo")
+    private void initBinderUserTo(WebDataBinder binder) {
+        binder.setValidator(userToValidator);
+    }
+
 }

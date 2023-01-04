@@ -36,8 +36,8 @@ public class UserToValidator implements Validator {
     public void validate(Object object, Errors errors) {
         UserTo userTo = (UserTo) object;
         Optional<User> dbUser = userRepository.findByEmail(userTo.getEmail());
-        int dbId = dbUser.isPresent() ? dbUser.get().getId() : null;
         if (!dbUser.isPresent()) return;
+        int dbId = dbUser.get().getId();
         if (request.getMethod().equals("PUT")) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             int authUserId = ((UserDetails) authentication.getPrincipal()).getUser().getId();

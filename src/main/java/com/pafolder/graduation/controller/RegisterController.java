@@ -13,29 +13,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+import static com.pafolder.graduation.controller.AbstractController.REST_URL;
+
 @RestController
-@RequestMapping(value = RegisterController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegisterController extends AbstractController {
-    static final String REST_URL = "/api/register";
-//    private final UserToValidator userToValidator;
 
-//    public RegisterController(UserToValidator userToValidator) {
-//        this.userToValidator = userToValidator;
-//    }
-
-//    @InitBinder
-//    private void initBinder(WebDataBinder binder) {
-//        binder.setValidator(userToValidator);
-//    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @Tag(name = "3 Register", description = "Register new User")
+    @Tag(name = "3 Register", description = "a new User")
     public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("register {}", userTo);
         User created = userService.save(UserUtil.createNewFromTo(userTo));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(REST_URL).build().toUri();
+                .path("/login").build().toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 }
