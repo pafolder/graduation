@@ -14,7 +14,6 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        LoggerFactory.getLogger("root").info("Servlet initializer");
         return application.sources(ServletInitializer.class);
     }
 }

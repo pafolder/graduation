@@ -14,18 +14,19 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.Date;
 import java.util.List;
 
+import static com.pafolder.graduation.controller.AbstractController.REST_URL;
 import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 
 @RestController
 @Tag(name = "2 Menus", description = "API")
-@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuController extends AbstractController {
     private static String ILLEGAL_DATE_FOR_GETTING_MENU = "Illegal date for getting menus for voting (in the past)";
 
     @GetMapping("/menus")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Get actual menus for voting", security = {@SecurityRequirement(name = "basicScheme")})
-    @Parameter(name = "date", description = "Optional: Date to get menus for. Defaults to the next launch date.")
+    @Operation(summary = "Get menus available for voting", security = {@SecurityRequirement(name = "basicScheme")})
+    @Parameter(name = "date", description = "Optional: Date to get menus for. Defaults to the next voting date.")
     public List<Menu> getAll(@RequestParam @Nullable Date date) {
         date = date == null ? getNextVotingDate() : date;
         if (date.after(getNextVotingDate())) {

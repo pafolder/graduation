@@ -47,18 +47,18 @@ VALUES (0, 'Фасоль', 99.99),
        (7, 'Пиво тёмное', 199.99);
 
 INSERT INTO users (name, email, password, role)
-VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', 'password', 'USER'),
+VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', '{noop}password', 'USER'),
        ('Серей Сергеев', 'sergey.sergeev@smail.su', '{noop}password', 'USER'),
-       ('Александра Александрова', 'aa@nomail.ru', 'password', 'USER'),
+       ('Александра Александрова', 'aa@nomail.ru', '{noop}password', 'USER'),
        ('Пётр Петров', 'petr_p@yandex.com', '{bcrypt}$2a$10$oHGXOKCZvICllyMwtvdNjeKHvx1EQXJgd5Ayh01S8vBGMAY3bvTOm',
         'ADMIN'),
-       ('Кирилл Кириллов', 'k_kirillov@qq.org', 'password', 'USER'),
-       ('Евгения Евгеньевна', 'evgeniya_e@yahoo.kz', 'password', 'USER');
+       ('Кирилл Кириллов', 'k_kirillov@qq.org', '{noop}password', 'USER'),
+       ('Евгения Евгеньевна', 'evgeniya_e@yahoo.kz', '{noop}password', 'USER');
 
 INSERT INTO vote (user_id, menu_id, menu_date)
 VALUES (0, 1, '2022-12-17'),
        (1, 0, '2022-12-16'),
        (2, 2, '2022-12-17'),
-       (3, 3, '2022-12-17'),
+       (0, 4, '2022-12-16'),
        (4, 0, '2022-12-16'),
        (1, 2, '2022-12-17');

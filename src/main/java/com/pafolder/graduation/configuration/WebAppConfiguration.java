@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Configuration
-@SecurityRequirement(name = "basicScheme")
+//@SecurityRequirement(name = "basicScheme")
 public class WebAppConfiguration implements WebMvcConfigurer {
     private static String HSQLDB_CONFIGURATION = "db/hsqldb.properties";
 

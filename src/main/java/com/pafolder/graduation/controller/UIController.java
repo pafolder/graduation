@@ -4,7 +4,7 @@ import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.repository.MenuRepository;
 import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.repository.VoteRepository;
-import com.pafolder.graduation.service.UserService;
+import com.pafolder.graduation.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -22,25 +22,21 @@ import java.util.List;
 public class UIController {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final VoteRepository voteRepository;
-    private final Logger log;
 
     @Autowired
-    public UIController(RestaurantRepository restaurantRepository, MenuRepository menuRepository, UserService userService,
+    public UIController(RestaurantRepository restaurantRepository, MenuRepository menuRepository, UserServiceImpl userService,
                         VoteRepository voteRepository) {
         this.menuRepository = menuRepository;
         this.userService = userService;
         this.voteRepository = voteRepository;
         this.restaurantRepository = restaurantRepository;
-        log = LoggerFactory.getLogger("yellow");
-        log.error("Hello! Logging has started!");
-        testDataBase();
+//        testDataBase();
     }
 
     @GetMapping("/login")
     public String login() {
-        log.error("login");
         return "login";
     }
 
@@ -86,14 +82,12 @@ public class UIController {
     @GetMapping("/root")
     @ResponseStatus(HttpStatus.OK)
     public String getRoot(HttpServletRequest request) {
-        log.error("@GetMapping('/root')");
         return "thymeleafPage";
     }
 
     @Hidden
     @GetMapping("/menus")
     public String getAll(HttpServletRequest request, Model model) {
-        log.error("@GetMapping('/menus')");
         List<Menu> menus = menuRepository.findAll();
         model.addAttribute("menus", menus);
         return "jsp/menus";
