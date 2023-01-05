@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "vote",
@@ -75,5 +76,17 @@ public class Vote {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vote vote)) return false;
+        return getId().equals(vote.getId()) && getUser().equals(vote.getUser()) && getMenu().equals(vote.getMenu());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUser(), getMenu());
     }
 }

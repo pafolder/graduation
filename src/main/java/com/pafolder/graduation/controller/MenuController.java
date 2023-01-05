@@ -21,13 +21,14 @@ import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 @Tag(name = "2 Menus", description = "API")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuController extends AbstractController {
-    private static String ILLEGAL_DATE_FOR_GETTING_MENU = "Illegal date for getting menus for voting (in the past)";
+    private static final String ILLEGAL_DATE_FOR_GETTING_MENU = "Illegal date for getting menus for voting (in the past)";
 
     @GetMapping("/menus")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get menus available for voting", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "date", description = "Optional: Date to get menus for. Defaults to the next voting date.")
     public List<Menu> getAll(@RequestParam @Nullable Date date) {
+        log.info("getAll(@RequestParam @Nullable Date date)");
         date = date == null ? getNextVotingDate() : date;
         if (date.after(getNextVotingDate())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, ILLEGAL_DATE_FOR_GETTING_MENU);

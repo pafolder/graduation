@@ -4,7 +4,7 @@ import com.pafolder.graduation.repository.MenuRepository;
 import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.repository.VoteRepository;
 import com.pafolder.graduation.service.UserServiceImpl;
-import com.pafolder.graduation.validator.MenuToValidator___;
+import com.pafolder.graduation.validator.MenuToValidator;
 import com.pafolder.graduation.validator.UserToValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +24,17 @@ public abstract class AbstractController {
     @Autowired
     protected RestaurantRepository restaurantRepository;
     @Autowired
-    protected MenuToValidator___ menuToValidator;
+    protected MenuToValidator menuToValidator;
     @Autowired
     protected UserToValidator userToValidator;
 
     @InitBinder("menuTo")
-    private void initBinderMenuTo(WebDataBinder binder) {
+    protected void initBinderMenuTo(WebDataBinder binder) {
         binder.setValidator(menuToValidator);
     }
 
     @InitBinder("userTo")
-    private void initBinderUserTo(WebDataBinder binder) {
+    protected void initBinderUserTo(WebDataBinder binder) {
         binder.setValidator(userToValidator);
     }
-
 }

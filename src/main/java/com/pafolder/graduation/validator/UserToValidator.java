@@ -29,7 +29,7 @@ public class UserToValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return clazz == UserTo.class;
+        return UserTo.class.equals(clazz);
     }
 
     @Override

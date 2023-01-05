@@ -1,7 +1,5 @@
 package com.pafolder.graduation.configuration;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +22,6 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Configuration
-//@SecurityRequirement(name = "basicScheme")
 public class WebAppConfiguration implements WebMvcConfigurer {
     private static String HSQLDB_CONFIGURATION = "db/hsqldb.properties";
 
@@ -56,13 +53,26 @@ public class WebAppConfiguration implements WebMvcConfigurer {
     @Bean
     public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
         Contact contact = new Contact();
-        contact.name("Sergey Pastukhov");
+        contact.name("the Author (pafolder@gmail.com");
         contact.email("pafolder@gmail.com");
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
                 .info(new Info().title("Rest API Documentation for Restaurant Voting Application").version(appVersion)
-                        .description("Write the <strong>Description</strong> here<br>...<br>The End")
-                        .contact(contact).summary("Summary"));
+                        .description(
+                                "<b>Restaurant Voting Application (RVA)</b> implements a Voting System for customers " +
+                                        "making their decisions which restaurant to have lunch at.<br>\n" +
+                                        "There are 2 types of users: Admins and regular Users (Customers).\n" +
+                                        "Admins can input Restaurants and theirs lunch Menus of the day " +
+                                        "(dish names with prices).<br>\n" +
+                                        "The Menus can be provided in advance for any further date.\n" +
+                                        "Users (Customers) can vote for a restaurant they want to have lunch at " +
+                                        "today (or any other day<br>provided that Admin has\n" +
+                                        "already input the menu). Only one vote per user per date counts.\n" +
+                                        "If the User votes again the same day, the vote will be overridden<br>unless" +
+                                        " it was sent after 11:00.\n" +
+                                        "In this case, the existing vote cannot be changed."
+                        )
+                        .contact(contact));
     }
 }
