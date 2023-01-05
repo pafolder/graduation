@@ -1,12 +1,11 @@
 package com.pafolder.graduation.repository;
 
 import com.pafolder.graduation.model.User;
-import org.springframework.cache.annotation.CacheEvict;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,7 +19,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-    @Modifying
     @Transactional
     void delete(User user);
+
+    @Transactional
+    @Query("UPDATE User u SET u.enabled=:isEnabled WHERE u.id=:id")
+    @Modifying
+    void updateIsEnabled(@Parameter Integer id, @Parameter boolean isEnabled);
 }

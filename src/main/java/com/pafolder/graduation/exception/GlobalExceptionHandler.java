@@ -2,8 +2,6 @@ package com.pafolder.graduation.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
@@ -22,8 +20,6 @@ import java.util.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
     private final MessageSource messageSource;
 
     public GlobalExceptionHandler(MessageSource messageSource) {
@@ -31,7 +27,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers, HttpStatusCode status,
+                                                                  WebRequest request) {
         ProblemDetail body = ex.updateAndGetBody(this.messageSource, LocaleContextHolder.getLocale());
         Map<String, String> invalidParams = new LinkedHashMap<>();
         for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
@@ -50,25 +48,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> handleResponseStatusException(ResponseStatusException ex, WebRequest request) throws Exception {
-        return handleExceptionInternal(ex, createProblemDetail(ex, ex.getStatusCode(), ex.getReason(), null, null, request),
+    public ResponseEntity<?> handleResponseStatusException(ResponseStatusException ex, WebRequest request) {
+        return handleExceptionInternal(ex, createProblemDetail(ex, ex.getStatusCode(), ex.getReason(),
+                        null, null, request),
                 new HttpHeaders(), ex.getStatusCode(), request);
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<?> handleEmptyResultDataAccessException(DataAccessException ex, WebRequest request) throws Exception {
-        return handleExceptionInternal(ex, createProblemDetail(ex, HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), null, null, request),
+    public ResponseEntity<?> handleEmptyResultDataAccessException(DataAccessException ex, WebRequest request) {
+        return handleExceptionInternal(ex, createProblemDetail(ex, HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(),
+                        null, null, request),
                 new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<Object> handleDataIntegrityViolation(
             DataIntegrityViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         errors.add(/*ex.getCause() + " : " + */ex.getMessage());
         ApiError apiError =
                 new ApiError(HttpStatus.UNPROCESSABLE_ENTITY, ex.getLocalizedMessage(), errors);
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
 
     }
@@ -76,14 +76,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(
             ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getRootBeanClass().getName() + " " +
                     violation.getPropertyPath() + ": " + violation.getMessage());
         }
         ApiError apiError =
                 new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 

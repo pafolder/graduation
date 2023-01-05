@@ -1,6 +1,5 @@
 package com.pafolder.graduation.configuration;
 
-import com.pafolder.graduation.repository.UserRepository;
 import com.pafolder.graduation.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,12 +18,6 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
-    private final UserRepository userRepository;
-
-    public SecurityConfiguration(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder,
                                                        UserServiceImpl userService) throws Exception {
@@ -46,9 +39,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests()
                 .requestMatchers("/api/admin/**")
                 .hasRole("ADMIN")
-                .requestMatchers("/api/profile/*")
-                .hasRole("USER")
-                .requestMatchers("/api/menus", "/api/votes")
+                .requestMatchers("/api/menus/**", "/api/votes/**", "/api/profile/**")
                 .access(AuthorizationManagers.anyOf(
                         AuthorityAuthorizationManager.hasRole("ADMIN"),
                         AuthorityAuthorizationManager.hasRole("USER")))
@@ -58,7 +49,7 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("http://localhost:8080/swagger-ui/index.html", true)
+                        .defaultSuccessUrl("/swagger-ui/index.html", true)
                         .permitAll())
                 .csrf().disable()
                 .logout().permitAll()

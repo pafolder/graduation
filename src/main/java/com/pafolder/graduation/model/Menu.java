@@ -5,17 +5,18 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
-@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "date"},
+@Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "menu_date"},
         name = "menu_unique_restaurant_date_idx")})
-public class Menu {
+public class Menu implements Serializable {
     @Id
     @SequenceGenerator(name = "menu_id_seq", sequenceName = "menu_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_id_seq")
@@ -26,7 +27,8 @@ public class Menu {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "menu_date", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private Date date;
 
@@ -103,7 +105,7 @@ public class Menu {
     }
 
     @Embeddable
-    public static class Item {
+    public static class Item implements Serializable {
         @NotNull
         @NotBlank
         private String dishName;
@@ -135,17 +137,5 @@ public class Menu {
         public void setDishPrice(Double dishPrice) {
             this.dishPrice = dishPrice;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Menu menu)) return false;
-        return getId().equals(menu.getId()) && getRestaurant().equals(menu.getRestaurant()) && getDate().equals(menu.getDate()) && Objects.equals(getMenuItems(), menu.getMenuItems());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getRestaurant(), getDate(), getMenuItems());
     }
 }

@@ -23,7 +23,7 @@ import java.util.Properties;
 
 @Configuration
 public class WebAppConfiguration implements WebMvcConfigurer {
-    private static String HSQLDB_CONFIGURATION = "db/hsqldb.properties";
+    private static final String HSQLDB_CONFIGURATION = "db/hsqldb.properties";
 
     @Bean
     LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env, ApplicationContext context) {
@@ -53,8 +53,9 @@ public class WebAppConfiguration implements WebMvcConfigurer {
     @Bean
     public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
         Contact contact = new Contact();
-        contact.name("the Author (pafolder@gmail.com");
+        contact.name("Sergey Pastukhov");
         contact.email("pafolder@gmail.com");
+        contact.url("http://pafolder.com");
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))

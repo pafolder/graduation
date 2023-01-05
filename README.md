@@ -1,6 +1,5 @@
-<p align=center> Restaurant Voting Application
-===============================
-</p>
+<p align=center> Restaurant Voting Application</p>
+=
 <p align=center>
 Java Enterprise Graduation Project
 </p>
@@ -15,6 +14,5 @@ Only one vote per user per date counts.
 If the User votes again the same day, the vote will be overridden unless it was sent after 11:00.
 In this case, the existing vote cannot be changed.
 
-[REST API documentation (Swagger)](http://localhost:8080/swagger-ui/index.html)
-
-[Login page](http://localhost:8080/login) 
+REST API documentation: </br>
+[pafolder.com/graduation](http://pafolder.com/graduation) 

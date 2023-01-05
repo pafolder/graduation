@@ -2,13 +2,11 @@ package com.pafolder.graduation.util;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class DateTimeUtil {
-    public static final Date CURRENT_DATE = Date.valueOf("2022-12-16");
+    private static final Date CURRENT_DATE = Date.valueOf("2022-12-16");
     public static final Time CURRENT_TIME = Time.valueOf("10:23:00");
-    public static long VOTING_TIME_LIMIT = Time.valueOf("11:00:00").getTime();
+    private static final Time VOTING_TIME_LIMIT = Time.valueOf("11:00:00");
 
     private static Time currentTime = CURRENT_TIME;
 
@@ -27,7 +25,7 @@ public class DateTimeUtil {
     }
 
     public static Date getNextVotingDate() {
-        return getCurrentTime().getTime() <= VOTING_TIME_LIMIT ? getCurrentDate() :
+        return getCurrentTime().getTime() <= VOTING_TIME_LIMIT.getTime() ? getCurrentDate() :
                 Date.valueOf(getCurrentDate().toLocalDate().plusDays(1));
     }
 }
