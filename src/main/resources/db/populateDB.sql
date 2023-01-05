@@ -23,8 +23,8 @@ VALUES (0, '2022-12-16'),
        (4, '2022-12-16');
 
 INSERT INTO menuitem (menu_id, dishname, dishprice)
-VALUES (0, 'Фасоль', 99.99),
-       (0, 'Рис', 88.00),
+VALUES (0, 'Фасоль', 88.99),
+       (0, 'Три корочки хлеба', 33.33),
        (1, 'Гуляш', 140.00),
        (1, 'Фу агра', 438.00),
        (2, 'Вермишель', 43.50),
@@ -42,8 +42,8 @@ VALUES (0, 'Фасоль', 99.99),
        (5, 'Арахис', 83.30),
        (6, 'Рыба', 426.00),
        (6, 'Вино белое сухое', 380.00),
-       (7, 'Ананас', 122.22),
-       (7, 'Сердце', 345.67),
+       (7, 'Ананас', 122.21),
+       (7, 'Бычье сердце', 1345.67),
        (7, 'Пиво тёмное', 199.99);
 
 INSERT INTO users (name, email, password, role)
@@ -53,12 +53,12 @@ VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', '{noop}password', 'USER
        ('Пётр Петров', 'petr_p@yandex.com', '{bcrypt}$2a$10$oHGXOKCZvICllyMwtvdNjeKHvx1EQXJgd5Ayh01S8vBGMAY3bvTOm',
         'ADMIN'),
        ('Кирилл Кириллов', 'k_kirillov@qq.org', '{noop}password', 'USER'),
-       ('Евгения Евгеньевна', 'evgeniya_e@yahoo.kz', '{noop}password', 'USER');
+       ('Евгения Евгеньевна', 'evgeniya_e@yahoo.zz', '{noop}password', 'USER');
 
 INSERT INTO vote (user_id, menu_id, menu_date)
 VALUES (0, 1, '2022-12-17'),
        (1, 0, '2022-12-16'),
        (2, 2, '2022-12-17'),
        (0, 4, '2022-12-16'),
-       (4, 0, '2022-12-16'),
+       (3, 0, '2022-12-16'),
        (1, 2, '2022-12-17');

@@ -17,8 +17,6 @@ springdoc:
     path: /swagger-ui.html
     tagsSorter: alpha
   version: '@springdoc.version@'
-#application:
-#  version: 0.8
 level: warn
 logging:
   level:
@@ -27,8 +25,8 @@ logging:
       hibernate: ${level}
       hibernate.SQL: ${level}
       springframework:
-        cache: TRACE
+        cache: ${level}
         orm:
-          jpa: debug
+          jpa: ${level}
         transaction: ${level}
-        transaction.interceptor: trace
+        transaction.interceptor: ${level}

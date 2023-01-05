@@ -30,16 +30,16 @@
         <appender-ref ref="consolebriefyellow"/>
     </logger>
 
-    <logger name="log4j.logger.org.springframework.transaction" level="debug">
+    <logger name="log4j.logger.org.springframework.transaction" level="info">
         <appender-ref ref="consolebriefyellow"/>
     </logger>
 
-    <logger name="org.springframework.web" level="debug">
+    <logger name="org.springframework.web" level="info">
 <!--        <appender-ref ref="consolebriefyellow"/>-->
     </logger>
 
 
-    <root level="info">
+    <root level="error">
         <appender-ref ref="console"/>
     </root>
 </configuration>

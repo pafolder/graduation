@@ -34,19 +34,24 @@ import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 @RequestMapping(value = REST_URL + "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController extends AbstractController {
     public static String RESTAURANTID_SHOULD_BE_NULL = "restaurantId should be null for creating new restaurant";
-    public static String NO_RESTAURANT_FOUND = "No restaurant found with specified restaurantId";
-    public static String RESTAURANT_INFORMATION_ABSENT = "Restaurant information is absent";
+    public static String NO_RESTAURANT_FOUND = "No restaurant found";
+    public static String NO_MENU_FOUND = "No menu found";
+    public static String RESTAURANT_INFORMATION_ABSENT = "Restaurant not found and information not provided";
+    public static String MENU_ALREADY_EXISTS = "Menu already exists";
+    public static String MENU_EXPIRED = "Menu is expired";
 
     @GetMapping("/users")
     @Operation(summary = "Get all users", security = {@SecurityRequirement(name = "basicScheme")})
     public List<User> getAllUsers() {
+        log.info("getAllUsers()");
         return userService.getAll();
     }
 
     @DeleteMapping("/users/{id}")
     @Operation(summary = "Delete user", security = {@SecurityRequirement(name = "basicScheme")})
-    @Parameter(name = "id", description = "User's to be deleted id.")
+    @Parameter(name = "id", description = "User's to be deleted ID.")
     public void deleteUser(@PathVariable Integer id) {
+        log.info("deleteUser(@PathVariable Integer id)");
         userService.delete(id);
     }
 
@@ -54,6 +59,7 @@ public class AdminController extends AbstractController {
     @Operation(summary = "Get menus for specified date", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "date", description = "Optional: Defaults to the next voting date.")
     public List<Menu> getAllMenusByDate(@RequestParam @Nullable Date date) {
+        log.info("getAllMenusByDate(@RequestParam @Nullable Date date)");
         date = date == null ? getNextVotingDate() : date;
         return menuRepository.findAllByDate(date);
     }
@@ -64,14 +70,21 @@ public class AdminController extends AbstractController {
     @Parameter(name = "menuTo", description = "If no restaurantId specified, a new Restaurant will be created")
     @Transactional
     public ResponseEntity<Menu> addMenu(@Valid @RequestBody MenuTo menuTo) {
-        menuTo.setDate(menuTo.getDate() == null ? getCurrentDate() : menuTo.getDate());
+        log.info("addMenu(@Valid @RequestBody MenuTo menuTo)");
+        menuTo.setDate(menuTo.getDate() == null ? getNextVotingDate() : menuTo.getDate());
+        if (menuTo.getDate().before(getNextVotingDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MENU_EXPIRED);
+        }
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
                 restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) :
                 restaurantRepository.save(new Restaurant(menuTo.getRestaurantName(), menuTo.getRestaurantAddress()));
         if (restaurant == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESTAURANT_INFORMATION_ABSENT);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, RESTAURANT_INFORMATION_ABSENT);
         }
         Menu menu = new Menu(restaurant, menuTo.getDate(), menuTo.getMenuItems());
+        if (menuRepository.findByDateAndRestaurant(menu.getDate(), menu.getRestaurant()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, MENU_ALREADY_EXISTS);
+        }
         menu = menuRepository.save(menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/menus").build().toUri();
@@ -83,12 +96,14 @@ public class AdminController extends AbstractController {
     @Parameter(name = "id", description = "ID of the Menu to delete.")
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteMenu(@PathVariable Integer id) {
+        log.info("deleteMenu(@PathVariable Integer id)");
         menuRepository.deleteById(id);
     }
 
     @GetMapping("/restaurants")
     @Operation(summary = "Get all the restaurants available", security = {@SecurityRequirement(name = "basicScheme")})
     public List<Restaurant> getAllRestaurants() {
+        log.info("getAllRestaurants()");
         return restaurantRepository.findAll();
     }
 
@@ -97,6 +112,7 @@ public class AdminController extends AbstractController {
     @Parameter(name = "restaurant", description = "restaurandId shouldn't be specified.")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Restaurant> addRestaurant(@Valid @RequestBody Restaurant restaurant) {
+        log.info("addRestaurant(@Valid @RequestBody Restaurant restaurant)");
         if (restaurant.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESTAURANTID_SHOULD_BE_NULL);
         }
@@ -111,6 +127,7 @@ public class AdminController extends AbstractController {
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     @Transactional
     public void updateRestaurant(@Valid @RequestBody Restaurant restaurant) {
+        log.info("updateRestaurant(@Valid @RequestBody Restaurant restaurant)");
         if (restaurant.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RESTAURANT_INFORMATION_ABSENT);
         }
@@ -125,20 +142,25 @@ public class AdminController extends AbstractController {
     @Parameter(name = "id", description = "ID of the Restaurant to be deleted.")
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteRestaurant(@PathVariable Integer id) {
+        log.info("deleteRestaurant(@PathVariable Integer id)");
         restaurantRepository.deleteById(id);
     }
+
 
     @GetMapping("/votes")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all votes for the specified restaurant on date", security = {@SecurityRequirement(name = "basicScheme")})
+    @Parameter(name = "date", description = "Optional: Defaults to the current date.")
+    @Parameter(name = "restaurantId", description = "Optional: ID of the Restaurant. Get votes for all restaurants if empty.")
     public List<Vote> getAllByDateAndRestaurant(@RequestParam @Nullable Date date,
                                                 @RequestParam @Nullable Integer restaurantId) {
+        log.info("getAllByDateAndRestaurant(Date date, Integer restaurantId)");
         date = date == null ? getCurrentDate() : date;
         Optional<Restaurant> restaurant = Optional.empty();
         if (restaurantId != null) {
             restaurant = restaurantRepository.findById(restaurantId);
             if (restaurant.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No restaurant found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_RESTAURANT_FOUND);
             }
         }
         if (restaurant.isEmpty()) {
@@ -147,10 +169,9 @@ public class AdminController extends AbstractController {
         } else {
             Optional<Menu> menu = menuRepository.findByDateAndRestaurant(date, restaurant.get());
             if (menu.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No menu found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_MENU_FOUND);
             }
             return voteRepository.findAllByMenu(menu.get());
         }
     }
-
 }

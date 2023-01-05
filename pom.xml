@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.pafolder</groupId>
     <artifactId>graduation</artifactId>
-    <version>0.8.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>graduation</name>
     <description>Graduation project on Spring Boot</description>
@@ -23,60 +23,50 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-<!--            maxHttpHeaderSize="12288"-->
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
-        <!--        <dependency>-->
-        <!--            <groupId>jakarta.servlet.jsp.jstl</groupId>-->
-        <!--            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.glassfish.web</groupId>-->
-        <!--            <artifactId>jakarta.servlet.jsp.jstl</artifactId>-->
-        <!--            <version>3.0.0</version>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>org.thymeleaf.extras</groupId>-->
-        <!--            <artifactId>thymeleaf-extras-springsecurity6</artifactId>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
@@ -98,18 +88,11 @@
             <version>5.2.3</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.webjars.npm</groupId>-->
-        <!--            <artifactId>jquery</artifactId>-->
-        <!--            <version>3.6.1</version>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

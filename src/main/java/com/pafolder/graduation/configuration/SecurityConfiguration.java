@@ -43,8 +43,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().ignoringRequestMatchers("/login");
-
         http.authorizeHttpRequests()
                 .requestMatchers("/api/admin/**")
                 .hasRole("ADMIN")
@@ -57,20 +55,12 @@ public class SecurityConfiguration {
                 .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**",
                         "/v3/**", "/swagger-ui/**", "/error", "/api/register", "/api/menus")
                 .permitAll()
-//                .and()
-//                .authorizeHttpRequests()
-                .anyRequest()
-                .authenticated()
                 .and()
                 .formLogin(form -> form
                         .loginPage("/login")
-//                        .loginProcessingUrl("/spring_security_check")
                         .defaultSuccessUrl("http://localhost:8080/swagger-ui/index.html", true)
                         .permitAll())
                 .csrf().disable()
-//                .logout()
-//                .and()
-//                .failureUrl("/login?error=true")
                 .logout().permitAll()
                 .and()
                 .httpBasic();

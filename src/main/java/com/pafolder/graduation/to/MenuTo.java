@@ -1,6 +1,7 @@
 package com.pafolder.graduation.to;
 
 import com.pafolder.graduation.model.Menu;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
@@ -21,6 +22,7 @@ public class MenuTo {
     @DateTimeFormat
     private Date date;
 
+    @NotEmpty
     private List<Menu.Item> menuItems;
 
     @Nullable

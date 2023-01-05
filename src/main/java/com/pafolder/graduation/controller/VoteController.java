@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,18 +27,18 @@ import static com.pafolder.graduation.util.DateTimeUtil.*;
 @Tag(name = "1 Votes", description = "API")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController extends AbstractController {
-    private static String NO_VOTE_FOUND = "No vote found";
-    private static String NO_MENU_FOUND = "No menu found";
-    private static String ILLEGAL_VOTING_DATE = "Illegal voting date (in the past)";
-    private static String TOO_LATE_TO_VOTE = "It's too late to vote (available until 11:00 am)";
-    private static String TOO_LATE_TO_DELETE_VOTE = "It's too late to delete the vote (available until 11:00 am)";
+    private static final String NO_VOTE_FOUND = "No vote found";
+    private static final String NO_MENU_FOUND = "No menu found";
+    private static final String ILLEGAL_VOTING_DATE = "Illegal voting date (in the past)";
+    private static final String TOO_LATE_TO_VOTE = "It's too late to vote (available until 11:00 am)";
+    private static final String TOO_LATE_TO_DELETE_VOTE = "It's too late to delete the vote (available until 11:00 am)";
 
     @GetMapping("/votes")
     @Operation(summary = "Get authenticated user's vote(s)", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "date", description = "Optional: Get user's vote on the specified date. Defaults to all votes for any dates.")
     public List<Vote> getVotes(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetails userDetails) {
         User user = userDetails.getUser();
-        log.error("Get vote for user {}", user);
+        log.info("Get vote for user {}", user);
         List<Vote> votes;
         votes = date == null ? voteRepository.findAllByUser(user) :
                 voteRepository.findByDateAndUser(date, user).map(List::of).orElse(null);

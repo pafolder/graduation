@@ -27,6 +27,7 @@ public class ProfileController extends AbstractController {
     @GetMapping("")
     @Operation(summary = "Get authenticated user's credentials", security = {@SecurityRequirement(name = "basicScheme")})
     public User get(@AuthenticationPrincipal UserDetails authUser) {
+        log.info("get(@AuthenticationPrincipal UserDetails authUser)");
         log.info("Getting authenticated user ({}) credentials", authUser.getUser().getEmail());
         return userService.getById(((UserDetails) authUser).getUser().getId()).orElse(null);
     }

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.validation.FieldError;
@@ -52,6 +53,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleResponseStatusException(ResponseStatusException ex, WebRequest request) throws Exception {
         return handleExceptionInternal(ex, createProblemDetail(ex, ex.getStatusCode(), ex.getReason(), null, null, request),
                 new HttpHeaders(), ex.getStatusCode(), request);
+    }
+
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<?> handleEmptyResultDataAccessException(DataAccessException ex, WebRequest request) throws Exception {
+        return handleExceptionInternal(ex, createProblemDetail(ex, HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), null, null, request),
+                new HttpHeaders(), HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class})
