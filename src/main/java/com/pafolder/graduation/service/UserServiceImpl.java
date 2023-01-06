@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserDetailsService {
         return repository.save(user);
     }
 
+    public User update(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.update(user);
+    }
+
     @Secured("ROLE_ADMIN")
     public void updateIsEnabled(int id, boolean isEnabled) {
         repository.updateIsEnabled(id, isEnabled);
