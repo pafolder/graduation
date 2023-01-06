@@ -19,7 +19,7 @@ public class MenuTo {
     private String restaurantAddress;
 
     @Nullable
-    @DateTimeFormat
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date date;
 
     @NotEmpty

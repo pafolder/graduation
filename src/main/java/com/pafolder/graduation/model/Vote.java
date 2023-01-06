@@ -3,13 +3,13 @@ package com.pafolder.graduation.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serializable;
 import java.sql.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "vote",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"menu_date", "user_id"}, name = "vote_unique_date_user_idx")})
-public class Vote {
+public class Vote implements Serializable {
     @Id
     @SequenceGenerator(name = "vote_id_generator", sequenceName = "vote_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vote_id_generator")
@@ -21,10 +21,8 @@ public class Vote {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id"),
-            @JoinColumn(name = "menu_date", nullable = false, referencedColumnName = "date")
-    })
+    @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "menu_date", nullable = false, referencedColumnName = "menu_date")
     @NotNull
     private Menu menu;
 
@@ -76,17 +74,5 @@ public class Vote {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Vote vote)) return false;
-        return getId().equals(vote.getId()) && getUser().equals(vote.getUser()) && getMenu().equals(vote.getMenu());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getUser(), getMenu());
     }
 }

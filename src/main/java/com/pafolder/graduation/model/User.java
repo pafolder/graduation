@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 @Entity(name = "User")
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
-public class User {
+public class User implements Serializable {
     @Id
     @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
@@ -104,18 +104,6 @@ public class User {
                 " '" + password + '\'' +
                 " role=" + role +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return Objects.equals(getId(), user.getId()) && getName().equals(user.getName()) && getEmail().equals(user.getEmail()) && password.equals(user.password) && role == user.role;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), password, role);
     }
 
     public enum Role implements GrantedAuthority {

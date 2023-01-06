@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Objects;
+import java.io.Serializable;
 
 @Entity
-//@OnDelete(action = OnDeleteAction.CASCADE)
+@OnDelete(action = OnDeleteAction.CASCADE)
 @Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "address"}, name = "restaurant_unique_name_address_idx")})
-public class Restaurant {
+public class Restaurant implements Serializable {
     @Id
     @SequenceGenerator(name = "restaurant_id_seq", sequenceName = "restaurant_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "restaurant_id_seq")
@@ -67,17 +67,5 @@ public class Restaurant {
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Restaurant that)) return false;
-        return Objects.equals(getId(), that.getId()) && getName().equals(that.getName()) && Objects.equals(getAddress(), that.getAddress());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getAddress());
     }
 }

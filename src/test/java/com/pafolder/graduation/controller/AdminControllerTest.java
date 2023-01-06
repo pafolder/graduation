@@ -11,7 +11,7 @@ import static com.pafolder.graduation.controller.AbstractController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AdminControllerTest extends AbstractControllerTest {
+class AdminControllerTest extends AbstractControllerTest {
     private static final String MENU_ID_TO_DELETE_STRING = "0";
 
     @Test
@@ -19,7 +19,6 @@ public class AdminControllerTest extends AbstractControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-//                .content(JsonUtil.writeValue(updatedTo)))
                         .content("{\"restaurantId\":0," +
                                 "\"date\":\"2022-12-18\"," +
                                 "\"date\":\"2022-12-18\"," +
