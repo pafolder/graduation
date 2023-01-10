@@ -59,11 +59,11 @@ public class WebAppConfiguration implements WebMvcConfigurer {
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
-                .info(new Info().title("Rest API Documentation for Restaurant Voting Application").version(appVersion)
+                .info(new Info().title("REST API Documentation for Restaurant Voting Application").version(appVersion)
                         .description(
                                 "<b>Restaurant Voting Application (RVA)</b> implements a Voting System for customers " +
                                         "making their decisions which restaurant to have lunch at.<br>\n" +
-                                        "There are 2 types of users: Admins and regular Users (Customers).\n" +
+                                        "There are two types of users: Admins and regular Users (Customers).\n" +
                                         "Admins can input Restaurants and theirs lunch Menus of the day " +
                                         "(dish names with prices).<br>\n" +
                                         "The Menus can be provided in advance for any further date.\n" +

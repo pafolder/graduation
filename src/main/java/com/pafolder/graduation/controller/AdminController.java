@@ -33,6 +33,9 @@ import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
 public class AdminController extends AbstractController {
     private static final String RESTAURANTID_SHOULD_BE_NULL = "restaurantId should be null for creating new restaurant";
     private static final String NO_RESTAURANT_FOUND = "No restaurant found";
+    private static final int ADMIN_ID = 3;
+    private static final int USER_ID = 1;
+    private static final String CAN_NOT_CHANGE_PRESET_USER_AND_ADMIN = "Changing preset Admin and User isn't allowed in test mode";
 
     @GetMapping("/users")
     @Operation(summary = "Get all users", security = {@SecurityRequirement(name = "basicScheme")})
@@ -46,6 +49,7 @@ public class AdminController extends AbstractController {
     @Parameter(name = "id", description = "User's to be deleted ID.")
     public void deleteUser(@PathVariable Integer id) {
         log.info("deleteUser(@PathVariable Integer id)");
+        protectPresetUserAndAdmin(id);
         userService.delete(id);
     }
 
@@ -54,6 +58,7 @@ public class AdminController extends AbstractController {
     @Parameter(name = "id", description = "User's to be processed.")
     public void updateEnabledTrue(@PathVariable Integer id, @RequestParam boolean isEnabled) {
         log.info("updateEnabledTrue(@PathVariable Integer id)");
+        protectPresetUserAndAdmin(id);
         userService.updateIsEnabled(id, isEnabled);
     }
 
@@ -124,6 +129,12 @@ public class AdminController extends AbstractController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, MenuController.NO_MENU_FOUND);
             }
             return voteRepository.findAllByMenu(menu.get());
+        }
+    }
+
+    private void protectPresetUserAndAdmin(Integer id) {
+        if (id == ADMIN_ID || id == USER_ID) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, CAN_NOT_CHANGE_PRESET_USER_AND_ADMIN);
         }
     }
 }

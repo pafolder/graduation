@@ -7,8 +7,28 @@
 </head>
 <body>
 <div class="container align-items-center">
+    <br><br>
+    <h1 class="text-center mb-3">
+        <strong> Restaurant Voting Application</strong> </h1>
+    <p align=center><i>
+        Java Enterprise Graduation Project
+    </i></p>
+    <p><strong>Restaurant Voting Application (RVA)</strong> implements a Voting System for customers making their
+        decisions which
+        restaurant to have lunch at.
+        There are two types of users: Admins and regular Users (Customers).
+        Admins can input Restaurants and theirs lunch Menus of the day (dish names with prices).
+        The Menus can be provided in advance for any further date.
+        Users (Customers) can vote for a restaurant they want to have lunch at today (or any other day provided that
+        Admin has
+        already input the menu).
+        Only one vote per user per date counts.
+        If the User votes again the same day, the vote will be overridden unless it was sent after 11:00.
+        In this case, the existing vote cannot be changed.
+    </p>
     <br>
-    <h2 class="text-center mb-3">Please Log In</h2>
+    <h4 class="text-center mb-3">Please Log in to get RVA <strong>REST API Documentation</strong></h4>
+    <br>
     <div th:if="${param.error}">
         Invalid username and password.
     </div>
@@ -24,7 +44,8 @@
             <input type="password" name="password" placeholder="Password"/>
         </div>
         <br>
-        <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+        <button type="submit" class="btn btn-primary btn-block mb-3">Login with Username & Password</button>
+        <br>or</br>
     </form>
     <div class=" text-center mb-3">
         <button class="btn btn-success" onclick="loginAsAdmin()"> Login as ADMIN</button>
@@ -32,20 +53,20 @@
         <button class="btn btn-success" onclick="location.href='swagger-ui/index.html'">Unauthorized</button>
 
     </div>
-</div>
-<script>
-    function loginAsAdmin() {
-        document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
-        document.getElementsByName("password")[0].value = 'password';
-        document.getElementById("loginForm").submit();
-    }
+    </div>
+    <script>
+        function loginAsAdmin() {
+            document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
+            document.getElementsByName("password")[0].value = 'password';
+            document.getElementById("loginForm").submit();
+        }
 
 
-    function loginAsUser() {
-        document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';
-        document.getElementsByName("password")[0].value = 'password';
-        document.getElementById("loginForm").submit();
-    }
-</script>
+        function loginAsUser() {
+            document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';
+            document.getElementsByName("password")[0].value = 'password';
+            document.getElementById("loginForm").submit();
+        }
+    </script>
 </body>
 </html>
