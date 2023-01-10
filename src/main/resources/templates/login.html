@@ -9,7 +9,7 @@
 <div class="container align-items-center">
     <br><br>
     <h1 class="text-center mb-3">
-        <strong> Restaurant Voting Application</strong> </h1>
+        <strong> Restaurant Voting Application</strong></h1>
     <p align=center><i>
         Java Enterprise Graduation Project
     </i></p>
@@ -29,9 +29,6 @@
     <br>
     <h4 class="text-center mb-3">Please Log in to get RVA <strong>REST API Documentation</strong></h4>
     <br>
-    <div th:if="${param.error}">
-        Invalid username and password.
-    </div>
     <div th:if="${param.logout}">
         You have been logged out.
     </div>
@@ -44,6 +41,10 @@
             <input type="password" name="password" placeholder="Password"/>
         </div>
         <br>
+        <div align="center" th:if="${param.error}">
+            <p style="color: red"><i>
+                Invalid username and password</i></p>
+        </div>
         <button type="submit" class="btn btn-primary btn-block mb-3">Login with Username & Password</button>
         <br>or</br>
     </form>
@@ -53,20 +54,20 @@
         <button class="btn btn-success" onclick="location.href='swagger-ui/index.html'">Unauthorized</button>
 
     </div>
-    </div>
-    <script>
-        function loginAsAdmin() {
-            document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
-            document.getElementsByName("password")[0].value = 'password';
-            document.getElementById("loginForm").submit();
-        }
+</div>
+<script>
+    function loginAsAdmin() {
+        document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
+        document.getElementsByName("password")[0].value = 'password';
+        document.getElementById("loginForm").submit();
+    }
 
 
-        function loginAsUser() {
-            document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';
-            document.getElementsByName("password")[0].value = 'password';
-            document.getElementById("loginForm").submit();
-        }
-    </script>
+    function loginAsUser() {
+        document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';
+        document.getElementsByName("password")[0].value = 'password';
+        document.getElementById("loginForm").submit();
+    }
+</script>
 </body>
 </html>
