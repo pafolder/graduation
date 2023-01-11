@@ -52,7 +52,12 @@
         <button class="btn btn-success" onclick="loginAsAdmin()"> Login as ADMIN</button>
         <button class="btn btn-success" onclick="loginAsUser()"> Login as USER</button>
         <button class="btn btn-success" onclick="location.href='swagger-ui/index.html'">Unauthorized</button>
-
+        <br>
+    </div>
+    <div text-center mb-3>
+        <form class="text-center mb-3" action="/reset?tomcatPortAndFolder=80/" method="post">
+            <button class="btn btn-link" type="submit">Reset Database</button>
+        </form>
     </div>
 </div>
 <script>
@@ -61,7 +66,6 @@
         document.getElementsByName("password")[0].value = 'password';
         document.getElementById("loginForm").submit();
     }
-
 
     function loginAsUser() {
         document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';

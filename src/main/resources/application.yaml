@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
   servlet:
     application-display-name: Graduation
   max-http-request-header-size: 32KB
