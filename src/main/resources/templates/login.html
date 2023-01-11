@@ -54,10 +54,10 @@
         <button class="btn btn-success" onclick="location.href='swagger-ui/index.html'">Unauthorized</button>
         <br>
     </div>
-    <div text-center mb-3>
-        <form class="text-center mb-3" action="/reset?tomcatPortAndFolder=80/" method="post">
-            <button class="btn btn-link" type="submit">Reset Database</button>
-        </form>
+    <div class="text-center mb-3">
+        <!--        <form class="text-center mb-3" action="/" method="post" id="restartForm">-->
+        <button class="btn btn-link" id="restartButton" onclick="restartApp()">Reset Database</button>
+        <!--        </form>-->
     </div>
 </div>
 <script>
@@ -71,6 +71,22 @@
         document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';
         document.getElementsByName("password")[0].value = 'password';
         document.getElementById("loginForm").submit();
+    }
+
+    // window.onload = function () {
+    //     document.getElementById("restartButton").textContent = "Reset Database";
+    // }
+
+    function restartApp() {
+        document.getElementById("restartButton").style.visibility = 'hidden';
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("DELETE", "http://localhost/", true);
+        xhttp.send();
+        setTimeout(showAlert, 100);
+    }
+
+    function showAlert() {
+        location.reload();
     }
 </script>
 </body>
