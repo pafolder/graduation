@@ -3,11 +3,6 @@ server:
   servlet:
     application-display-name: Graduation
   max-http-request-header-size: 32KB
-spring:
-  security:
-    user:
-      name: user
-      password: password
   cache:
     cache-names: menus
     caffeine.spec: maximumSize=5000,expireAfterAccess=600s

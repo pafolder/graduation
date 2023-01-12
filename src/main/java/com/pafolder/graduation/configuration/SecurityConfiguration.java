@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder,
@@ -43,8 +42,8 @@ public class SecurityConfiguration {
                 .access(AuthorizationManagers.anyOf(
                         AuthorityAuthorizationManager.hasRole("ADMIN"),
                         AuthorityAuthorizationManager.hasRole("USER")))
-                .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**", "/manager/text/**",
-                        "/v3/**", "/swagger-ui/**", "/error", "/api/register", "/api/menus")
+                .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**", "/manager/**", "/reset*",
+                        "/v3/**", "/swagger-ui/**", "/error", "/api/register", "/api/menus", "/static/favicon.ico")
                 .permitAll()
                 .and()
                 .formLogin(form -> form

@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Please Log In</title>
-    <base href="@{}">
+    <link rel="icon" type="image/ico" th:href="@{../static/favicon.ico}">
+    <base th:href="@{/}">
     <link rel="stylesheet" href="webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css">
 </head>
 <body>
@@ -10,7 +11,7 @@
     <br><br>
     <h1 class="text-center mb-3">
         <strong> Restaurant Voting Application</strong></h1>
-    <p align=center><i>
+    <p style="text-align:center"><i>
         Java Enterprise Graduation Project
     </i></p>
     <p><strong>Restaurant Voting Application (RVA)</strong> implements a Voting System for customers making their
@@ -32,7 +33,7 @@
     <div th:if="${param.logout}">
         You have been logged out.
     </div>
-    <form class="text-center mb-3" id="loginForm" th:action="@{/login}" method="post">
+    <form class="text-center mb-3" name="loginForm" th:action="@{/login}" method="post">
         <div>
             <input type="text" name="username" placeholder="Username"/>
         </div>
@@ -55,38 +56,32 @@
         <br>
     </div>
     <div class="text-center mb-3">
-        <!--        <form class="text-center mb-3" action="/" method="post" id="restartForm">-->
         <button class="btn btn-link" id="restartButton" onclick="restartApp()">Reset Database</button>
-        <!--        </form>-->
     </div>
 </div>
-<script>
+<script th:inline="javascript">
+    let contextPath = /*[[@{/}]]*/ 'reset';
+
     function loginAsAdmin() {
         document.getElementsByName("username")[0].value = 'petr_p@yandex.com';
         document.getElementsByName("password")[0].value = 'password';
-        document.getElementById("loginForm").submit();
+        document.getElementsByName("loginForm")[0].submit();
     }
 
     function loginAsUser() {
         document.getElementsByName("username")[0].value = 'Sergey.Sergeev@smail.su';
         document.getElementsByName("password")[0].value = 'password';
-        document.getElementById("loginForm").submit();
+        document.getElementsByName("loginForm")[0].submit();
     }
-
-    // window.onload = function () {
-    //     document.getElementById("restartButton").textContent = "Reset Database";
-    // }
 
     function restartApp() {
-        document.getElementById("restartButton").style.visibility = 'hidden';
+        document.getElementById("restartButton").style.visibility = "hidden";
         let xhttp = new XMLHttpRequest();
-        xhttp.open("DELETE", "http://localhost/", true);
+        xhttp.open("POST", location.protocol + "//" + location.hostname + ":" + location.port + contextPath + "reset", true);
         xhttp.send();
-        setTimeout(showAlert, 100);
-    }
-
-    function showAlert() {
-        location.reload();
+        setTimeout(function () {
+            location.reload();
+        }, 500);
     }
 </script>
 </body>
