@@ -34,8 +34,9 @@ public class Menu implements Serializable {
 
     @NotNull
     @NotEmpty
-    @ElementCollection(targetClass = Item.class)
-    @CollectionTable(name = "menuitem", joinColumns = @JoinColumn(name = "menu_id"))
+    @ElementCollection(targetClass = Item.class, fetch = FetchType.LAZY)
+    @Column(name = "menu_item")
+    @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"))
     private List<Item> menuItems;
 
     public void setMenuItems(List<Item> menuItems) {
@@ -108,10 +109,12 @@ public class Menu implements Serializable {
     public static class Item implements Serializable {
         @NotNull
         @NotBlank
+//        @Column(name = "dish_name", nullable = false)
         private String dishName;
 
         @NotNull
         @Range(min = 0, max = 10000)
+//        @Column(name = "dish_price", nullable = false)
         private Double dishPrice;
 
         public Item() {

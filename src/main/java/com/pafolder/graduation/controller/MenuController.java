@@ -47,7 +47,7 @@ public class MenuController extends AbstractController {
     @PostMapping("/admin/menus")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new menu", security = {@SecurityRequirement(name = "basicScheme")})
-    @Parameter(name = "menuTo", description = "If no restaurantId specified, a new Restaurant will be created")
+    @Parameter(name = "menuTo", description = "?????")
     @Transactional
     public ResponseEntity<Menu> addMenu(@Valid @NotNull @RequestBody MenuTo menuTo) {
         log.info("addMenu(@Valid @RequestBody MenuTo menuTo)");
@@ -56,8 +56,7 @@ public class MenuController extends AbstractController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MENU_EXPIRED);
         }
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
-                restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) :
-                restaurantRepository.save(new Restaurant(menuTo.getRestaurantName(), menuTo.getRestaurantAddress()));
+                restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) : null;
         if (restaurant == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, RESTAURANT_INFORMATION_ABSENT);
         }

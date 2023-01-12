@@ -8,7 +8,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "vote",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"menu_date", "user_id"}, name = "vote_unique_date_user_idx")})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"vote_date", "user_id"}, name = "vote_unique_date_user_idx")})
 public class Vote implements Serializable {
     @Id
     @SequenceGenerator(name = "vote_id_generator", sequenceName = "vote_id_seq", allocationSize = 1, initialValue = 0)
@@ -22,7 +22,7 @@ public class Vote implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
-    @JoinColumn(name = "menu_date", nullable = false, referencedColumnName = "menu_date")
+    @JoinColumn(name = "vote_date", nullable = false, referencedColumnName = "menu_date")
     @NotNull
     private Menu menu;
 

@@ -14,5 +14,11 @@ Only one vote per user per date counts.
 If the User votes again the same day, the vote will be overridden unless it was sent after 11:00.
 In this case, the existing vote cannot be changed.
 
-REST API documentation: </br>
+REST API documentation: <br>
 [pafolder.com](http://pafolder.com) 
+
+Credentials for testing:
+```
+Admin: admin@mail.com / admin
+User: user@mail.com / password
+```

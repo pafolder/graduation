@@ -22,7 +22,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@Sql(scripts = {"classpath:db/initDB.sql", "classpath:db/populateDB.sql"}, config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = {"classpath:schema.sql", "classpath:data.sql"}, config = @SqlConfig(encoding = "UTF-8"))
 //@EnableWebSecurity
 public abstract class AbstractControllerTest {
     protected static final Locale RU_LOCALE = new Locale("ru");

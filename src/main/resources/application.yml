@@ -1,11 +1,32 @@
+spring:
+  datasource:
+    username: sa
+    password: ''
+    url: jdbc:hsqldb:mem:graduation
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+  jpa:
+    show-sql: true
+    open-in-view: false
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      jakarta:
+        persistence:
+          sharedCache:
+            mode: ALL
+  #  sql:
+  #    init:
+  #      platform: hsqldb
+  #      mode: always
+  cache:
+    cache-names: menus
+    caffeine.spec: maximumSize=5000,expireAfterAccess=600s
 server:
   port: 80
   servlet:
     application-display-name: Graduation
-  max-http-request-header-size: 32KB
-  cache:
-    cache-names: menus
-    caffeine.spec: maximumSize=5000,expireAfterAccess=600s
+  max-http-request-header-size: 64KB
 springdoc:
   packagesToScan: com.pafolder.graduation.controller
   swagger-ui:
@@ -25,4 +46,3 @@ logging:
           jpa: ${level}
         transaction: ${level}
         transaction.interceptor: ${level}
-

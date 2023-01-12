@@ -16,13 +16,13 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Cacheable("menus")
-    @Query("SELECT m FROM Menu m")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
+    @Query("SELECT m FROM Menu m")
     List<Menu> findAll();
 
     @Cacheable("menus")
-    @Query("SELECT m FROM Menu m WHERE m.date = ?1")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
+    @Query("SELECT m FROM Menu m WHERE m.date = ?1")
     List<Menu> findAllByDate(Date date);
 
     @Transactional
@@ -32,7 +32,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     boolean deleteById(int id);
 
     @Cacheable("menus")
-    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
+    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
     Optional<Menu> findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") Restaurant restaurant);
 }

@@ -47,24 +47,6 @@ class AdminControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void addMenuWithValidationErrorBadRestaurantDataIdAndNameSpecified() throws Exception {
-        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-                        .content("{\"restaurantId\":0, \"restaurantName\":\"Другой ресторан\"," +
-                                "\"date\":\"2022-12-18\"," +
-                                "\"menuItems\":[{\"dishName\":\"Фасоль\",\"dishPrice\":99.99}," +
-                                "{\"dishName\":\"Рис\",\"dishPrice\":88.0}]}"))
-                .andDo(print())
-                .andExpect(status().isUnprocessableEntity())
-                .andReturn()
-                .getResponse()
-                .getContentAsString()
-                .toLowerCase()
-                .matches(".*restaurantId and.* can't be nonnull.*".toLowerCase()));
-    }
-
-    @Test
     void addMenuWithValidationErrorBadRestaurantDataNotFound() throws Exception {
         Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
                         .contentType(MediaType.APPLICATION_JSON)
