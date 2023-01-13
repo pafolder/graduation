@@ -2,6 +2,7 @@ package com.pafolder.graduation.repository;
 
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.Restaurant;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +24,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Cacheable("menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     @Query("SELECT m FROM Menu m WHERE m.date = ?1")
-    List<Menu> findAllByDate(Date date);
+    List<Menu> findAllByDate(@NotNull Date date);
 
     @Transactional
     Menu save(Menu menu);
@@ -34,5 +35,5 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Cacheable("menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
-    Optional<Menu> findByDateAndRestaurant(@Param("date") Date date, @Param("restaurant") Restaurant restaurant);
+    Optional<Menu> findByDateAndRestaurant(@Param("date") @NotNull Date date, @Param("restaurant") Restaurant restaurant);
 }

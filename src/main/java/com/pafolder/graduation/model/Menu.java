@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.util.ProxyUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -29,13 +30,11 @@ public class Menu implements Serializable {
 
     @Column(name = "menu_date", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @NotNull
     private Date date;
 
     @NotNull
     @NotEmpty
     @ElementCollection(targetClass = Item.class, fetch = FetchType.LAZY)
-    @Column(name = "menu_item")
     @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"))
     private List<Item> menuItems;
 
@@ -93,15 +92,30 @@ public class Menu implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !getClass().equals(ProxyUtils.getUserClass(o))) {
+            return false;
+        }
+        return id != null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
+    }
+
+    @Override
     public String toString() {
-        String restaurantName = restaurant != null ? restaurant.getName() : "";
-        StringBuilder sb = new StringBuilder("\n" + id + " " + restaurantName + " " + date);
+        StringBuilder sb = new StringBuilder("Menu { id=" + id + ", " +
+                (restaurant != null ? restaurant.toString() : "Restaurant {}") + ", date='" + date + "'");
         if (menuItems != null) {
             for (Item item : menuItems) {
-                sb.append("\n").append(item.dishName).append(" ").append(item.dishPrice);
+                sb.append(", Item { ").append(item.dishName).append(", ").append(item.dishPrice).append(" }");
             }
         }
-        sb.append("\n");
         return sb.toString();
     }
 
@@ -109,12 +123,10 @@ public class Menu implements Serializable {
     public static class Item implements Serializable {
         @NotNull
         @NotBlank
-//        @Column(name = "dish_name", nullable = false)
         private String dishName;
 
         @NotNull
         @Range(min = 0, max = 10000)
-//        @Column(name = "dish_price", nullable = false)
         private Double dishPrice;
 
         public Item() {

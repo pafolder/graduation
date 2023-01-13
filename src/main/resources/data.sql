@@ -13,14 +13,15 @@ VALUES ('Старый Ресторан', 'Старая Площадь'),
        ('Четвёртый ресторан', 'Четвёртая линия, дом 4');
 
 INSERT INTO menu (restaurant_id, menu_date)
-VALUES (0, DATE_ADD(CURRENT_DATE, 1)),
+-- VALUES (0, DATE_ADD(CURRENT_DATE, 1)),
+VALUES (0, '2022-12-16'),
        (1, '2022-12-17'),
        (2, '2022-12-17'),
        (3, '2022-12-17'),
        (1, '2022-12-16'),
        (2, '2022-12-16'),
        (3, '2022-12-16'),
-       (4, CURRENT_DATE);
+       (4, '2022-12-16');
 
 INSERT INTO menu_item (menu_id, dish_name, dish_price)
 VALUES (0, 'Фасоль', 88.99),
@@ -54,10 +55,10 @@ VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', '{noop}password', 'USER
        ('Кирилл Кириллов', 'kkirillov@qq.org', '{noop}password', 'USER'),
        ('Евгения Евгеньевна', 'evgeniya.e@yahoo.zz', '{noop}password', 'USER');
 
-INSERT INTO vote (user_id, menu_id, vote_date)
+INSERT INTO vote (user_id, menu_id, registered)
 VALUES (0, 1, '2022-12-17'),
        (1, 0, '2022-12-16'),
        (2, 2, '2022-12-17'),
        (0, 4, '2022-12-16'),
-       (3, 0, '2022-12-16'),
+       (3, 4, '2022-12-16'),
        (1, 2, '2022-12-17');

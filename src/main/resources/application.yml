@@ -1,3 +1,8 @@
+rva:
+  tomcat:
+    script:
+      user: user
+      password: password
 spring:
   datasource:
     username: sa
@@ -30,7 +35,7 @@ server:
 springdoc:
   packagesToScan: com.pafolder.graduation.controller
   swagger-ui:
-    path: /swagger-ui.html
+    path: /swagger-ui
     tagsSorter: alpha
   version: '@springdoc.version@'
 level: warn

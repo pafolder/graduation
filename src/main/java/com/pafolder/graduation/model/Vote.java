@@ -2,13 +2,14 @@ package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.util.ProxyUtils;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "vote",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"vote_date", "user_id"}, name = "vote_unique_date_user_idx")})
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"registered", "user_id"}, name = "registered_user_idx")})
 public class Vote implements Serializable {
     @Id
     @SequenceGenerator(name = "vote_id_generator", sequenceName = "vote_id_seq", allocationSize = 1, initialValue = 0)
@@ -22,9 +23,11 @@ public class Vote implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
-    @JoinColumn(name = "vote_date", nullable = false, referencedColumnName = "menu_date")
     @NotNull
     private Menu menu;
+
+    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
+    private @NotNull Timestamp registered;
 
     public Vote() {
     }
@@ -34,30 +37,12 @@ public class Vote implements Serializable {
         this.menu = menu;
     }
 
-    @Override
-    public String toString() {
-        String dateString = (menu != null) ? menu.getDate().toString() : "";
-        String restaurantName = (menu != null && menu.getRestaurant() != null) ?
-                menu.getRestaurant().getName() : "";
-        String userName = user != null ? user.getName() : "";
-
-        return "\nVote " +
-                "id=" + id +
-                " " + dateString +
-                " '" + userName + "'" +
-                " '" + restaurantName + "'";
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Date getDate() {
-        return menu.getDate();
     }
 
     public User getUser() {
@@ -74,5 +59,37 @@ public class Vote implements Serializable {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    public @NotNull Timestamp getRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(@NotNull Timestamp registered) {
+        this.registered = registered;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !getClass().equals(ProxyUtils.getUserClass(o))) {
+            return false;
+        }
+        return id != null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
+    }
+
+    @Override
+    public String toString() {
+        return "\nVote { id=" + id + ", " +
+                (menu != null ? menu.toString() : " Menu {}, ") +
+                (user != null ? user.toString() : " User {}, registered=") +
+                (registered != null ? registered.toString() : "");
     }
 }

@@ -2,9 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>Please Log in</title>
-    <link rel="icon" type="image/ico" th:href="@{../static/favicon.ico}">
-    <base th:href="@{/}">
-    <link rel="stylesheet" href="webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css">
+    <link rel="icon" th:href="@{/favicon.ico}" type="image/ico">
+    <!--    <base th:href="@{/}">-->
+    <link rel="stylesheet" th:href="@{webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{css/style.css}">
 </head>
 <body>
 <div class="container align-items-center">
@@ -14,20 +15,7 @@
     <p style="text-align:center"><i>
         Java Enterprise Graduation Project
     </i></p>
-    <p><strong>Restaurant Voting Application (RVA)</strong> implements a Voting System for customers making their
-        decisions which
-        restaurant to have lunch at.
-        There are two types of users: Admins and regular Users (Customers).
-        Admins can input Restaurants and theirs lunch Menus of the day (dish names with prices).
-        The Menus can be provided in advance for any further date.
-        Users (Customers) can vote for a restaurant they want to have lunch at today (or any other day provided that
-        Admin has
-        already input the menu).
-        Only one vote per user per date counts.
-        If the User votes again the same day, the vote will be overridden unless it was sent after 11:00.
-        In this case, the existing vote cannot be changed.
-    </p>
-    <br>
+    <p th:utext="${summary}"></p>
     <h4 class="text-center mb-3">Please Log in to get RVA <strong>REST API Documentation</strong></h4>
     <br>
     <div th:if="${param.logout}">
@@ -35,14 +23,12 @@
     </div>
     <form class="text-center mb-3" name="loginForm" th:action="@{/login}" method="post">
         <div>
-            <input type="text" name="username" placeholder="Username"/>
+            <input class="text-center mb-3" type="text" name="username" placeholder="Username"/>
         </div>
-        <br>
         <div>
-            <input type="password" name="password" placeholder="Password"/>
+            <input class="text-center mb-3" type="password" name="password" placeholder="Password"/>
         </div>
-        <br>
-        <div align="center" th:if="${param.error}">
+        <div class="text-center mb-3" th:if="${param.error}">
             <p style="color: red"><i>
                 Invalid username and password</i></p>
         </div>
@@ -50,35 +36,40 @@
         <br>or</br>
     </form>
     <div class=" text-center mb-3">
-        <button class="btn btn-success" onclick="loginAsAdmin()"> Login as ADMIN</button>
-        <button class="btn btn-success" onclick="loginAsUser()"> Login as USER</button>
-        <button class="btn btn-success" onclick="location.href='swagger-ui/index.html'">Unauthorized</button>
+        <button class="btn btn-danger" onclick="loginAs('admin')"> Login as ADMIN</button>
+        <button class="btn btn-success" onclick="loginAs('user')"> Login as USER</button>
+        <button class="btn btn-warning" onclick="location.href='unauthorized'">Unauthorized</button>
         <br>
     </div>
     <div class="text-center mb-3">
-        <button class="btn btn-link" id="restartButton" onclick="restartApp()">Reset Database</button>
+        <button class="btn btn-link btn-sm" id="restartButton" onclick="restartApp()">Reset Database</button>
+    </div>
+</div>
+<div id="modalWait" class="modal">
+    <div class="modal-content">
+        <div class="text-center">
+            <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
+            &nbsp;Wait for Restaurant Voting Application to restart...
+        </div>
     </div>
 </div>
 <script th:inline="javascript">
-    let contextPath = /*[[@{/}]]*/ 'reset';
+    let resetPath = /*[[@{/reset}]]*/ '';
+    let modal = document.getElementById("modalWait");
 
-    function loginAsAdmin() {
-        document.getElementsByName("username")[0].value = 'admin@mail.com';
-        document.getElementsByName("password")[0].value = 'admin';
-        document.getElementsByName("loginForm")[0].submit();
-    }
-
-    function loginAsUser() {
-        document.getElementsByName("username")[0].value = 'user@mail.com';
-        document.getElementsByName("password")[0].value = 'password';
+    function loginAs(who) {
+        document.getElementsByName("username")[0].value = who === 'admin' ? 'admin@mail.com' : 'user@mail.com';
+        document.getElementsByName("password")[0].value = who === 'admin' ? 'admin' : 'password';
         document.getElementsByName("loginForm")[0].submit();
     }
 
     function restartApp() {
         document.getElementById("restartButton").style.visibility = "hidden";
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("POST", location.protocol + "//" + location.hostname + ":" + location.port + contextPath + "reset", true);
-        xhttp.send();
+        modal.style.display = "block";
+        let request = new XMLHttpRequest();
+        request.open("POST", location.protocol + "//" + location.hostname +
+            ":" + location.port + resetPath, true);
+        request.send();
         setTimeout(function () {
             location.reload();
         }, 500);

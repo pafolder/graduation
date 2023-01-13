@@ -62,11 +62,12 @@ public class VoteController extends AbstractController {
         }
         if (menu.getDate().before(getNextVotingDate())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, TOO_LATE_TO_VOTE + " " +
-                    DateTimeUtil.getCurrentDate().toString());
+                    DateTimeUtil.getCurrentDate());
         }
         Vote vote = new Vote(userDetails.getUser(), menu);
         voteRepository.findByDateAndUser(menu.getDate(), user)
                 .ifPresent(existingUser -> vote.setId(existingUser.getId()));
+        vote.setRegistered(getCurrentTimestamp());
         voteRepository.save(vote);
     }
 

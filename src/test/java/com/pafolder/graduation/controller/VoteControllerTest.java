@@ -13,8 +13,7 @@ import java.util.Optional;
 
 import static com.pafolder.graduation.TestData.*;
 import static com.pafolder.graduation.controller.AbstractController.REST_URL;
-import static com.pafolder.graduation.util.DateTimeUtil.CURRENT_TIME;
-import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
+import static com.pafolder.graduation.util.DateTimeUtil.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,6 +31,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void updateVote() throws Exception {
+//                DateTimeUtil.setCurrentTime(Time.valueOf("10:00:01"));
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/votes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
@@ -65,7 +65,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .getResponse()
                 .getContentAsString()
                 .toLowerCase()
-                .matches(".*It's too late to vote.*".toLowerCase()));
+                .matches(".*it's too late to vote.*".toLowerCase()));
         DateTimeUtil.setCurrentTime(CURRENT_TIME);
     }
 
@@ -86,6 +86,8 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteVote() throws Exception {
+        Time currentTime = getCurrentTime();
+        setCurrentTime(Time.valueOf("10:30:00"));
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/votes").contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
                         .param("date", DATE1.toString()))
@@ -97,14 +99,35 @@ class VoteControllerTest extends AbstractControllerTest {
                         .param("date", DATE1.toString()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+        setCurrentTime(currentTime);
+    }
+
+    @Test
+    void deleteVoteTooLate() throws Exception {
+        Time currentTime = getCurrentTime();
+        setCurrentTime(Time.valueOf("11:01:00"));
+        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/votes").contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
+                        .param("date", DATE1.toString()))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn()
+                .getResponse()
+                .getContentAsString()
+                .toLowerCase()
+                .matches(".*too late to delete the vote.*".toLowerCase()));
+        setCurrentTime(currentTime);
     }
 
     @Test
     void deleteNonexistentVote() throws Exception {
+        Time currentTime = getCurrentTime();
+        setCurrentTime(Time.valueOf("10:30:00"));
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/votes").contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
                         .param("date", DATE2.toString()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+        setCurrentTime(currentTime);
     }
 }

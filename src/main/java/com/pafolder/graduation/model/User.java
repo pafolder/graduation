@@ -2,6 +2,7 @@ package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.data.util.ProxyUtils;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
@@ -97,13 +98,25 @@ public class User implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !getClass().equals(ProxyUtils.getUserClass(o))) {
+            return false;
+        }
+        return id != null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
+    }
+
+    @Override
     public String toString() {
-        return "\nUser{" + id +
-                " '" + name + '\'' +
-                " '" + email + '\'' +
-                " '" + password + '\'' +
-                " role=" + role +
-                '}';
+        return "\nUser { id='" + id + "', name='" + (name != null ? name : "") + "', email='" +
+                (email != null ? email : "") + "', role='" + (role != null ? role : "") + "' }";
     }
 
     public enum Role implements GrantedAuthority {

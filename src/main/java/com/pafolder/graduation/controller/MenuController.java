@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,7 +48,7 @@ public class MenuController extends AbstractController {
     @Operation(summary = "Create new menu", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "menuTo", description = "?????")
     @Transactional
-    public ResponseEntity<Menu> addMenu(@Valid @NotNull @RequestBody MenuTo menuTo) {
+    public ResponseEntity<Menu> addMenu(@Valid @RequestBody MenuTo menuTo) {
         log.info("addMenu(@Valid @RequestBody MenuTo menuTo)");
         Date date = menuTo.getDate() == null ? getNextVotingDate() : menuTo.getDate();
         if (date != null && date.before(getNextVotingDate())) {

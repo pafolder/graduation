@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +109,7 @@ public class AdminController extends AbstractController {
     @Operation(summary = "Get all votes for the specified restaurant on date", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "date", description = "Optional: Defaults to the current date.")
     @Parameter(name = "restaurantId", description = "Optional: ID of the Restaurant. Get votes for all restaurants if empty.")
-    public List<Vote> getAllByDateAndRestaurant(@RequestParam @Nullable Date date,
+    public List<Vote> getAllByDateAndRestaurant(@RequestParam @Nullable @NotNull Date date,
                                                 @RequestParam @Nullable Integer restaurantId) {
         log.info("getAllByDateAndRestaurant(Date date, Integer restaurantId)");
         date = date == null ? getCurrentDate() : date;

@@ -3,6 +3,7 @@ package com.pafolder.graduation.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.util.ProxyUtils;
 
 import java.io.Serializable;
 
@@ -58,11 +59,24 @@ public class Restaurant implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !getClass().equals(ProxyUtils.getUserClass(o))) {
+            return false;
+        }
+        return id != null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
+    }
+
+    @Override
     public String toString() {
-        return "Restaurant{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+        return "Restaurant { id=" + id + ", name='" + (name != null ? name : "") +
+                "', address='" + (address != null ? address : "") + "' }";
     }
 }
