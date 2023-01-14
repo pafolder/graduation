@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.pafolder.graduation.controller.AbstractController.REST_URL;
-import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
+import static com.pafolder.graduation.util.DateTimeUtil.*;
+import static com.pafolder.graduation.util.UserUtil.protectPresetUserAndAdmin;
 
 @RestController
 @Tag(name = "5 Admin", description = "Administrator's API")
@@ -32,9 +33,9 @@ import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
 public class AdminController extends AbstractController {
     private static final String RESTAURANTID_SHOULD_BE_NULL = "restaurantId should be null for creating new restaurant";
     private static final String NO_RESTAURANT_FOUND = "No restaurant found";
-    private static final int ADMIN_ID = 3;
-    private static final int USER_ID = 1;
-    private static final String CAN_NOT_CHANGE_PRESET_USER_AND_ADMIN = "Changing preset Admin and User isn't allowed in test mode";
+    public static final String CAN_NOT_CHANGE_PRESET_USER_AND_ADMIN = "Changing preset Admin and User isn't allowed in test mode";
+    public static final int ADMIN_ID = 3;
+    public static final int USER_ID = 1;
 
     @GetMapping("/users")
     @Operation(summary = "Get all users", security = {@SecurityRequirement(name = "basicScheme")})
@@ -130,12 +131,4 @@ public class AdminController extends AbstractController {
             return voteRepository.findAllByMenu(menu.get());
         }
     }
-
-    private void protectPresetUserAndAdmin(Integer id) {
-        if (id == ADMIN_ID || id == USER_ID) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, CAN_NOT_CHANGE_PRESET_USER_AND_ADMIN);
-        }
-    }
-
-
 }

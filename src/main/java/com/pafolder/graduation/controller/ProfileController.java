@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import static com.pafolder.graduation.controller.AbstractController.REST_URL;
+import static com.pafolder.graduation.util.UserUtil.protectPresetUserAndAdmin;
 
 @RestController
 @Tag(name = "4 Profile", description = "of the authenticated user")
@@ -47,9 +48,11 @@ public class ProfileController extends AbstractController {
     @DeleteMapping("")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete authenticated user", security = {@SecurityRequirement(name = "basicScheme")})
-    public void haraKiri(@AuthenticationPrincipal UserDetailsImpl authUser, HttpServletRequest request) throws ServletException {
+    public void selfDelete(@AuthenticationPrincipal UserDetailsImpl authUser, HttpServletRequest request) throws ServletException {
         log.error("Self deleting user {}", authUser.getUsername());
-        userService.delete(authUser.getUser().getId());
+        int id = authUser.getUser().getId();
+        protectPresetUserAndAdmin(id);
+        userService.delete(id);
         request.logout();
     }
 }

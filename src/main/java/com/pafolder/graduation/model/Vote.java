@@ -1,13 +1,15 @@
 package com.pafolder.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.util.ProxyUtils;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Entity
+@JsonFilter("voteJsonFilter")
 @Table(name = "vote",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"registered", "user_id"}, name = "registered_user_idx")})
 public class Vote implements Serializable {
@@ -27,7 +29,7 @@ public class Vote implements Serializable {
     private Menu menu;
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    private @NotNull Timestamp registered;
+    private Date registered;
 
     public Vote() {
     }
@@ -61,11 +63,11 @@ public class Vote implements Serializable {
         this.menu = menu;
     }
 
-    public @NotNull Timestamp getRegistered() {
+    public Date getRegistered() {
         return registered;
     }
 
-    public void setRegistered(@NotNull Timestamp registered) {
+    public void setRegistered(Date registered) {
         this.registered = registered;
     }
 

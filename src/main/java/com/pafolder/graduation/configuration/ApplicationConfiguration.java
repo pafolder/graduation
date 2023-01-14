@@ -11,15 +11,16 @@ import io.swagger.v3.oas.models.info.Info;
 
 @Configuration
 public class ApplicationConfiguration {
+    public static final String GO_BACK_LINK = "←&nbsp;<a href=\"/login\">Back to Login page</a><br><br>";
     public static final String RESTAURANT_VOTING_APPLICATION_SUMMARY =
             "<b>Restaurant Voting Application (RVA)</b> implements a Voting System for customers making their " +
-                    "decisions which restaurant to have lunch at.<br>There are two types of users: Admins and " +
+                    "decisions which restaurant to have lunch at. There are two types of users: Admins and " +
                     "regular Users (Customers). Admins can input Restaurants and theirs lunch Menus of the day " +
-                    "(dish names with prices).<br>The Menus can be provided in advance for any further date." +
+                    "(dish names with prices). The Menus can be provided in advance for any further date." +
                     "Users (Customers) can vote for a restaurant they want to have lunch at  today (or any other " +
-                    "day<br>provided that Admin has already input the menu). Only one vote per user per date " +
-                    "counts. If the User votes again the same day, the vote will be overridden<br>unless" +
-                    " it was sent after 11:00. In this case, the existing vote cannot be changed.<br><br>" +
+                    "day provided that Admin has already input the menu). Only one vote per user per date " +
+                    "counts. If the User votes again the same day, the vote will be overridden unless" +
+                    " it was sent after 11:00. In this case, the existing vote cannot be changed.<br>" +
                     "<b>Credentials for testing:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                     "Admin: <i>admin@mail.com / admin</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                     "&nbsp;&nbsp;&nbsp;User: &nbsp;&nbsp;&nbsp;<i>user@mail.com / password</i>";
@@ -33,8 +34,9 @@ public class ApplicationConfiguration {
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
-                .info(new Info().title("REST API Documentation for Restaurant Voting Application").version(appVersion)
-                        .description(RESTAURANT_VOTING_APPLICATION_SUMMARY)
+                .info(new Info().title("REST API Documentation for Restaurant Voting Application")
+                        .version(appVersion)
+                        .description(GO_BACK_LINK + RESTAURANT_VOTING_APPLICATION_SUMMARY)
                         .contact(contact));
     }
 }

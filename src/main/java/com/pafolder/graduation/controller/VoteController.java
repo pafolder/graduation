@@ -1,5 +1,8 @@
 package com.pafolder.graduation.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
@@ -12,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +40,7 @@ public class VoteController extends AbstractController {
     @GetMapping("/votes")
     @Operation(summary = "Get authenticated user's vote(s)", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "date", description = "Optional: Get user's vote on the specified date. Defaults to all votes for any dates.")
-    public List<Vote> getVotes(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public MappingJacksonValue getVotes(@RequestParam @Nullable Date date, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         log.info("Get vote for user {}", user);
         List<Vote> votes;
@@ -45,11 +49,16 @@ public class VoteController extends AbstractController {
         if (votes == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
         }
-        return votes;
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider().addFilter("voteJsonFilter",
+                SimpleBeanPropertyFilter.filterOutAllExcept("menu", "registered"));
+        new ObjectMapper().setFilterProvider(filterProvider);
+        MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(votes);
+        mappingJacksonValue.setFilters(filterProvider);
+        return mappingJacksonValue;
     }
 
     @PostMapping("/votes")
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(summary = "Send authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "menuId", description = "Id of the Menu authenticated user votes for.")
     @Transactional
@@ -67,7 +76,7 @@ public class VoteController extends AbstractController {
         Vote vote = new Vote(userDetails.getUser(), menu);
         voteRepository.findByDateAndUser(menu.getDate(), user)
                 .ifPresent(existingUser -> vote.setId(existingUser.getId()));
-        vote.setRegistered(getCurrentTimestamp());
+        vote.setRegistered(getCurrentDate());
         voteRepository.save(vote);
     }
 

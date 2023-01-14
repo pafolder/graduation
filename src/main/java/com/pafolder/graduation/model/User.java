@@ -1,5 +1,6 @@
 package com.pafolder.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.data.util.ProxyUtils;
@@ -29,6 +30,8 @@ public class User implements Serializable {
     private String email;
 
     @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Size(min = 256)
     @NotEmpty
     private String password;
 

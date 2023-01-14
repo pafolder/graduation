@@ -15,11 +15,11 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant", "menu.menuItems"})
-    @Query("SELECT v FROM Vote v WHERE :user=v.user")
+    @Query("SELECT v FROM Vote v WHERE :user=v.user ORDER BY v.menu.date ASC")
     List<Vote> findAllByUser(User user);
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant", "menu.menuItems"})
-    @Query("SELECT v FROM Vote v WHERE :date=v.menu.date")
+    @Query("SELECT v FROM Vote v WHERE :date=v.menu.date GROUP BY v.menu.id")
     List<Vote> findAllByDate(Date date);
 
     @EntityGraph(attributePaths = {"user", "menu", "menu.restaurant", "menu.menuItems"})

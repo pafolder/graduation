@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                         AuthorityAuthorizationManager.hasRole("USER")))
                 .requestMatchers("/", "/login/*", "/resources/**", "/webjars/**", "/manager/**", "/reset",
                         "/v3/**", "/swagger-ui/**", "/error", "/api/register", "/api/menus", "/favicon.ico",
-                        "/unauthorized", "/css")
+                        "/unauthenticated", "/css/*", "/setdatetime", "/reset")
                 .permitAll()
                 .and()
                 .formLogin(form -> form
