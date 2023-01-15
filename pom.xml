@@ -10,8 +10,8 @@
     </parent>
     <groupId>com.pafolder</groupId>
     <artifactId>graduation</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <version>0.9.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>graduation</name>
     <description>Graduation project on Spring Boot</description>
     <properties>
@@ -37,6 +37,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -75,6 +76,12 @@
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -138,5 +145,4 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-
 </project>

@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
@@ -19,10 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.pafolder.graduation.controller.AbstractController.REST_URL;
+import static com.pafolder.graduation.util.DateTimeUtil.getCurrentDate;
 import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 
 @RestController
@@ -30,37 +30,39 @@ import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuController extends AbstractController {
     public static final String NO_MENU_FOUND = "No menu found";
+    public static final String NO_RESTAURANT_FOUND = "No restaurant found";
     public static final String MENU_ALREADY_EXISTS = "Menu already exists";
     public static final String MENU_EXPIRED = "Menu is expired";
-    public static final String RESTAURANT_INFORMATION_ABSENT = "Restaurant not found and information not provided";
+    public static final String VOTING_IS_OVER = "Voting is over for today";
 
     @GetMapping("/menus")
-    @Operation(summary = "Get menus for specified date", security = {@SecurityRequirement(name = "basicScheme")})
-    @Parameter(name = "date", description = "Optional: Defaults to the next voting date.")
-    public List<Menu> getAllMenusByDate(@RequestParam @Nullable Date date) {
-        log.info("getAllMenusByDate(@RequestParam @Nullable Date date)");
-        date = date == null ? getNextVotingDate() : date;
-        return menuRepository.findAllByDate(date);
+    @Operation(summary = "Get menus for current day", security = {@SecurityRequirement(name = "basicScheme")})
+    public List<Menu> getAllMenusForCurrentDate() {
+        log.info("getAllMenusForCurrentDate()");
+        if (!getCurrentDate().equals(getNextVotingDate())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, VOTING_IS_OVER);
+        }
+        return menuRepository.findAllByDate(getNextVotingDate());
     }
 
     @PostMapping("/admin/menus")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create new menu", security = {@SecurityRequirement(name = "basicScheme")})
-    @Parameter(name = "menuTo", description = "?????")
+    @Parameter(name = "menuTo", description = "if date not specified, next voting date will be used")
     @Transactional
     public ResponseEntity<Menu> addMenu(@Valid @RequestBody MenuTo menuTo) {
-        log.info("addMenu(@Valid @RequestBody MenuTo menuTo)");
-        Date date = menuTo.getDate() == null ? getNextVotingDate() : menuTo.getDate();
-        if (date != null && date.before(getNextVotingDate())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MENU_EXPIRED);
+        log.info("addMenu()");
+        LocalDate date = menuTo.getDate() == null ? getNextVotingDate() : menuTo.getDate();
+        if (date != null && date.isBefore(getNextVotingDate())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, MENU_EXPIRED);
         }
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
                 restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) : null;
         if (restaurant == null) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, RESTAURANT_INFORMATION_ABSENT);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_RESTAURANT_FOUND);
         }
         Menu menu = new Menu(restaurant, date, menuTo.getMenuItems());
-        if (menuRepository.findByDateAndRestaurant(menu.getDate(), menu.getRestaurant()).isPresent()) {
+        if (menuRepository.findByDateAndRestaurantId(menu.getDate(), menu.getRestaurant().getId()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, MENU_ALREADY_EXISTS);
         }
         menu = menuRepository.save(menu);

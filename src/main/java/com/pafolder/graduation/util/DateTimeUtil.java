@@ -1,36 +1,31 @@
 package com.pafolder.graduation.util;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class DateTimeUtil {
-    public static final Date CURRENT_DATE = Date.valueOf("2022-12-16");
-    public static final Time CURRENT_TIME = Time.valueOf("10:23:00");
-    public static final Time VOTING_TIME_LIMIT = Time.valueOf("11:00:00");
+    //    public static final Date CURRENT_DATE = Date.valueOf("2022-12-16");
+    public static final LocalTime CURRENT_TIME = LocalTime.of(10, 23);
+    public static final LocalTime VOTING_TIME_LIMIT = LocalTime.of(11, 00);
 
-    private static Time currentTime = CURRENT_TIME;
-    private static Date currentDate = CURRENT_DATE;
+    private static LocalTime currentTime = CURRENT_TIME;
 
-    public static Date getCurrentDate() {
-        return currentDate;
-//        return Date.valueOf(LocalDateTime.now().toLocalDate());
+    public static LocalDate getCurrentDate() {
+        return LocalDateTime.now().toLocalDate();
     }
 
-    public static void setCurrentDate(Date currentDate) {
-        DateTimeUtil.currentDate = currentDate;
-    }
-
-    public static Time getCurrentTime() {
+    public static LocalTime getCurrentTime() {
         return currentTime;
 //        return Time.valueOf(LocalDateTime.now().toLocalTime());
     }
 
-    public static void setCurrentTime(Time newCurrentTime) {
+    public static void setCurrentTime(LocalTime newCurrentTime) {
         currentTime = newCurrentTime;
     }
 
-    public static Date getNextVotingDate() {
-        return getCurrentTime().getTime() <= VOTING_TIME_LIMIT.getTime() ? getCurrentDate() :
-                Date.valueOf(getCurrentDate().toLocalDate().plusDays(1));
+    public static LocalDate getNextVotingDate() {
+        return getCurrentTime().isAfter(VOTING_TIME_LIMIT) ?
+                getCurrentDate().plusDays(1) : getCurrentDate();
     }
 }

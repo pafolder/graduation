@@ -1,23 +1,26 @@
 package com.pafolder.graduation.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Range;
+import lombok.*;
 import org.springframework.data.util.ProxyUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.io.Serializable;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "menu_date"},
         name = "menu_unique_restaurant_date_idx")})
-public class Menu implements Serializable {
+public class Menu {
     @Id
     @SequenceGenerator(name = "menu_id_seq", sequenceName = "menu_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_id_seq")
@@ -30,65 +33,18 @@ public class Menu implements Serializable {
 
     @Column(name = "menu_date", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private Date date;
+    private LocalDate date;
 
     @NotNull
     @NotEmpty
-    @ElementCollection(targetClass = Item.class, fetch = FetchType.LAZY)
+    @ElementCollection(targetClass = Item.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"))
     private List<Item> menuItems;
 
-    public void setMenuItems(List<Item> menuItems) {
-        this.menuItems = menuItems;
-    }
-
-    public Menu() {
-    }
-
-    public Menu(Restaurant restaurant, Date date, Menu.Item... items) {
-        this.restaurant = restaurant;
-        this.date = date;
-        menuItems = new ArrayList<>();
-        addItems(items);
-    }
-
-    public Menu(Restaurant restaurant, Date date, List<Menu.Item> items) {
+    public Menu(Restaurant restaurant, LocalDate date, List<Menu.Item> items) {
         this.restaurant = restaurant;
         this.date = date;
         this.menuItems = items;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public List<Item> getMenuItems() {
-        return menuItems;
-    }
-
-    public void addItems(Item... items) {
-        List<Item> itemList = Arrays.asList(items);
-        menuItems.addAll(itemList);
     }
 
     @Override
@@ -107,50 +63,20 @@ public class Menu implements Serializable {
         return id == null ? 0 : id;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Menu { id=" + id + ", " +
-                (restaurant != null ? restaurant.toString() : "Restaurant {}") + ", date='" + date + "'");
-        if (menuItems != null) {
-            for (Item item : menuItems) {
-                sb.append(", Item { ").append(item.dishName).append(", ").append(item.dishPrice).append(" }");
-            }
-        }
-        return sb.toString();
-    }
-
     @Embeddable
-    public static class Item implements Serializable {
-        @NotNull
+    @Getter
+    @Setter
+    @ToString
+    public static class Item {
+        @Column(name = "dish_name", nullable = false)
         @NotBlank
         private String dishName;
 
-        @NotNull
-        @Range(min = 0, max = 10000)
-        private Double dishPrice;
+        @Column(name = "dish_price", nullable = false, precision = 7, scale = 2)
+        @Digits(integer = 9, fraction = 2)
+        private BigDecimal dishPrice;
 
         public Item() {
-        }
-
-        public Item(String dishName, Double dishPrice) {
-            this.dishName = dishName;
-            this.dishPrice = dishPrice;
-        }
-
-        public String getDishName() {
-            return dishName;
-        }
-
-        public void setDishName(String dishName) {
-            this.dishName = dishName;
-        }
-
-        public Double getDishPrice() {
-            return dishPrice;
-        }
-
-        public void setDishPrice(Double dishPrice) {
-            this.dishPrice = dishPrice;
         }
     }
 }

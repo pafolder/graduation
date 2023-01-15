@@ -3,16 +3,23 @@ package com.pafolder.graduation.model;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.util.ProxyUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonFilter("voteJsonFilter")
 @Table(name = "vote",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"registered", "user_id"}, name = "registered_user_idx")})
-public class Vote implements Serializable {
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"vote_date", "user_id"}, name = "registered_user_idx")})
+public class Vote {
     @Id
     @SequenceGenerator(name = "vote_id_generator", sequenceName = "vote_id_seq", allocationSize = 1, initialValue = 0)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vote_id_generator")
@@ -23,52 +30,19 @@ public class Vote implements Serializable {
     @NotNull
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
     @NotNull
     private Menu menu;
 
-    @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()", updatable = false)
-    private Date registered;
-
-    public Vote() {
-    }
+    @Column(name = "vote_date", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @NotNull
+    private LocalDate voteDate;
 
     public Vote(User user, Menu menu) {
         this.user = user;
         this.menu = menu;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
-    }
-
-    public Date getRegistered() {
-        return registered;
-    }
-
-    public void setRegistered(Date registered) {
-        this.registered = registered;
     }
 
     @Override
@@ -85,13 +59,5 @@ public class Vote implements Serializable {
     @Override
     public int hashCode() {
         return id == null ? 0 : id;
-    }
-
-    @Override
-    public String toString() {
-        return "\nVote { id=" + id + ", " +
-                (menu != null ? menu.toString() : " Menu {}, ") +
-                (user != null ? user.toString() : " User {}, registered=") +
-                (registered != null ? registered.toString() : "");
     }
 }

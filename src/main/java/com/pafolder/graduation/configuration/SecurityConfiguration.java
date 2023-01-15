@@ -2,6 +2,7 @@ package com.pafolder.graduation.configuration;
 
 import com.pafolder.graduation.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authorization.AuthorityAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationManagers;
@@ -11,9 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
     @Bean
@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests()
                 .requestMatchers("/api/admin/**")
                 .hasRole("ADMIN")
-                .requestMatchers("/api/menus/**", "/api/votes/**", "/api/profile/**")
+                .requestMatchers("/api/menus/**", "/api/vote/**", "/api/profile/**")
                 .access(AuthorizationManagers.anyOf(
                         AuthorityAuthorizationManager.hasRole("ADMIN"),
                         AuthorityAuthorizationManager.hasRole("USER")))
@@ -53,7 +53,10 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .logout().permitAll()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .csrf().disable();
         return http.build();
     }
 

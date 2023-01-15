@@ -1,5 +1,6 @@
 package com.pafolder.graduation.controller;
 
+import com.pafolder.graduation.util.DateTimeUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -19,9 +20,9 @@ class AdminControllerTest extends AbstractControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-                        .content("{\"restaurantId\":0," +
-                                "\"date\":\"2022-12-18\"," +
-                                "\"date\":\"2022-12-18\"," +
+                        .content("{\"restaurantId\":4," +
+                                "\"date\":\"2022-12-18\",\"date\":\"" +
+                                DateTimeUtil.getCurrentDate().plusDays(1).toString() + "\"," +
                                 "\"menuItems\":[{\"dishName\":\"Фасоль\",\"dishPrice\":99.99}," +
                                 "{\"dishName\":\"Рис\",\"dishPrice\":88.0}]}"))
                 .andDo(print())
@@ -38,7 +39,7 @@ class AdminControllerTest extends AbstractControllerTest {
                                 "\"menuItems\":[{\"dishName\":\"Фасоль\",\"dishPrice\":99.99}," +
                                 "{\"dishName\":\"Рис\",\"dishPrice\":88.0}]}"))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isUnprocessableEntity())
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
@@ -52,7 +53,8 @@ class AdminControllerTest extends AbstractControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
                         .content("{\"restaurantId\":" + NONEXISTENT_ID_STRING + "," +
-                                "\"date\":\"2022-12-18\"," +
+                                "\"date\":\"2022-12-18\",\"date\":\"" +
+                                DateTimeUtil.getCurrentDate().plusDays(1).toString() + "\"," +
                                 "\"menuItems\":[{\"dishName\":\"Фасоль\",\"dishPrice\":99.99}," +
                                 "{\"dishName\":\"Рис\",\"dishPrice\":88.0}]}"))
                 .andDo(print())
@@ -61,7 +63,7 @@ class AdminControllerTest extends AbstractControllerTest {
                 .getResponse()
                 .getContentAsString()
                 .toLowerCase()
-                .matches(".*Restaurant not found.* information.*".toLowerCase()));
+                .matches(".*no.*restaurant found.*".toLowerCase()));
     }
 
     @Test

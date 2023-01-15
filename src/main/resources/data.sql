@@ -13,15 +13,15 @@ VALUES ('Старый Ресторан', 'Старая Площадь'),
        ('Четвёртый ресторан', 'Четвёртая линия, дом 4');
 
 INSERT INTO menu (restaurant_id, menu_date)
--- VALUES (0, DATE_ADD(CURRENT_DATE, 1)),
-VALUES (0, '2022-12-16'),
-       (1, '2022-12-17'),
-       (2, '2022-12-17'),
-       (3, '2022-12-17'),
-       (1, '2022-12-16'),
-       (2, '2022-12-16'),
-       (3, '2022-12-16'),
-       (4, '2022-12-16');
+VALUES (0, CURRENT_DATE),
+       (1, CURRENT_DATE),
+       (2, CURRENT_DATE),
+       (3, CURRENT_DATE),
+       (4, CURRENT_DATE),
+       (0, DATE_ADD(CURRENT_DATE, 1)),
+       (2, DATE_ADD(CURRENT_DATE, 1)),
+       (3, DATE_ADD(CURRENT_DATE, 1)),
+       (4, DATE_SUB(CURRENT_DATE, 1));
 
 INSERT INTO menu_item (menu_id, dish_name, dish_price)
 VALUES (0, 'Фасоль', 88.99),
@@ -45,20 +45,24 @@ VALUES (0, 'Фасоль', 88.99),
        (6, 'Вино белое сухое', 380.00),
        (7, 'Ананас', 122.21),
        (7, 'Бычье сердце', 1345.67),
-       (7, 'Пиво тёмное', 199.99);
+       (7, 'Пиво тёмное', 199.99),
+       (8, 'Шампанское', 599.00),
+       (8, 'Фу агра', 438.00),
+       (8, 'Холодная закуска дня', 135.16);
 
 INSERT INTO users (name, email, password, role)
-VALUES ('Иван Иванов', 'ivan_ivanov@mail.net', '{noop}password', 'USER'),
-       ('Пользователь', 'user@mail.com', '{noop}password', 'USER'),
-       ('Александра Александрова', 'aa@nomail.ru', '{noop}password', 'USER'),
-       ('Администратор', 'admin@mail.com', '{noop}admin', 'ADMIN'),
-       ('Кирилл Кириллов', 'kkirillov@qq.org', '{noop}password', 'USER'),
-       ('Евгения Евгеньевна', 'evgeniya.e@yahoo.zz', '{noop}password', 'USER');
+VALUES ('John Smith', 'johnsmith@mail.net', '{noop}password', 'USER'),
+       ('User', 'user@mail.com', '{noop}password', 'USER'),
+       ('Alexandre Henderson', 'ahen@nomail.in', '{noop}password', 'USER'),
+       ('Administrator', 'admin@mail.com', '{noop}admin', 'ADMIN'),
+       ('Kirill Kirillov', 'kkirillov@qup.org', '{noop}password', 'USER'),
+       ('Eugeni Flack', 'evgeniflack.e@yahoo.zz', '{noop}password', 'USER');
 
-INSERT INTO vote (user_id, menu_id, registered)
-VALUES (0, 1, '2022-12-17'),
-       (1, 0, '2022-12-16'),
-       (2, 2, '2022-12-17'),
-       (0, 4, '2022-12-16'),
-       (3, 4, '2022-12-16'),
-       (1, 2, '2022-12-17');
+INSERT INTO vote (user_id, menu_id, vote_date)
+VALUES (0, 8, DATE_SUB(CURRENT_DATE, 1)),
+       (5, 8, DATE_SUB(CURRENT_DATE, 1)),
+       (0, 1, CURRENT_DATE),
+       (1, 0, CURRENT_DATE),
+       (2, 2, CURRENT_DATE),
+       (3, 4, CURRENT_DATE),
+       (4, 4, CURRENT_DATE);

@@ -19,7 +19,7 @@ spring:
       jakarta:
         persistence:
           sharedCache:
-            mode: ALL
+            mode: NONE
   #  sql:
   #    init:
   #      platform: hsqldb

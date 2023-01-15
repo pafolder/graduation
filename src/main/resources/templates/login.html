@@ -1,100 +1,91 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <title>Please Log in</title>
+    <title>Login</title>
     <link rel="icon" th:href="@{/favicon.ico}" type="image/ico">
     <link rel="stylesheet" th:href="@{webjars/bootstrap/5.2.3/dist/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{css/style.css}">
 </head>
 <body>
 <div class="container align-items-center p-2">
-    <div id="modalUserNotFound" class="modal">
-        <div class="modal-content text-center" style="width: 30%">
-            <div>Invalid Username & Password</div>
-            <div>
-                <button class="btn btn-danger btn-sm mt-2" id="buttonOkUserNotFound">&nbsp;Ok&nbsp;</button>
-            </div>
-        </div>
-    </div>
     <br>
     <h1 class="text-center">
         <b> Restaurant Voting Application</b></h1>
-    <p style="text-align:center"><i>
-        Java Enterprise Graduation Project
-    </i></p>
+    <p style="text-align:center"><i>Java Enterprise Graduation Project</i></p>
     <p th:utext="${summary}"></p>
-      <h4 class="text-center mb-3">Please Log in to get RVA <b>REST API Documentation</b></h4>
-    <div th:if="${param.logout}">
-        You have been logged out.
-    </div>
+    <h5 class="text-center">Login for Testing</h5>
+    <span th:if="${param.error}">
+            <div id="modalUserNotFound" class="modal">
+        <div class="modal-content text-center" style="width: 20%">Invalid Username & Password<div>
+                <button class="btn btn-danger btn-sm mt-2" id="buttonOkUserNotFound">&nbsp;Ok&nbsp;</button></div>
+        </div></div>
+    <script th:inline="javascript">let buttonOkUserNotFound = document.getElementById("buttonOkUserNotFound");
+    buttonOkUserNotFound.onclick = function () {
+        history.back();
+    }
+    document.getElementById("modalUserNotFound").style.display = "block";
+    </script>
+    </span>
+    <div th:if="${param.logout}">You have been logged out</div>
     <form class="text-center" name="loginForm" th:action="@{/login}" method="post">
-        <div class="text-center p-1">
-            <button type="button" class="btn btn-danger"
-                    onclick="location.href='/unauthenticated'">
+        <div>
+            <input class="text-center mb-1" type="text" name="username" id="username" placeholder="Email"/>
+        </div>
+        <div>
+            <input class="text-center mb-1" type="password" name="password" id="password" placeholder="Password"/>
+        </div>
+        <div>
+            <input type="button" class="btn btn-primary btn-sm mt-1" value="Login" onclick="this.form.submit()">
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn btn-link btn-sm" onclick="location.href='/unauthenticated'">
                 Unauthenticated
-            </button> &nbsp;
-            <button class="btn btn-warning" onclick=
+            </button>
+            <button class="btn btn-link btn-sm" onclick=
                     "javascript: username.value = 'user@mail.com'; password.value='password'; this.form.submit();">
                 Login as User
-            </button> &nbsp;
-            <button class="btn btn-success" onclick=
+            </button>
+            <button class="btn btn-link btn-sm" onclick=
                     "javascript: username.value = 'admin@mail.com'; password.value='admin'; this.form.submit();">
                 Login as Admin
             </button>
         </div>
-        <p class="p-0 m-0 text-center">or provide</p>
-        <div class="p-1 m-1">
-            <input class="text-center" type="text" name="username" id="username" placeholder="Email"/>
-            <input class="text-center" type="password" name="password" id="password" placeholder="Password"/>
-        </div>
-        <div class="p-1 m-1">
-            <span th:if="${param.error}">
-                <script>
-                document.getElementById("modalUserNotFound").style.display = "block";
-                </script>
-            </span>
-            <input type="button" class="btn btn-primary mb-2" value="Login with Email & Password"
-                   onclick="this.form.submit()">
-        </div>
-    </form>
-    <form class="text-center p-2" th:action="@{/setdatetime}" method="post">
-        <label for="datePicker">Date & Time for testing:</label>
-        <input class="text-center" type="date" name="newDate" th:value="${currentDate}"
-               onchange="this.form.submit()"/>
-        <input class="text-center" type="time" name="newTime" th:value="${currentTime}"
-               onchange="this.form.submit()"/>
-        <button class="mb-1 btn btn-link btn-sm" type="button" id="restartButton" onclick="restartApp()">Reset Database
-        </button>
     </form>
 </div>
-<div id="modalWait" class="modal">
-    <div class="modal-content">
-        <div class="text-center m-3">
-            <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>
-            &nbsp;Wait for Restaurant Voting Application to restart...
-        </div>
-    </div>
-</div>
-<script th:inline="javascript">
-    let resetPath = /*[[@{/reset}]]*/ '';
-    let modal = document.getElementById("modalWait");
-    let buttonOkUserNotFound = document.getElementById("buttonOkUserNotFound");
 
-    function restartApp() {
-        modal.style.display = "block";
-        let request = new XMLHttpRequest();
-        request.open("POST", location.protocol + "//" + location.hostname +
-            ":" + location.port + resetPath, true);
-        request.send();
-        setTimeout(function () {
-            location.reload();
-        }, 1000);
-    }
 
-    buttonOkUserNotFound.onclick = function () {
-        history.back();
-    }
-
-</script>
+<!--    <form class="text-center p-2" th:action="@{/setdatetime}" method="post">-->
+<!--        <label for="datePicker">Date & Time for testing:</label>-->
+<!--        <input class="text-center" type="date" name="newDate" th:value="${currentDate}"-->
+<!--               onchange="this.form.submit()"/>-->
+<!--        <input class="text-center" type="time" name="newTime" th:value="${currentTime}"-->
+<!--               onchange="this.form.submit()"/>-->
+<!--        <button class="mb-1 btn btn-link btn-sm" type="button" id="restartButton" onclick="restartApp()">Reset Database-->
+<!--        </button>-->
+<!--    </form>-->
+<!--</div>-->
+<!--    <div id="modalWait" class="modal">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="text-center m-3">-->
+<!--                <span class="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span>-->
+<!--                &nbsp;Wait for Restaurant Voting Application to restart...-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <script th:inline="javascript">-->
+<!--        let resetPath = /*[[@{/reset}]]*/ '';-->
+<!--        let modal = document.getElementById("modalWait");-->
+<!--        let buttonOkUserNotFound = document.getElementById("buttonOkUserNotFound");-->
+<!---->
+<!--        function restartApp() {-->
+<!--            modal.style.display = "block";-->
+<!--            let request = new XMLHttpRequest();-->
+<!--            request.open("POST", location.protocol + "//" + location.hostname +-->
+<!--                ":" + location.port + resetPath, true);-->
+<!--            request.send();-->
+<!--            setTimeout(function () {-->
+<!--                location.reload();-->
+<!--            }, 1000);-->
+<!--        }-->
 </body>
 </html>

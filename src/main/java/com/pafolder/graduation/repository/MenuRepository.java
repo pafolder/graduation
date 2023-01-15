@@ -1,8 +1,6 @@
 package com.pafolder.graduation.repository;
 
 import com.pafolder.graduation.model.Menu;
-import com.pafolder.graduation.model.Restaurant;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +22,16 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Cacheable("menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     @Query("SELECT m FROM Menu m WHERE m.date = ?1")
-    List<Menu> findAllByDate(@NotNull Date date);
+    List<Menu> findAllByDate(LocalDate date);
 
-    @Transactional
-    Menu save(Menu menu);
-
-    @Transactional
-    boolean deleteById(int id);
+//    @Transactional
+//    Menu save(Menu menu);
+//
+//    @Transactional
+//    boolean deleteById(int id);
 
     @Cacheable("menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
-    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant = :restaurant")
-    Optional<Menu> findByDateAndRestaurant(@Param("date") @NotNull Date date, @Param("restaurant") Restaurant restaurant);
+    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant.id = :restaurantId")
+    Optional<Menu> findByDateAndRestaurantId(@Param("date") LocalDate date, @Param("restaurantId") int restaurantId);
 }
