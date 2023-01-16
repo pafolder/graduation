@@ -42,8 +42,6 @@ public abstract class AbstractControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
-    MenuRepository menuRepository;
-    @Autowired
     VoteRepository voteRepository;
 
     @PostConstruct

@@ -1,9 +1,7 @@
 package com.pafolder.graduation.controller;
 
-import com.pafolder.graduation.repository.MenuRepository;
 import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.repository.VoteRepository;
-import com.pafolder.graduation.service.UserServiceImpl;
 import com.pafolder.graduation.validator.MenuToValidator;
 import com.pafolder.graduation.validator.UserToValidator;
 import org.slf4j.Logger;
@@ -15,10 +13,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 public abstract class AbstractController {
     public static final String REST_URL = "/api";
     protected Logger log = LoggerFactory.getLogger("yellow");
-    @Autowired
-    protected MenuRepository menuRepository;
-    @Autowired
-    protected UserServiceImpl userService;
+
+
     @Autowired
     protected VoteRepository voteRepository;
     @Autowired

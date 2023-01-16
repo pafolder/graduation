@@ -1,10 +1,12 @@
 package com.pafolder.graduation.controller;
 
 import com.pafolder.graduation.model.User;
+import com.pafolder.graduation.service.UserServiceImpl;
 import com.pafolder.graduation.to.UserTo;
 import com.pafolder.graduation.util.UserUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import static com.pafolder.graduation.controller.AbstractController.REST_URL;
 @RestController
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegisterController extends AbstractController {
+    @Autowired
+    UserServiceImpl userService;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)

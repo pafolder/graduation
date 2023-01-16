@@ -21,17 +21,11 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     @Cacheable("menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
-    @Query("SELECT m FROM Menu m WHERE m.date = ?1")
-    List<Menu> findAllByDate(LocalDate date);
-
-//    @Transactional
-//    Menu save(Menu menu);
-//
-//    @Transactional
-//    boolean deleteById(int id);
+    @Query("SELECT m FROM Menu m WHERE m.menuDate = :menuDate")
+    List<Menu> findAllByDate(LocalDate menuDate);
 
     @Cacheable("menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
-    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant.id = :restaurantId")
-    Optional<Menu> findByDateAndRestaurantId(@Param("date") LocalDate date, @Param("restaurantId") int restaurantId);
+    @Query("SELECT m FROM Menu m WHERE m.menuDate = :menuDate AND m.restaurant.id = :restaurantId")
+    Optional<Menu> findByDateAndRestaurantId(@Param("menuDate") LocalDate date, @Param("restaurantId") int restaurantId);
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.util.ProxyUtils;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "menu", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "menu_date"},
         name = "menu_unique_restaurant_date_idx")})
@@ -33,19 +33,12 @@ public class Menu {
 
     @Column(name = "menu_date", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate date;
+    private LocalDate menuDate;
 
-    @NotNull
     @NotEmpty
     @ElementCollection(targetClass = Item.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"))
     private List<Item> menuItems;
-
-    public Menu(Restaurant restaurant, LocalDate date, List<Menu.Item> items) {
-        this.restaurant = restaurant;
-        this.date = date;
-        this.menuItems = items;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -75,8 +68,5 @@ public class Menu {
         @Column(name = "dish_price", nullable = false, precision = 7, scale = 2)
         @Digits(integer = 9, fraction = 2)
         private BigDecimal dishPrice;
-
-        public Item() {
-        }
     }
 }

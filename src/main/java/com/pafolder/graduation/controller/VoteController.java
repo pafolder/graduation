@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.model.Vote;
+import com.pafolder.graduation.repository.MenuRepository;
 import com.pafolder.graduation.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -25,13 +27,17 @@ import static com.pafolder.graduation.controller.AbstractController.REST_URL;
 import static com.pafolder.graduation.util.DateTimeUtil.*;
 
 @RestController
-@Tag(name = "1 Votes", description = "API")
+@Tag(name = "1 votes-controller")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController extends AbstractController {
     private static final String NO_VOTE_FOUND = "No vote found";
     private static final String NO_MENU_FOUND = "No menu found";
     private static final String TOO_LATE_TO_VOTE = "It's too late to vote (available until 11:00 am)";
     private static final String TOO_LATE_TO_DELETE_VOTE = "It's too late to delete the vote (available until 11:00 am)";
+
+    @Autowired
+    MenuRepository menuRepository;
+
 
     @GetMapping("/vote")
     @Operation(summary = "Get authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
@@ -64,10 +70,22 @@ public class VoteController extends AbstractController {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_MENU_FOUND);
         }
         Vote vote = new Vote(userDetails.getUser(), menu.get());
-        voteRepository.findByDateAndUser(menu.get().getDate(), userDetails.getUser())
+        voteRepository.findByDateAndUser(menu.get().getMenuDate(), userDetails.getUser())
                 .ifPresent(existingUser -> vote.setId(existingUser.getId()));
         vote.setVoteDate(getCurrentDate());
         voteRepository.save(vote);
+    }
+
+    @PutMapping("/vote")
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @Operation(summary = "Change authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
+    @Parameter(name = "restaurantId", description = "Id of the Restaurant authenticated user updates vote for")
+    @Transactional
+    public void changeVote(@RequestParam int restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("updateVote()");
+        if (!getCurrentDate().equals(getNextVotingDate())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, TOO_LATE_TO_VOTE);
+        }
     }
 
     @DeleteMapping("/vote")
@@ -79,7 +97,7 @@ public class VoteController extends AbstractController {
         log.info("deleteVote");
         Optional<Vote> vote = voteRepository.findByDateAndUser(getCurrentDate(), user);
         if (vote.isPresent()) {
-            if (vote.get().getMenu().getDate().isBefore(getNextVotingDate())) {
+            if (vote.get().getMenu().getMenuDate().isBefore(getNextVotingDate())) {
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, TOO_LATE_TO_DELETE_VOTE);
             }
             voteRepository.delete(vote.get());

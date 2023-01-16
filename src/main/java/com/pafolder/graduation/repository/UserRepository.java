@@ -19,11 +19,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByEmail(String email);
 
-//    @Transactional
-//    void delete(User user);
-
     @Transactional
     @Query("UPDATE User u SET u.enabled=:isEnabled WHERE u.id=:id")
     @Modifying
-    void updateIsEnabled(@Parameter Integer id, @Parameter boolean isEnabled);
+    void updateIsEnabled(@Parameter int id, @Parameter boolean isEnabled);
 }

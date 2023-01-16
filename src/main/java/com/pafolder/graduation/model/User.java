@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
 public class User {
@@ -42,15 +43,7 @@ public class User {
     private boolean enabled = true;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
-
-    public User(Integer id, String name, String email, String password, Role role) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+    private Role role = Role.USER;
 
     @Override
     public boolean equals(Object o) {
@@ -66,12 +59,6 @@ public class User {
     @Override
     public int hashCode() {
         return id == null ? 0 : id;
-    }
-
-    @Override
-    public String toString() {
-        return "\nUser { id='" + id + "', name='" + (name != null ? name : "") + "', email='" +
-                (email != null ? email : "") + "', role='" + (role != null ? role : "") + "' }";
     }
 
     public enum Role implements GrantedAuthority {
