@@ -1,6 +1,5 @@
 package com.pafolder.graduation.controller;
 
-import com.pafolder.graduation.repository.MenuRepository;
 import com.pafolder.graduation.repository.VoteRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @SpringBootTest
 @Transactional
 @AutoConfigureMockMvc
-@Sql(scripts = {"classpath:schema.sql", "classpath:data.sql"}, config = @SqlConfig(encoding = "UTF-8"))
-//@EnableWebSecurity
 public abstract class AbstractControllerTest {
     protected static final Locale RU_LOCALE = new Locale("ru");
 

@@ -5,6 +5,7 @@ import com.pafolder.graduation.repository.UserRepository;
 import com.pafolder.graduation.security.UserDetailsImpl;
 import com.pafolder.graduation.to.UserTo;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,15 +15,11 @@ import org.springframework.validation.Validator;
 import java.util.Optional;
 
 @Component
+@AllArgsConstructor
 public class UserToValidator implements Validator {
     private static final String DUPLICATING_EMAIL = "Email is already in use";
     private final UserRepository userRepository;
     private final HttpServletRequest request;
-
-    public UserToValidator(UserRepository userRepository, HttpServletRequest request) {
-        this.userRepository = userRepository;
-        this.request = request;
-    }
 
     @Override
     public boolean supports(Class<?> clazz) {

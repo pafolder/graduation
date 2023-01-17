@@ -3,10 +3,7 @@ package com.pafolder.graduation.model;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.util.ProxyUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,14 +12,15 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@ToString
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonFilter("voteJsonFilter")
 @Table(name = "vote",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"vote_date", "user_id"}, name = "registered_user_idx")})
 public class Vote {
     @Id
-    @SequenceGenerator(name = "vote_id_generator", sequenceName = "vote_id_seq", allocationSize = 1, initialValue = 0)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vote_id_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,11 +37,6 @@ public class Vote {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate voteDate;
-
-    public Vote(User user, Menu menu) {
-        this.user = user;
-        this.menu = menu;
-    }
 
     @Override
     public boolean equals(Object o) {

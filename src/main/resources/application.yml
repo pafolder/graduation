@@ -10,20 +10,16 @@ spring:
     url: jdbc:hsqldb:mem:graduation
     driver-class-name: org.hsqldb.jdbc.JDBCDriver
   jpa:
-    show-sql: true
+    show-sql: false
     open-in-view: false
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       jakarta:
         persistence:
           sharedCache:
-            mode: NONE
-  #  sql:
-  #    init:
-  #      platform: hsqldb
-  #      mode: always
+            mode: UNSPECIFIED
   cache:
     cache-names: menus
     caffeine.spec: maximumSize=5000,expireAfterAccess=600s
@@ -38,7 +34,7 @@ springdoc:
     path: /swagger-ui
     tagsSorter: alpha
   version: '@springdoc.version@'
-level: warn
+level: debug
 logging:
   level:
     ROOT: ${level}
@@ -46,8 +42,8 @@ logging:
       hibernate: ${level}
       hibernate.SQL: ${level}
       springframework:
-        cache: ${level}
+        cache: trace
         orm:
           jpa: ${level}
-        transaction: ${level}
+        transaction: trace
         transaction.interceptor: ${level}

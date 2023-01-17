@@ -8,16 +8,16 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.pafolder.graduation.TestData.*;
-import static com.pafolder.graduation.controller.AbstractController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminControllerTest extends AbstractControllerTest {
     private static final String MENU_ID_TO_DELETE_STRING = "0";
+    private static final String REST_URL = "/api/admin";
 
     @Test
     void addMenu() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
+        mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/menus")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
                         .content("{\"restaurantId\":4," +
@@ -31,14 +31,14 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void addMenuWithValidationErrorExpired() throws Exception {
-        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
+        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/menus")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-                        .content("{\"restaurantId\":0," +
-                                "\"date\":\"2020-01-11\"," +
+                        .content("{\"restaurantId\":4," +
+                                "\"date\":\"" + DateTimeUtil.getCurrentDate() + "\",\"date\":\"" +
+                                DateTimeUtil.getCurrentDate().plusDays(1).toString() + "\"," +
                                 "\"menuItems\":[{\"dishName\":\"Фасоль\",\"dishPrice\":99.99}," +
-                                "{\"dishName\":\"Рис\",\"dishPrice\":88.0}]}"))
-                .andDo(print())
+                                "{\"dishName\":\"Рис\",\"dishPrice\":88.0}]}")).andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn()
                 .getResponse()
@@ -49,7 +49,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void addMenuWithValidationErrorBadRestaurantDataNotFound() throws Exception {
-        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/admin/menus")
+        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL + "/menus")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
                         .content("{\"restaurantId\":" + NONEXISTENT_ID_STRING + "," +
@@ -68,7 +68,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteMenu() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/admin/menus" + "/" + MENU_ID_TO_DELETE_STRING)
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/menus" + "/" + MENU_ID_TO_DELETE_STRING)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword())))
                 .andDo(print())
@@ -77,7 +77,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteMenuUnauthorized() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/admin/menus/" + MENU_ID_TO_DELETE_STRING)
+        mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/menus/" + MENU_ID_TO_DELETE_STRING)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword())))
                 .andDo(print())
@@ -86,7 +86,7 @@ class AdminControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteMenuNotFound() throws Exception {
-        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/admin/menus/"
+        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL + "/menus/"
                                 + NONEXISTENT_ID_STRING)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword())))

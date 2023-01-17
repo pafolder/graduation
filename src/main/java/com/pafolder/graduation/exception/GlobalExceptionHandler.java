@@ -2,6 +2,8 @@ package com.pafolder.graduation.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
@@ -19,12 +21,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.*;
 
 @RestControllerAdvice
+@AllArgsConstructor
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private final MessageSource messageSource;
-
-    public GlobalExceptionHandler(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -87,47 +86,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 
-    public class ApiError {
+    @Getter
+    @AllArgsConstructor
+    public static class ApiError {
         private HttpStatus status;
         private String message;
         private List<String> errors;
-
-        public ApiError(HttpStatus status, String message, List<String> errors) {
-            super();
-            this.status = status;
-            this.message = message;
-            this.errors = errors;
-        }
-
-        public ApiError(HttpStatus status, String message, String error) {
-            super();
-            this.status = status;
-            this.message = message;
-            errors = Arrays.asList(error);
-        }
-
-        public HttpStatus getStatus() {
-            return status;
-        }
-
-        public void setStatus(HttpStatus status) {
-            this.status = status;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public List<String> getErrors() {
-            return errors;
-        }
-
-        public void setErrors(List<String> errors) {
-            this.errors = errors;
-        }
     }
 }

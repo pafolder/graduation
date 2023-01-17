@@ -16,9 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"}, name = "user_unique_email_idx")})
 public class User {
     @Id
-    @SequenceGenerator(name = "user_id_generator", sequenceName = "user_id_seq", allocationSize = 1, initialValue = 0)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_generator")
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -28,18 +26,17 @@ public class User {
     private String name;
 
     @Column(name = "email", nullable = false, unique = true)
-    @NotNull
-    @NotEmpty
+    @NotBlank
     @Email
     private String email;
 
     @Column(name = "password", nullable = false)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(max = 256)
-    @NotEmpty
+    @NotBlank
     private String password;
 
-    @Column(name = "enabled", nullable = false)
+    @Column(name = "enabled", nullable = false, columnDefinition = "boolean default true")
     private boolean enabled = true;
 
     @Enumerated(EnumType.STRING)

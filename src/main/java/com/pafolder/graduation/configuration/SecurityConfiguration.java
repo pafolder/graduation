@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http.authorizeHttpRequests()
                 .requestMatchers("/api/admin/**")
                 .hasRole("ADMIN")
-                .requestMatchers("/api/menus/**", "/api/vote/**", "/api/profile/**")
+                .requestMatchers("/api/profile/**")
                 .access(AuthorizationManagers.anyOf(
                         AuthorityAuthorizationManager.hasRole("ADMIN"),
                         AuthorityAuthorizationManager.hasRole("USER")))

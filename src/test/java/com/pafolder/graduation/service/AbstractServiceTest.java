@@ -10,7 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@Sql(scripts = {"classpath:schema.sql", "classpath:data.sql"}, config = @SqlConfig(encoding = "UTF-8"))
+@Sql(scripts = {"classpath:schema.sq_", "classpath:data.sql"}, config = @SqlConfig(encoding = "UTF-8"))
 
 public class AbstractServiceTest {
     Logger log = LoggerFactory.getLogger("yellow");

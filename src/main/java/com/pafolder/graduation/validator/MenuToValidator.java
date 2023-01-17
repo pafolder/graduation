@@ -7,9 +7,6 @@ import org.springframework.validation.Validator;
 
 @Component
 public class MenuToValidator implements Validator {
-    public MenuToValidator() {
-    }
-
     @Override
     public boolean supports(Class<?> clazz) {
         return MenuTo.class.equals(clazz);
@@ -17,6 +14,6 @@ public class MenuToValidator implements Validator {
 
     @Override
     public void validate(Object object, Errors errors) {
-        MenuTo menuTo = (MenuTo) object;
+        MenuTo menuTo = (MenuTo) object; //?????
     }
 }

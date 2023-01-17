@@ -6,12 +6,12 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.pafolder.graduation.TestData.user;
-import static com.pafolder.graduation.controller.AbstractController.REST_URL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 class MenuControllerTest extends AbstractControllerTest {
+    private static final String REST_URL = "/api";
+
     @Test
     void getAll() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "/menus").contentType(MediaType.APPLICATION_JSON)

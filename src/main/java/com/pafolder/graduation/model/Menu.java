@@ -22,8 +22,7 @@ import java.util.List;
         name = "menu_unique_restaurant_date_idx")})
 public class Menu {
     @Id
-    @SequenceGenerator(name = "menu_id_seq", sequenceName = "menu_id_seq", allocationSize = 1, initialValue = 0)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "menu_id_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -37,7 +36,8 @@ public class Menu {
 
     @NotEmpty
     @ElementCollection(targetClass = Item.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"))
+    @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_name"}))
     private List<Item> menuItems;
 
     @Override

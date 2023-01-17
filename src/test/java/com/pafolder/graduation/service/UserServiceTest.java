@@ -21,7 +21,6 @@ class UserServiceTest extends AbstractServiceTest {
         log.info("Testing User Service ===/s");
         List<User> userList = userService.getAll();
         for (User user : userList) {
-            log.info(user.toString());
             Assertions.assertEquals(userList, userList);
         }
     }

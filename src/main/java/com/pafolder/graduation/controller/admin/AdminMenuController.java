@@ -4,6 +4,7 @@ import com.pafolder.graduation.controller.AbstractController;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.repository.MenuRepository;
+import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.to.MenuTo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,20 +24,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDate;
 
-import static com.pafolder.graduation.controller.AbstractController.REST_URL;
+import static com.pafolder.graduation.controller.admin.AdminMenuController.REST_URL;
 import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 
 @RestController
 @AllArgsConstructor
-@Tag(name = "5.1 admin-menu-controller")
-@RequestMapping(value = REST_URL + "/admin/menus", produces = MediaType.APPLICATION_JSON_VALUE)
+@Tag(name = "5.2 admin-menu-controller")
+@RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractController {
+    static final String REST_URL = "/api/admin/menus";
     public static final String NO_MENU_FOUND = "No menu found";
     public static final String NO_RESTAURANT_FOUND = "No restaurant found";
     public static final String MENU_ALREADY_EXISTS = "Menu already exists";
     public static final String MENU_EXPIRED = "Menu is expired";
 
-    protected MenuRepository menuRepository;
+    private MenuRepository menuRepository;
+    private RestaurantRepository restaurantRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
