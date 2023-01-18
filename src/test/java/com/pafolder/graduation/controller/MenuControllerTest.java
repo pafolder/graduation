@@ -6,24 +6,25 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.pafolder.graduation.TestData.user;
+import static com.pafolder.graduation.util.DateTimeUtil.CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT;
+import static com.pafolder.graduation.util.DateTimeUtil.setCurrentTimeForTests;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class MenuControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = "/api";
 
     @Test
     void getAll() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "/menus").contentType(MediaType.APPLICATION_JSON)
-                                .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
-//                        .param("date", "2022-12-17"))
+        setCurrentTimeForTests(CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT);
+        mockMvc.perform(MockMvcRequestBuilders.get(MenuController.REST_URL).contentType(MediaType.APPLICATION_JSON)
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void getAllUnauthorized() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(REST_URL + "/menus").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(MockMvcRequestBuilders.get(MenuController.REST_URL).contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(print())
                 .andExpect(status().isUnauthorized());

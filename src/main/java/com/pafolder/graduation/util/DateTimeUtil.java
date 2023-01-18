@@ -1,31 +1,22 @@
 package com.pafolder.graduation.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class DateTimeUtil {
-    //    public static final Date CURRENT_DATE = Date.valueOf("2022-12-16");
-    public static final LocalTime CURRENT_TIME = LocalTime.of(10, 23);
     public static final LocalTime VOTING_TIME_LIMIT = LocalTime.of(11, 00);
-
-    private static LocalTime currentTime = CURRENT_TIME;
-
-    public static LocalDate getCurrentDate() {
-        return LocalDateTime.now().toLocalDate();
-    }
+    public static final LocalTime CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT = VOTING_TIME_LIMIT;
+    public static final LocalTime CURRENT_TIME_AFTER_VOTING_TIME_LIMIT = VOTING_TIME_LIMIT.plusSeconds(1);
+    private static LocalTime currentTimeForTests;
 
     public static LocalTime getCurrentTime() {
-        return currentTime;
-//        return Time.valueOf(LocalDateTime.now().toLocalTime());
+        return currentTimeForTests == null ? LocalTime.now() : currentTimeForTests;
     }
 
-    public static void setCurrentTime(LocalTime newCurrentTime) {
-        currentTime = newCurrentTime;
+    public static boolean isLateToVote() {
+        return getCurrentTime().isAfter(VOTING_TIME_LIMIT);
     }
 
-    public static LocalDate getNextVotingDate() {
-        return getCurrentTime().isAfter(VOTING_TIME_LIMIT) ?
-                getCurrentDate().plusDays(1) : getCurrentDate();
+    public static void setCurrentTimeForTests(LocalTime currentTimeForTests) {
+        DateTimeUtil.currentTimeForTests = currentTimeForTests;
     }
 }

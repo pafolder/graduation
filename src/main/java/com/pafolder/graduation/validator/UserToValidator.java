@@ -17,7 +17,7 @@ import java.util.Optional;
 @Component
 @AllArgsConstructor
 public class UserToValidator implements Validator {
-    private static final String DUPLICATING_EMAIL = "Email is already in use";
+    static final String DUPLICATING_EMAIL = "Email is already used by another user";
     private final UserRepository userRepository;
     private final HttpServletRequest request;
 
@@ -30,7 +30,7 @@ public class UserToValidator implements Validator {
     public void validate(Object object, Errors errors) {
         UserTo userTo = (UserTo) object;
         Optional<User> dbUser = userRepository.findByEmail(userTo.getEmail());
-        if (!dbUser.isPresent()) return;
+        if (dbUser.isEmpty()) return;
         int dbId = dbUser.get().getId();
         if (request.getMethod().equals("PUT")) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

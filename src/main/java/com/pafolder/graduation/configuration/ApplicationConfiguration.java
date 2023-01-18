@@ -13,13 +13,12 @@ import io.swagger.v3.oas.models.info.Info;
 @Configuration
 @EnableCaching
 public class ApplicationConfiguration {
-    public static final String GO_BACK_LINK = "←&nbsp;<a href=\"/login\">Back to Login page</a><br><br>";
     public static final String RESTAURANT_VOTING_APPLICATION_SUMMARY =
             "<b>Restaurant Voting Application (RVA)</b> implements a Voting System for customers making their " +
                     "decisions which restaurant to have lunch at. There are two types of users: Admins and " +
                     "regular Users. Admins can input Restaurants and theirs lunch Menus of the day " +
                     "(dish names with prices). The Menus can be provided in advance for any further date." +
-                    " Users can vote for a restaurant they want to have next lunch at. Only one vote per user per " +
+                    " Users can vote for a restaurant they want to have lunch at today. Only one vote per user per " +
                     "date counts. If the User votes again the same day, the vote will be overridden unless" +
                     " it was sent after 11:00. In this case, the existing vote cannot be changed.<br>" +
                     "<b>Credentials for testing:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
@@ -37,7 +36,7 @@ public class ApplicationConfiguration {
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))
                 .info(new Info().title("REST API Documentation for Restaurant Voting Application")
                         .version(appVersion)
-                        .description(GO_BACK_LINK + RESTAURANT_VOTING_APPLICATION_SUMMARY)
+                        .description(RESTAURANT_VOTING_APPLICATION_SUMMARY)
                         .contact(contact));
     }
 }

@@ -8,18 +8,21 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
 
 import static com.pafolder.graduation.TestData.*;
 import static com.pafolder.graduation.controller.VoteController.REST_URL;
 import static com.pafolder.graduation.util.DateTimeUtil.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class VoteControllerTest extends AbstractControllerTest {
     @Test
     void createVote() throws Exception {
+        DateTimeUtil.setCurrentTimeForTests(CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT);
         mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
@@ -30,14 +33,14 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void updateVote() throws Exception {
-        DateTimeUtil.setCurrentTime(LocalTime.of(10, 23));
+        DateTimeUtil.setCurrentTimeForTests(CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT);
         mockMvc.perform(MockMvcRequestBuilders.put(REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
                         .param("restaurantId", Integer.toString(RESTAURANT_ID_FOR_SECOND_VOTE)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        Optional<Vote> updatedVote = voteRepository.findByDateAndUser(getCurrentDate(), user);
+        Optional<Vote> updatedVote = voteRepository.findByDateAndUser(LocalDate.now(), user);
         Assertions.assertTrue(updatedVote.map(value -> value.getMenu()
                 .getRestaurant().getId().equals(RESTAURANT_ID_FOR_SECOND_VOTE)).orElse(false));
     }
@@ -54,7 +57,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void sendVoteTooLate() throws Exception {
-        DateTimeUtil.setCurrentTime(LocalTime.of(11, 00, 01));
+        DateTimeUtil.setCurrentTimeForTests(CURRENT_TIME_AFTER_VOTING_TIME_LIMIT);
         Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
@@ -66,11 +69,11 @@ class VoteControllerTest extends AbstractControllerTest {
                 .getContentAsString()
                 .toLowerCase()
                 .matches(".*it's too late to vote.*".toLowerCase()));
-        DateTimeUtil.setCurrentTime(CURRENT_TIME);
     }
 
     @Test
     void sendVoteForNonexistentRestaurant() throws Exception {
+        setCurrentTimeForTests(CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT);
         Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
@@ -86,8 +89,7 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteVote() throws Exception {
-        LocalTime currentTime = getCurrentTime();
-        setCurrentTime(LocalTime.of(10, 30));
+        setCurrentTimeForTests(CURRENT_TIME_BEFORE_VOTING_TIME_LIMIT);
         mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL).contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword())))
                 .andDo(print())
@@ -98,13 +100,12 @@ class VoteControllerTest extends AbstractControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isNotFound());
-        setCurrentTime(currentTime);
     }
 
     @Test
     void deleteVoteTooLate() throws Exception {
         LocalTime currentTime = getCurrentTime();
-        setCurrentTime(LocalTime.of(11, 01));
+        setCurrentTimeForTests(CURRENT_TIME_AFTER_VOTING_TIME_LIMIT);
         Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.delete(REST_URL).contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword())))
                 .andDo(print())
@@ -114,6 +115,6 @@ class VoteControllerTest extends AbstractControllerTest {
                 .getContentAsString()
                 .toLowerCase()
                 .matches(".*too late to.* vote.*".toLowerCase()));
-        setCurrentTime(currentTime);
+        setCurrentTimeForTests(currentTime);
     }
 }

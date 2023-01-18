@@ -14,11 +14,6 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<Menu, Integer> {
-//    @Cacheable("menus")
-//    @EntityGraph(attributePaths = {"restaurant", "menuItems"})
-//    @Query("SELECT m FROM Menu m")
-//    List<Menu> findAll();
-
     @Cacheable(value = "menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     @Query("SELECT m FROM Menu m WHERE m.menuDate = :menuDate")
@@ -27,5 +22,5 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Cacheable(value = "menus")
     @EntityGraph(attributePaths = {"restaurant", "menuItems"})
     @Query("SELECT m FROM Menu m WHERE m.menuDate = :menuDate AND m.restaurant.id = :restaurantId")
-    Optional<Menu> findByDateAndRestaurantId(@Param("menuDate") LocalDate date, @Param("restaurantId") int restaurantId);
+    Optional<Menu> findByDateAndRestaurantId(@Param("menuDate") LocalDate menuDate, @Param("restaurantId") int restaurantId);
 }

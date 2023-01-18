@@ -3,6 +3,7 @@ package com.pafolder.graduation.controller;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.service.UserServiceImpl;
 import com.pafolder.graduation.to.UserTo;
+import com.pafolder.graduation.validator.UserToValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -21,9 +23,14 @@ import java.net.URI;
 @Tag(name = "3 register-controller")
 @RequestMapping(value = RegisterController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegisterController extends AbstractController {
-    static final String REST_URL = "/api/register";
-
+    public static final String REST_URL = "/api/register";
     private UserServiceImpl userService;
+    protected UserToValidator userToValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(userToValidator);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

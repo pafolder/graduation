@@ -34,7 +34,7 @@ springdoc:
     path: /swagger-ui
     tagsSorter: alpha
   version: '@springdoc.version@'
-level: debug
+level: error
 logging:
   level:
     ROOT: ${level}

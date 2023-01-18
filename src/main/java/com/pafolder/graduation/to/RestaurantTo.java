@@ -12,4 +12,6 @@ public class RestaurantTo {
 
     @NotBlank
     private String address;
+
+    private int voteCount;
 }

@@ -25,51 +25,52 @@ import java.net.URI;
 import java.time.LocalDate;
 
 import static com.pafolder.graduation.controller.admin.AdminMenuController.REST_URL;
-import static com.pafolder.graduation.util.DateTimeUtil.getNextVotingDate;
 
 @RestController
 @AllArgsConstructor
 @Tag(name = "5.2 admin-menu-controller")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractController {
-    static final String REST_URL = "/api/admin/menus";
-    public static final String NO_MENU_FOUND = "No menu found";
-    public static final String NO_RESTAURANT_FOUND = "No restaurant found";
-    public static final String MENU_ALREADY_EXISTS = "Menu already exists";
-    public static final String MENU_EXPIRED = "Menu is expired";
+    public static final String REST_URL = "/api/admin/menus";
+    static final String NO_MENU_FOUND = "No menu found";
+    static final String NO_RESTAURANT_FOUND = "No restaurant found";
+    static final String MENU_ALREADY_EXISTS = "Menu already exists";
+    static final String INCORRECT_MENU_DATE = "Menu date is wrong (should be tomorrow or later)";
 
     private MenuRepository menuRepository;
     private RestaurantRepository restaurantRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create new menu", security = {@SecurityRequirement(name = "basicScheme")})
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "if date not specified, next voting date will be used")
+    @Operation(summary = "Create a new menu", security = {@SecurityRequirement(name = "basicScheme")})
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "No date defaults to tomorrow")
     @Transactional
-    public ResponseEntity<Menu> addMenu(@Valid @RequestBody MenuTo menuTo) {
-        log.info("addMenu()");
-        LocalDate date = menuTo.getDate() == null ? getNextVotingDate() : menuTo.getDate();
-        if (date != null && date.isBefore(getNextVotingDate())) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, MENU_EXPIRED);
+    public ResponseEntity<Menu> createMenu(@Valid @RequestBody MenuTo menuTo) {
+        log.info("createMenu()");
+        if (!menuTo.getDate().isAfter(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, INCORRECT_MENU_DATE);
         }
+        LocalDate date = menuTo.getDate() == null ? LocalDate.now().plusDays(1) : menuTo.getDate();
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
                 restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) : null;
         if (restaurant == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_RESTAURANT_FOUND);
         }
         Menu menu = new Menu(null, restaurant, date, menuTo.getMenuItems());
-        if (menuRepository.findByDateAndRestaurantId(menu.getMenuDate(), menu.getRestaurant().getId()).isPresent()) {
+        if (menuRepository.findByDateAndRestaurantId(date, restaurant.getId()).isEmpty()) {
+            Menu createdMenu = menuRepository.save(menu);
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path(REST_URL + "/{id}").buildAndExpand(createdMenu.getId()).toUri();
+            return ResponseEntity.created(uriOfNewResource).body(createdMenu);
+        } else {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, MENU_ALREADY_EXISTS);
         }
-        menu = menuRepository.save(menu);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/menus").build().toUri();
-        return ResponseEntity.created(uriOfNewResource).body(menu);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete menu", security = {@SecurityRequirement(name = "basicScheme")})
-    @Parameter(name = "id", description = "Menu id to delete")
+    @Parameter(name = "id", description = "Menu Id to delete")
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteMenu(@PathVariable int id) {
         log.info("deleteMenu()");
