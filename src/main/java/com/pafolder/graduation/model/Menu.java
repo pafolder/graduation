@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.util.ProxyUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,10 +34,13 @@ public class Menu {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     @NotEmpty
-    @ElementCollection(targetClass = Item.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = Item.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "menu_item", joinColumns = @JoinColumn(name = "menu_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"menu_id", "dish_name"}))
     private List<Item> menuItems;

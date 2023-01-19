@@ -32,7 +32,6 @@ public class ApplicationConfiguration {
         Contact contact = new Contact();
         contact.name("Sergei Pastukhov");
         contact.email("pafolder@gmail.com");
-//        contact.url("https://github.com/pafolder/rva");
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
                         new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("basic")))

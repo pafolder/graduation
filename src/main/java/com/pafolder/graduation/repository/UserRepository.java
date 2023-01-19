@@ -2,6 +2,7 @@ package com.pafolder.graduation.repository;
 
 import com.pafolder.graduation.model.User;
 import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,10 +14,12 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface UserRepository extends JpaRepository<User, Integer> {
+    @Cacheable("users")
     @Query("SELECT u FROM User u")
     @EntityGraph(attributePaths = "role")
     List<User> findAll();
 
+    @Cacheable("users")
     Optional<User> findByEmail(String email);
 
     @Transactional

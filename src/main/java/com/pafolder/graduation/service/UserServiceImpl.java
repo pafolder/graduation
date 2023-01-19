@@ -5,7 +5,6 @@ import com.pafolder.graduation.repository.UserRepository;
 import com.pafolder.graduation.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -41,12 +40,10 @@ public class UserServiceImpl implements UserDetailsService {
         repository.deleteById(id);
     }
 
-    @Cacheable("users")
     public User getByEmail(String email) {
         return repository.findByEmail(email).orElse(null);
     }
 
-    @Cacheable("users")
     public Optional<User> getById(int id) {
         return repository.findById(id);
     }

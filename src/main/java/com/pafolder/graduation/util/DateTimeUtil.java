@@ -8,6 +8,9 @@ public class DateTimeUtil {
     public static final LocalTime CURRENT_TIME_AFTER_VOTING_TIME_LIMIT = VOTING_TIME_LIMIT.plusSeconds(1);
     private static LocalTime currentTimeForTests;
 
+    private DateTimeUtil() {
+    }
+
     public static LocalTime getCurrentTime() {
         return currentTimeForTests == null ? LocalTime.now() : currentTimeForTests;
     }

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.util.ProxyUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,6 +27,7 @@ public class Vote {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private User user;
 
@@ -33,8 +36,9 @@ public class Vote {
     @NotNull
     private LocalDate voteDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private Menu menu;
 

@@ -40,7 +40,7 @@ springdoc:
     path: /
     tagsSorter: alpha
   version: '@springdoc.version@'
-level: warn
+level: error
 logging:
   level:
     ROOT: ${level}
@@ -50,6 +50,6 @@ logging:
       springframework:
         cache: trace
         orm:
-          jpa: ${level}
-        transaction: trace
+          jpa: debug
+        transaction: ${level}
         transaction.interceptor: ${level}
