@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds">
-
     <!-- To enable JMX Management -->
     <jmxConfigurator/>
 
@@ -19,27 +18,12 @@
         </encoder>
     </appender>
 
-    <appender name="consolebriefyellow" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%yellow(===***){} %blue(%M:%L){} %yellow(***===) %msg%n)</pattern>
-        </encoder>
-    </appender>
-
-    <logger name="yellow" level="info" additivity="false">
-        <appender-ref ref="consolebriefyellow"/>
-    </logger>
-
-    <logger name="log4j.logger.org.springframework.transaction" level="info">
-        <appender-ref ref="consolebriefyellow"/>
-    </logger>
-
+    <logger name="log4j.logger.org.springframework.transaction" level="info"/>
     <logger name="org.springframework.web" level="info">
-<!--        <appender-ref ref="consolebriefyellow"/>-->
+        <!--        <appender-ref ref="consolebriefyellow"/>-->
     </logger>
 
-
-    <root level="error">
+    <root level="warn">
         <appender-ref ref="console"/>
     </root>
 </configuration>

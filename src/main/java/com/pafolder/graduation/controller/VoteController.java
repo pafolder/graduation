@@ -35,7 +35,7 @@ public class VoteController extends AbstractController {
     public static final String REST_URL = "/api/profile/vote";
     static final String NO_VOTE_FOUND = "No vote found";
     static final String VOTE_ALREADY_EXISTS = "Vote already exists";
-    static final String NO_MENU_RESTAURANT_FOUND = "No menu/restaurant found";
+    static final String NO_MENU_RESTAURANT_FOUND = "No menu found for restaurant";
     private MenuRepository menuRepository;
     private VoteRepository voteRepository;
 
@@ -45,7 +45,7 @@ public class VoteController extends AbstractController {
         log.info("getVote()");
         Optional<Vote> vote = voteRepository.findByDateAndUserWithMenu(LocalDate.now(), userDetails.getUser());
         if (vote.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_VOTE_FOUND);
         }
         return getFilteredVoteJson(vote.get());
     }
@@ -65,7 +65,7 @@ public class VoteController extends AbstractController {
         if (voteRepository.findByDateAndUser(menu.get().getMenuDate(), userDetails.getUser()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, VOTE_ALREADY_EXISTS);
         }
-        Vote createdVote = voteRepository.save(new Vote(null, userDetails.getUser(), menu.get(), LocalDate.now()));
+        Vote createdVote = voteRepository.save(new Vote(null, userDetails.getUser(), LocalDate.now(), menu.get()));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}").buildAndExpand(createdVote.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(getFilteredVoteJson(createdVote));
@@ -90,11 +90,11 @@ public class VoteController extends AbstractController {
         throwExceptionIfLateToVote();
         Vote vote = voteRepository.findByDateAndUser(LocalDate.now(), userDetails.getUser()).orElse(null);
         if (vote == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_VOTE_FOUND);
         }
         Menu menu = menuRepository.findByDateAndRestaurantId(LocalDate.now(), restaurantId).orElse(null);
         if (menu == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_MENU_RESTAURANT_FOUND);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_MENU_RESTAURANT_FOUND);
         }
         vote.setMenu(menu);
         voteRepository.save(vote);
@@ -111,7 +111,7 @@ public class VoteController extends AbstractController {
         if (vote.isPresent()) {
             voteRepository.delete(vote.get());
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, NO_VOTE_FOUND);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_VOTE_FOUND);
         }
     }
 }

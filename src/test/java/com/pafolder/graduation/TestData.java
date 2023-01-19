@@ -10,11 +10,7 @@ public class TestData {
     public static final Integer RESTAURANT_ID_FOR_SECOND_VOTE = 2;
     public static final User admin = new User(1, "Administrator", "admin@mail.com",
             DEFAULT_ADMIN_PASSWORD, true, User.Role.ADMIN);
-    public static final User user = new User(2, "User", "user@mail.com", DEFAULT_PASSWORD,
-            true, User.Role.USER);
-    public static final User updatedUser = new User(2, "Updated User", "updated.user@mail.com", DEFAULT_PASSWORD,
-            true, User.Role.USER);
-    public static final User newUser = new User(null, "New User", "new.user@mail.com",
+    public static final User user = new User(2, "User", "user@mail.com",
             DEFAULT_PASSWORD, true, User.Role.USER);
 }
 

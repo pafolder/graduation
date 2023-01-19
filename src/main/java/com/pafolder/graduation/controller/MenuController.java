@@ -30,7 +30,7 @@ public class MenuController extends AbstractController {
     public List<Menu> getAllMenusForCurrentDate() {
         log.info("getAllMenusForCurrentDate()");
         if (isLateToVote()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, VOTING_IS_OVER);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, VOTING_IS_OVER);
         }
         return menuRepository.findAllByDate(LocalDate.now());
     }

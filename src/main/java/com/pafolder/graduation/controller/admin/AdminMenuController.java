@@ -32,15 +32,15 @@ import static com.pafolder.graduation.controller.admin.AdminMenuController.REST_
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminMenuController extends AbstractController {
     public static final String REST_URL = "/api/admin/menus";
-    static final String NO_MENU_FOUND = "No menu found";
-    static final String NO_RESTAURANT_FOUND = "No restaurant found";
-    static final String MENU_ALREADY_EXISTS = "Menu already exists";
-    static final String INCORRECT_MENU_DATE = "Menu date is wrong (should be tomorrow or later)";
+    public static final String NO_RESTAURANT_FOUND = "No restaurant found";
+    public static final String MENU_ALREADY_EXISTS = "Menu already exists";
+    public static final String INCORRECT_MENU_DATE = "Menu date is wrong: should be tomorrow or later";
 
     private MenuRepository menuRepository;
     private RestaurantRepository restaurantRepository;
 
     @PostMapping
+    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new menu", security = {@SecurityRequirement(name = "basicScheme")})
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "No date defaults to tomorrow")
@@ -56,7 +56,7 @@ public class AdminMenuController extends AbstractController {
         if (restaurant == null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_RESTAURANT_FOUND);
         }
-        Menu menu = new Menu(null, restaurant, date, menuTo.getMenuItems());
+        Menu menu = new Menu(null, date, restaurant, menuTo.getMenuItems());
         if (menuRepository.findByDateAndRestaurantId(date, restaurant.getId()).isEmpty()) {
             Menu createdMenu = menuRepository.save(menu);
             URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -68,10 +68,10 @@ public class AdminMenuController extends AbstractController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete menu", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "id", description = "Menu Id to delete")
-    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteMenu(@PathVariable int id) {
         log.info("deleteMenu()");
         menuRepository.deleteById(id);

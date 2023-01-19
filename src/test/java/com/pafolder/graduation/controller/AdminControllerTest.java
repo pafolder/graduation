@@ -1,7 +1,6 @@
 package com.pafolder.graduation.controller;
 
 import com.pafolder.graduation.controller.admin.AdminMenuController;
-import com.pafolder.graduation.util.DateTimeUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -11,12 +10,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 
 import static com.pafolder.graduation.TestData.*;
+import static com.pafolder.graduation.controller.admin.AdminMenuController.INCORRECT_MENU_DATE;
+import static com.pafolder.graduation.controller.admin.AdminMenuController.NO_RESTAURANT_FOUND;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminControllerTest extends AbstractControllerTest {
     private static final String MENU_ID_TO_DELETE_STRING = "2";
     private static final String RESTAURANT_ID_TO_CREATE_STRING = "2";
+    private static String NO_MENU_ENTITY_REGEX = ".*no.*menu entity with id.*" + NONEXISTENT_ID_STRING + ".*exists.*";
 
     @Test
     void createMenu() throws Exception {
@@ -37,15 +39,15 @@ class AdminControllerTest extends AbstractControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
                         .content("{\"restaurantId\":" + RESTAURANT_ID_TO_CREATE_STRING + "," + "\"date\":\"" +
-                                LocalDate.now().toString() +
+                                LocalDate.now() +
                                 "\",\"menuItems\":[{\"dishName\":\"Beef\",\"dishPrice\":488.45}," +
                                 "{\"dishName\":\"Garnish\",\"dishPrice\":132.80}]}"))
                 .andExpect(status().isUnprocessableEntity())
+                .andDo(print())
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .toLowerCase()
-                .matches(".*menu.*date is wrong.*"));
+                .matches(".*" + INCORRECT_MENU_DATE + ".*"));
     }
 
     @Test
@@ -62,8 +64,7 @@ class AdminControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .toLowerCase()
-                .matches(".*no.*restaurant found.*".toLowerCase()));
+                .matches(".*" + NO_RESTAURANT_FOUND + ".*"));
     }
 
     @Test
@@ -98,6 +99,6 @@ class AdminControllerTest extends AbstractControllerTest {
                 .getResponse()
                 .getContentAsString()
                 .toLowerCase()
-                .matches((".*no.*menu entity with id.*" + NONEXISTENT_ID_STRING + ".*exists.*")));
+                .matches(NO_MENU_ENTITY_REGEX));
     }
 }

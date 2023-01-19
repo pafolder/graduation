@@ -28,15 +28,15 @@ public class Vote {
     @NotNull
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
-    @NotNull
-    private Menu menu;
-
     @Column(name = "vote_date", nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @NotNull
     private LocalDate voteDate;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "menu_id", nullable = false, referencedColumnName = "id")
+    @NotNull
+    private Menu menu;
 
     @Override
     public boolean equals(Object o) {

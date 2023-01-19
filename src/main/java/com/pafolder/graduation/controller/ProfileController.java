@@ -62,7 +62,7 @@ public class ProfileController extends AbstractController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete authenticated user", security = {@SecurityRequirement(name = "basicScheme")})
     public void deleteAuth(@AuthenticationPrincipal UserDetailsImpl authUser, HttpServletRequest request) throws ServletException {
-        log.error("deleteAuthUser()");
+        log.info("deleteAuthUser()");
         int id = authUser.getUser().getId();
         protectAdminPreset(id);
         userService.delete(id);

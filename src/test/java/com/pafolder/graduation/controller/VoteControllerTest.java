@@ -13,9 +13,9 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import static com.pafolder.graduation.TestData.*;
+import static com.pafolder.graduation.controller.VoteController.NO_MENU_RESTAURANT_FOUND;
 import static com.pafolder.graduation.controller.VoteController.REST_URL;
 import static com.pafolder.graduation.util.DateTimeUtil.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,8 +67,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .toLowerCase()
-                .matches(".*it's too late to vote.*".toLowerCase()));
+                .matches(".*" + AbstractController.TOO_LATE_TO_VOTE + ".*"));
     }
 
     @Test
@@ -83,8 +82,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .toLowerCase()
-                .matches(".*no.*menu.*found.*".toLowerCase()));
+                .matches(".*" + NO_MENU_RESTAURANT_FOUND + ".*"));
     }
 
     @Test
@@ -99,7 +97,7 @@ class VoteControllerTest extends AbstractControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword()))
                 )
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -113,8 +111,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .toLowerCase()
-                .matches(".*too late to.* vote.*".toLowerCase()));
+                .matches(".*" + AbstractController.TOO_LATE_TO_VOTE + ".*"));
         setCurrentTimeForTests(currentTime);
     }
 }

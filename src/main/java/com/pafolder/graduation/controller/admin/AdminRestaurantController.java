@@ -47,6 +47,7 @@ public class AdminRestaurantController extends AbstractController {
     }
 
     @PostMapping
+    @CacheEvict(value = "menus", allEntries = true)
     @Operation(summary = "Add a new restaurant", security = {@SecurityRequirement(name = "basicScheme")})
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "")
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,10 +61,10 @@ public class AdminRestaurantController extends AbstractController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "menus", allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete restaurant", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "id", description = "Id of the Restaurant to delete")
-    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     public void deleteRestaurant(@PathVariable int id) {
         log.info("deleteRestaurant()");
         restaurantRepository.deleteById(id);
