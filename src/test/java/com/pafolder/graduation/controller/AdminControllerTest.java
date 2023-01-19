@@ -16,9 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminControllerTest extends AbstractControllerTest {
-    private static final String MENU_ID_TO_DELETE_STRING = "2";
+    private static final String MENU_ID_TO_DELETE_STRING = "8";
     private static final String RESTAURANT_ID_TO_CREATE_STRING = "2";
-    private static String NO_MENU_ENTITY_REGEX = ".*no.*menu entity with id.*" + NONEXISTENT_ID_STRING + ".*exists.*";
 
     @Test
     void createMenu() throws Exception {
@@ -98,7 +97,6 @@ class AdminControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .toLowerCase()
-                .matches(NO_MENU_ENTITY_REGEX));
+                .matches(".*" + INCORRECT_MENU_DATE + ".*"));
     }
 }

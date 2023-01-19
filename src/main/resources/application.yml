@@ -21,35 +21,26 @@ spring:
       jakarta:
         persistence:
           sharedCache:
-            mode: UNSPECIFIED
+            mode: ENABLE_SELECTIVE
   cache:
     cache-names: menus, users
     caffeine.spec: maximumSize=5000,expireAfterAccess=3d
 server:
   port: 80
-  max-http-request-header-size: 64KB
+  max-http-request-header-size: 32KB
   servlet:
-    application-display-name: Graduation
+    application-display-name: RVA Graduation project
     encoding:
-      charset: UTF-8 # Charset of HTTP requests and responses. Added to the "Content-Type" header if not set explicitly
-      enabled: true # Enable http encoding support
+      charset: UTF-8
+      enabled: true
       force: true
 springdoc:
   packagesToScan: com.pafolder.graduation.controller
   swagger-ui:
     path: /
+    defaultModelsExpandDepth: -1
     tagsSorter: alpha
-  version: '@springdoc.version@'
-level: error
 logging:
   level:
-    ROOT: ${level}
-    org:
-      hibernate: ${level}
-      hibernate.SQL: ${level}
-      springframework:
-        cache: trace
-        orm:
-          jpa: debug
-        transaction: ${level}
-        transaction.interceptor: ${level}
+    ROOT: warn
+

@@ -23,6 +23,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 import static com.pafolder.graduation.controller.admin.AdminMenuController.REST_URL;
 
@@ -39,6 +41,13 @@ public class AdminMenuController extends AbstractController {
     private MenuRepository menuRepository;
     private RestaurantRepository restaurantRepository;
 
+    @GetMapping
+    @Operation(summary = "Get menu list for tomorrow's voting", security = {@SecurityRequirement(name = "basicScheme")})
+    public List<Menu> getAllMenusForTomorrow() {
+        log.info("getAllMenusForTomorrow()");
+        return menuRepository.findAllByDate(LocalDate.now().plusDays(1));
+    }
+
     @PostMapping
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,10 +56,10 @@ public class AdminMenuController extends AbstractController {
     @Transactional
     public ResponseEntity<Menu> createMenu(@Valid @RequestBody MenuTo menuTo) {
         log.info("createMenu()");
-        if (!menuTo.getDate().isAfter(LocalDate.now())) {
+        LocalDate date = menuTo.getDate() == null ? LocalDate.now().plusDays(1) : menuTo.getDate();
+        if (!date.isAfter(LocalDate.now())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, INCORRECT_MENU_DATE);
         }
-        LocalDate date = menuTo.getDate() == null ? LocalDate.now().plusDays(1) : menuTo.getDate();
         Restaurant restaurant = menuTo.getRestaurantId() != null ?
                 restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) : null;
         if (restaurant == null) {
@@ -70,10 +79,15 @@ public class AdminMenuController extends AbstractController {
     @DeleteMapping("/{id}")
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Operation(summary = "Delete menu", security = {@SecurityRequirement(name = "basicScheme")})
+    @Operation(summary = "Delete next date's menu", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "id", description = "Menu Id to delete")
-    public void deleteMenu(@PathVariable int id) {
-        log.info("deleteMenu()");
+    @Transactional
+    public void deleteNextDatesMenu(@PathVariable int id) {
+        log.info("deleteNextDatesMenu()");
+        Optional<Menu> menu = menuRepository.findById(id);
+        if (menu.isEmpty() || !(menu.get().getMenuDate().isAfter(LocalDate.now()))) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, INCORRECT_MENU_DATE);
+        }
         menuRepository.deleteById(id);
     }
 }

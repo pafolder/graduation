@@ -18,9 +18,6 @@
         </encoder>
     </appender>
 
-            <logger name="org.springframework.transaction" level="debug"/>
-    <!--        <logger name="org.springframework.web" level="warn"/>-->
-            <logger name="org.springframework.cache" level="trace"/>
     <root level="warn">
         <appender-ref ref="console"/>
     </root>

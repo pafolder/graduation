@@ -11,7 +11,7 @@
     <groupId>com.pafolder</groupId>
     <artifactId>graduation</artifactId>
     <version>0.9.5-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>graduation</name>
     <description>Graduation project on Spring Boot</description>
     <properties>
