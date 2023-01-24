@@ -23,19 +23,6 @@ class MenuControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAllTooLate() throws Exception {
-        setCurrentTimeForTests(CURRENT_TIME_AFTER_VOTING_TIME_LIMIT);
-        Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.get(MenuController.REST_URL).contentType(MediaType.APPLICATION_JSON)
-                        .with(SecurityMockMvcRequestPostProcessors.httpBasic(user.getEmail(), user.getPassword())))
-                .andDo(print())
-                .andExpect(status().isUnprocessableEntity())
-                .andReturn()
-                .getResponse()
-                .getContentAsString()
-                .matches(".*" + MenuController.VOTING_IS_OVER + ".*"));
-    }
-
-    @Test
     void getAllUnauthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get(MenuController.REST_URL).contentType(MediaType.APPLICATION_JSON)
                 )

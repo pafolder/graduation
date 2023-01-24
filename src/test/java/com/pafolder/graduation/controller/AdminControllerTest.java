@@ -24,8 +24,8 @@ class AdminControllerTest extends AbstractControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post(AdminMenuController.REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-                        .content("{\"restaurantId\":2," + "\"date\":\"" +
-                                LocalDate.now().plusDays(1).toString() +
+                        .content("{\"restaurantId\":2," + "\"menuDate\":\"" +
+                                LocalDate.now().plusDays(1) +
                                 "\",\"menuItems\":[{\"dishName\":\"Beef\",\"dishPrice\":488.45}," +
                                 "{\"dishName\":\"Garnish\",\"dishPrice\":132.80}]}"))
                 .andDo(print())
@@ -37,7 +37,7 @@ class AdminControllerTest extends AbstractControllerTest {
         Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(AdminMenuController.REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-                        .content("{\"restaurantId\":" + RESTAURANT_ID_TO_CREATE_STRING + "," + "\"date\":\"" +
+                        .content("{\"restaurantId\":" + RESTAURANT_ID_TO_CREATE_STRING + "," + "\"menuDate\":\"" +
                                 LocalDate.now() +
                                 "\",\"menuItems\":[{\"dishName\":\"Beef\",\"dishPrice\":488.45}," +
                                 "{\"dishName\":\"Garnish\",\"dishPrice\":132.80}]}"))
@@ -54,8 +54,8 @@ class AdminControllerTest extends AbstractControllerTest {
         Assertions.assertTrue(mockMvc.perform(MockMvcRequestBuilders.post(AdminMenuController.REST_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic(admin.getEmail(), admin.getPassword()))
-                        .content("{\"restaurantId\":" + NONEXISTENT_ID_STRING + "," + "\"date\":\"" +
-                                LocalDate.now().plusDays(1).toString() +
+                        .content("{\"restaurantId\":" + NONEXISTENT_ID_STRING + "," + "\"menuDate\":\"" +
+                                LocalDate.now().plusDays(1) +
                                 "\",\"menuItems\":[{\"dishName\":\"Beef\",\"dishPrice\":488.45}," +
                                 "{\"dishName\":\"Garnish\",\"dishPrice\":132.80}]}"))
                 .andDo(print())

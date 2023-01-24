@@ -25,7 +25,7 @@ public class ApplicationConfiguration {
                     "<b>Credentials for testing:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                     "Admin:&nbsp;<i>admin@mail.com&nbsp;/&nbsp;admin</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                     "&nbsp;&nbsp;&nbsp;&nbsp;User:&nbsp;<i>user@mail.com&nbsp;/&nbsp;password</i>" +
-                    "<br><div><a href=\"https://github.com/pafolder/rva\">Application source files (GitHub)</a></div>";
+                    "<br><br><div><a href=\"https://github.com/pafolder/rva\">Application source files (GitHub)</a></div>";
 
     @Bean
     public OpenAPI customOpenAPI(@Value("${rva.version}") String appVersion) {

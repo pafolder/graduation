@@ -36,8 +36,8 @@ public class ProfileController extends AbstractController {
 
     @GetMapping
     @Operation(summary = "Get authenticated user's credentials", security = {@SecurityRequirement(name = "basicScheme")})
-    public User getAuthUser(@AuthenticationPrincipal UserDetailsImpl authUser) {
-        log.info("getAuthUser()");
+    public User getAuth(@AuthenticationPrincipal UserDetailsImpl authUser) {
+        log.info("getAuth()");
         return userService.getById(authUser.getUser().getId()).orElse(null);
     }
 
@@ -47,9 +47,9 @@ public class ProfileController extends AbstractController {
             security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "userTo", description = "Updated user's credentials")
     @Transactional
-    public void updateAuthUser(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal UserDetailsImpl authUser,
+    public void updateAuth(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal UserDetailsImpl authUser,
                                HttpServletRequest request) throws ServletException {
-        log.info("updateAuthUser()");
+        log.info("updateAuth()");
         int id = authUser.getUser().getId();
         protectAdminPreset(id);
         User updated = new User(id, userTo.getName(), userTo.getEmail(), userTo.getPassword(),
@@ -62,7 +62,7 @@ public class ProfileController extends AbstractController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete authenticated user", security = {@SecurityRequirement(name = "basicScheme")})
     public void deleteAuth(@AuthenticationPrincipal UserDetailsImpl authUser, HttpServletRequest request) throws ServletException {
-        log.info("deleteAuthUser()");
+        log.info("deleteAuth()");
         int id = authUser.getUser().getId();
         protectAdminPreset(id);
         userService.delete(id);

@@ -35,14 +35,14 @@ public class VoteController extends AbstractController {
     public static final String REST_URL = "/api/profile/vote";
     static final String NO_VOTE_FOUND = "No vote found";
     static final String VOTE_ALREADY_EXISTS = "Vote already exists";
-    static final String NO_MENU_RESTAURANT_FOUND = "No menu found for restaurant";
+    public static final String NO_MENU_RESTAURANT_FOUND = "No menu found for restaurant";
     private MenuRepository menuRepository;
     private VoteRepository voteRepository;
 
     @GetMapping
     @Operation(summary = "Get authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
-    public MappingJacksonValue getVote(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info("getVote()");
+    public MappingJacksonValue get(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("get()");
         Optional<Vote> vote = voteRepository.findByDateAndUserWithMenu(LocalDate.now(), userDetails.getUser());
         if (vote.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_VOTE_FOUND);
@@ -55,8 +55,8 @@ public class VoteController extends AbstractController {
     @Operation(summary = "Send authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "restaurantId", description = "Restaurant Id authenticated user votes for")
     @Transactional
-    public ResponseEntity<MappingJacksonValue> createVote(@RequestParam int restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info("sendVote()");
+    public ResponseEntity<MappingJacksonValue> create(@RequestParam int restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("send()");
         throwExceptionIfLateToVote();
         Optional<Menu> menu = menuRepository.findByDateAndRestaurantId(LocalDate.now(), restaurantId);
         if (menu.isEmpty()) {
@@ -85,8 +85,8 @@ public class VoteController extends AbstractController {
     @Operation(summary = "Change authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "restaurantId", description = "Restaurant Id authenticated user updates vote for")
     @Transactional
-    public void updateVote(@RequestParam int restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info("updateVote()");
+    public void update(@RequestParam int restaurantId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("update()");
         throwExceptionIfLateToVote();
         Vote vote = voteRepository.findByDateAndUser(LocalDate.now(), userDetails.getUser()).orElse(null);
         if (vote == null) {
@@ -104,8 +104,8 @@ public class VoteController extends AbstractController {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete authenticated user's vote", security = {@SecurityRequirement(name = "basicScheme")})
     @Transactional
-    public void deleteVote(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        log.info("deleteVote");
+    public void delete(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        log.info("delete");
         throwExceptionIfLateToVote();
         Optional<Vote> vote = voteRepository.findByDateAndUser(LocalDate.now(), userDetails.getUser());
         if (vote.isPresent()) {

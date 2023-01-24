@@ -26,8 +26,8 @@ public class AdminUserController extends AbstractController {
 
     @GetMapping
     @Operation(summary = "Get all users", security = {@SecurityRequirement(name = "basicScheme")})
-    public List<User> getAllUsers() {
-        log.info("getAllUsers()");
+    public List<User> getAll() {
+        log.info("getAll()");
         return userService.getAll();
     }
 
@@ -44,8 +44,8 @@ public class AdminUserController extends AbstractController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete user", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "id", description = "User to be deleted Id")
-    public void deleteUser(@PathVariable int id) {
-        log.info("deleteUser()");
+    public void delete(@PathVariable int id) {
+        log.info("delete()");
         protectAdminPreset(id);
         userService.delete(id);
     }

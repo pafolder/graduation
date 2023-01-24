@@ -15,7 +15,8 @@ changed.
 
 ### REST API documentation:
 
-[pafolder.com](http://pafolder.com)
+[pafolder.com](http://pafolder.com)<br>
+[localhost](http://localhost)
 
 Credentials for testing:
 

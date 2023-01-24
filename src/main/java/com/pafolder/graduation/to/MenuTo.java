@@ -17,7 +17,7 @@ public class MenuTo {
     private Integer restaurantId;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate date;
+    private LocalDate menuDate;
 
     @NotEmpty
     private List<Menu.Item> menuItems;

@@ -35,6 +35,7 @@ import static com.pafolder.graduation.controller.admin.AdminMenuController.REST_
 public class AdminMenuController extends AbstractController {
     public static final String REST_URL = "/api/admin/menus";
     public static final String NO_RESTAURANT_FOUND = "No restaurant found";
+    public static final String NO_MENU_FOUND = "No menu found";
     public static final String MENU_ALREADY_EXISTS = "Menu already exists";
     public static final String INCORRECT_MENU_DATE = "Menu date is wrong: should be tomorrow or later";
 
@@ -43,7 +44,7 @@ public class AdminMenuController extends AbstractController {
 
     @GetMapping
     @Operation(summary = "Get menu list for tomorrow's voting", security = {@SecurityRequirement(name = "basicScheme")})
-    public List<Menu> getAllMenusForTomorrow() {
+    public List<Menu> getAllForTomorrow() {
         log.info("getAllMenusForTomorrow()");
         return menuRepository.findAllByDate(LocalDate.now().plusDays(1));
     }
@@ -54,17 +55,16 @@ public class AdminMenuController extends AbstractController {
     @Operation(summary = "Create a new menu", security = {@SecurityRequirement(name = "basicScheme")})
     @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "No date defaults to tomorrow")
     @Transactional
-    public ResponseEntity<Menu> createMenu(@Valid @RequestBody MenuTo menuTo) {
+    public ResponseEntity<Menu> create(@Valid @RequestBody MenuTo menuTo) {
         log.info("createMenu()");
-        LocalDate date = menuTo.getDate() == null ? LocalDate.now().plusDays(1) : menuTo.getDate();
+        LocalDate date = menuTo.getMenuDate() == null ? LocalDate.now().plusDays(1) : menuTo.getMenuDate();
         if (!date.isAfter(LocalDate.now())) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, INCORRECT_MENU_DATE);
         }
-        Restaurant restaurant = menuTo.getRestaurantId() != null ?
-                restaurantRepository.findById(menuTo.getRestaurantId()).orElse(null) : null;
-        if (restaurant == null) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_RESTAURANT_FOUND);
-        }
+        Restaurant restaurant = Optional.ofNullable(menuTo.getRestaurantId())
+                .flatMap(rId -> restaurantRepository.findById(rId))
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_RESTAURANT_FOUND));
         Menu menu = new Menu(null, date, restaurant, menuTo.getMenuItems());
         if (menuRepository.findByDateAndRestaurantId(date, restaurant.getId()).isEmpty()) {
             Menu createdMenu = menuRepository.save(menu);
@@ -76,13 +76,42 @@ public class AdminMenuController extends AbstractController {
         }
     }
 
+    @PutMapping
+    @CacheEvict(cacheNames = {"menus"}, allEntries = true)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    @Operation(summary = "Update menu", security = {@SecurityRequirement(name = "basicScheme")})
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "No date defaults to tomorrow")
+    @Transactional
+    public void update(@RequestParam int menuId, @Valid @RequestBody MenuTo menuTo) {
+        log.info("updateMenu()");
+        LocalDate date = menuTo.getMenuDate() == null ? LocalDate.now().plusDays(1) : menuTo.getMenuDate();
+        if (!date.isAfter(LocalDate.now())) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, INCORRECT_MENU_DATE);
+        }
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_MENU_FOUND));
+        if (menuTo.getRestaurantId() != null) {
+            menu.setRestaurant(restaurantRepository.findById(menuTo.getRestaurantId())
+                    .orElseThrow(() ->
+                            new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, NO_RESTAURANT_FOUND)));
+            menu.setId(menuId);
+        }
+        if (menuTo.getMenuItems() != null) {
+            menu.setMenuItems(menuTo.getMenuItems());
+        }
+        if (menuTo.getMenuDate() != null) {
+            menu.setMenuDate(menuTo.getMenuDate());
+        }
+        menuRepository.save(menu);
+    }
+
     @DeleteMapping("/{id}")
     @CacheEvict(cacheNames = {"menus"}, allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete next date's menu", security = {@SecurityRequirement(name = "basicScheme")})
     @Parameter(name = "id", description = "Menu Id to delete")
     @Transactional
-    public void deleteNextDatesMenu(@PathVariable int id) {
+    public void deleteNextDates(@PathVariable int id) {
         log.info("deleteNextDatesMenu()");
         Optional<Menu> menu = menuRepository.findById(id);
         if (menu.isEmpty() || !(menu.get().getMenuDate().isAfter(LocalDate.now()))) {
