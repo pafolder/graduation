@@ -1,6 +1,5 @@
 package com.pafolder.graduation.controller.admin;
 
-import com.pafolder.graduation.controller.AbstractController;
 import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.service.UserServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +7,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.pafolder.graduation.controller.admin.AdminUserController.REST_URL;
+import static com.pafolder.graduation.util.ControllerUtil.protectAdminPreset;
 
 @RestController
 @AllArgsConstructor
 @Tag(name = "5.1 admin-users-controller")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminUserController extends AbstractController {
+public class AdminUserController {
     public static final String REST_URL = "/api/admin/users";
+    private final Logger log = LoggerFactory.getLogger(getClass());
     protected UserServiceImpl userService;
 
     @GetMapping

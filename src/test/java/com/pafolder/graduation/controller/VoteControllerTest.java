@@ -1,6 +1,7 @@
 package com.pafolder.graduation.controller;
 
 import com.pafolder.graduation.model.Vote;
+import com.pafolder.graduation.util.ControllerUtil;
 import com.pafolder.graduation.util.DateTimeUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .matches(".*" + AbstractController.TOO_LATE_TO_VOTE + ".*"));
+                .matches(".*" + ControllerUtil.TOO_LATE_TO_VOTE + ".*"));
     }
 
     @Test
@@ -111,7 +112,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString()
-                .matches(".*" + AbstractController.TOO_LATE_TO_VOTE + ".*"));
+                .matches(".*" + ControllerUtil.TOO_LATE_TO_VOTE + ".*"));
         setCurrentTimeForTests(currentTime);
     }
 }

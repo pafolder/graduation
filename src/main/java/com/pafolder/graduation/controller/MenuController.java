@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @Tag(name = "2 menu-controller")
 @RequestMapping(value = MenuController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class MenuController extends AbstractController {
+public class MenuController {
     public static final String REST_URL = "/api/profile/menus";
     static final String VOTING_IS_OVER = "Voting is over for today";
+    private final Logger log = LoggerFactory.getLogger(getClass());
     protected MenuRepository menuRepository;
 
     @GetMapping

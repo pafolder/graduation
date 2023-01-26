@@ -1,6 +1,5 @@
 package com.pafolder.graduation.controller.admin;
 
-import com.pafolder.graduation.controller.AbstractController;
 import com.pafolder.graduation.model.Menu;
 import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.repository.MenuRepository;
@@ -12,6 +11,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,13 +33,13 @@ import static com.pafolder.graduation.controller.admin.AdminMenuController.REST_
 @AllArgsConstructor
 @Tag(name = "5.2 admin-menu-controller")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminMenuController extends AbstractController {
+public class AdminMenuController {
     public static final String REST_URL = "/api/admin/menus";
     public static final String NO_RESTAURANT_FOUND = "No restaurant found";
     public static final String NO_MENU_FOUND = "No menu found";
     public static final String MENU_ALREADY_EXISTS = "Menu already exists";
     public static final String INCORRECT_MENU_DATE = "Menu date is wrong: should be tomorrow or later";
-
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private MenuRepository menuRepository;
     private RestaurantRepository restaurantRepository;
 

@@ -4,6 +4,7 @@ import com.pafolder.graduation.model.User;
 import com.pafolder.graduation.security.UserDetailsImpl;
 import com.pafolder.graduation.service.UserServiceImpl;
 import com.pafolder.graduation.to.UserTo;
+import com.pafolder.graduation.util.ControllerUtil;
 import com.pafolder.graduation.validator.UserToValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +14,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,9 +27,10 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Tag(name = "4 profile-controller")
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProfileController extends AbstractController {
+public class ProfileController extends ControllerUtil {
     public static final String REST_URL = "/api/profile";
-    UserServiceImpl userService;
+    private final Logger log = LoggerFactory.getLogger(getClass());
+    private UserServiceImpl userService;
     protected UserToValidator userToValidator;
 
     @InitBinder
@@ -48,7 +52,7 @@ public class ProfileController extends AbstractController {
     @Parameter(name = "userTo", description = "Updated user's credentials")
     @Transactional
     public void updateAuth(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal UserDetailsImpl authUser,
-                               HttpServletRequest request) throws ServletException {
+                           HttpServletRequest request) throws ServletException {
         log.info("updateAuth()");
         int id = authUser.getUser().getId();
         protectAdminPreset(id);

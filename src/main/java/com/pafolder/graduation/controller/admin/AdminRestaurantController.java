@@ -1,6 +1,5 @@
 package com.pafolder.graduation.controller.admin;
 
-import com.pafolder.graduation.controller.AbstractController;
 import com.pafolder.graduation.model.Restaurant;
 import com.pafolder.graduation.repository.RestaurantRepository;
 import com.pafolder.graduation.repository.VoteRepository;
@@ -11,6 +10,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,9 @@ import static com.pafolder.graduation.controller.admin.AdminRestaurantController
 @AllArgsConstructor
 @Tag(name = "5.3 admin-restaurant-controller")
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminRestaurantController extends AbstractController {
+public class AdminRestaurantController {
     public static final String REST_URL = "/api/admin/restaurants";
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private RestaurantRepository restaurantRepository;
     private VoteRepository voteRepository;
 
