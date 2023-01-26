@@ -27,12 +27,12 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
                     "<b>Credentials for testing:</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                     "Admin:&nbsp;<i>admin@mail.com&nbsp;/&nbsp;admin</i><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
                     "&nbsp;&nbsp;&nbsp;&nbsp;User:&nbsp;<i>user@mail.com&nbsp;/&nbsp;password</i>" +
-                    "<br><br><div><a href=\"https://github.com/pafolder/rva\">Application source files (GitHub)</a></div>";
+                    "</li><br><div><a href=\"https://github.com/pafolder/rva\">Application source files (GitHub)</a></div>";
 
     @Bean
     public OpenAPI customOpenAPI(@Value("${rva.version}") String appVersion) {
         Contact contact = new Contact();
-        contact.name("Sergei Pastukhov");
+        contact.name("the Author");
         contact.email("pafolder@gmail.com");
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("basicScheme",
