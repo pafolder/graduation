@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableCaching
-public class ApplicationConfiguration {
+public class ApplicationConfiguration implements WebMvcConfigurer {
     public static final String RESTAURANT_VOTING_APPLICATION_SUMMARY =
             "<b>Restaurant Voting Application</b> implements a Voting System for users making " +
                     "decisions which restaurant to have lunch at.<li> There are two types of users: Admins and " +
@@ -39,5 +41,10 @@ public class ApplicationConfiguration {
                         .version(appVersion)
                         .description(RESTAURANT_VOTING_APPLICATION_SUMMARY)
                         .contact(contact));
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SubDomainInterceptor());
     }
 }

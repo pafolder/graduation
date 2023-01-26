@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
         <relativePath/>
     </parent>
     <groupId>com.pafolder</groupId>
     <artifactId>graduation</artifactId>
-    <version>0.9.7-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>0.9.8-SNAPSHOT</version>
+    <packaging>war</packaging>
     <name>graduation</name>
     <description>Graduation project on Spring Boot</description>
     <properties>
